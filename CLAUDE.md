@@ -27,10 +27,11 @@
 
 ```
 e:\SPLLM/
+├── book/                 # 📖 精品书籍素材（配合 book2skill 进行书籍蒸馏）
 ├── daily-feed/           # 📰 每日市场信息（你读取，不修改）
 ├── source-material/      # 📚 深度资料（你读取，不修改）
 ├── raw/assets/           # 📎 原始资源
-├── skills/               # 🔧 技能插件（如 hv-analysis 横纵分析法、neat-freak 知识清理、prompt-flow 提示词决策流程、oral-copy 口播文案与公众号长文、khazix-writer 卡兹克写作风格）
+├── skills/               # 🔧 技能插件（如 hv-analysis 横纵分析法、neat-freak 知识清理、prompt-flow 提示词决策流程、oral-copy 口播文案与公众号长文、khazix-writer 卡兹克写作风格、book2skill 书籍蒸馏、darwin-skill 技能优化器）
 ├── SCHEMA.md             # 📖 完整规范文档
 ├── CLAUDE.md             # 📖 本文件（你的操作指南）
 ├── AGENTS.md             # 📖 维基构建约定与工作流程说明
@@ -366,6 +367,89 @@ e:\SPLLM/
 - **类型D 公众号长文**：5种文章原型 + HKR选题法 + 风格内核 + 四层自检体系（适合深度内容/公众号输出 · 长文写作）
 
 **参考技能**：类型D长文写作时，可参考 **khazix-writer** 技能（`e:\SPLLM\skills\khazix-writer/`）的完整风格示例库和内容方法论
+
+### 3.9 Book2Skill（书籍蒸馏）【按需触发】
+
+**触发规则**：当用户说"拆书"、"蒸馏一本书"、"把XX书做成skill"、"turn a book into skills"时触发
+
+**技能**：使用 **book2skill** 技能（`e:\SPLLM\skills\book2skill/SKILL.md`）
+
+**来源**：基于 RIA-TV++ 方法论，将书籍中的方法论/框架/原则蒸馏为原子化、可被 agent 调用的 skills
+
+**核心流程**：
+```
+阶段 0: Adler 整书理解     → BOOK_OVERVIEW.md
+阶段 1: 5 个 agent 并行提取 → 候选方法论单元池
+阶段 1.5: 三重验证筛选       → 通过的单元（跨域/预测力/独特性）
+阶段 2: RIA++ 构造 skill     → 每个 skill 的 SKILL.md
+阶段 3: Zettelkasten 链接    → INDEX.md
+阶段 4: 压力测试 (darwin 兼容) → test-prompts.json + 回炉淘汰
+```
+
+**输入要求**：必须确认 ① 书的文本来源（PDF/EPUB/TXT）② 书名+作者+出版年 ③ 是否首次试点
+
+**输出结构**：
+```
+books/<book-slug>/
+├── BOOK_OVERVIEW.md           # 阶段 0 产出
+├── INDEX.md                   # 阶段 3 产出
+├── candidates/                # 阶段 1 产出（审计用）
+├── rejected/                  # 阶段 1.5 淘汰（审计用）
+├── <skill-slug-1>/
+│   ├── SKILL.md
+│   └── test-prompts.json
+└── ...
+```
+
+**重要**：永远先试点1本验证流程；阶段之间主动汇报进度；不凭记忆拆书——没文本就停下来问用户要
+
+### 3.10 Darwin Skill（技能优化器）【按需触发】
+
+**触发规则**：当用户说"优化skill"、"skill评分"、"自动优化"、"skill质量检查"、"达尔文"、"darwin"、"帮我改改skill"、"skill怎么样"、"提升skill质量"、"skill review"时触发
+
+**技能**：使用 **darwin-skill** 技能（`e:\SPLLM\skills\darwin-skill/SKILL.md`）
+
+**来源**：借鉴 Karpathy autoresearch 的自主实验循环，对 skills 进行持续优化
+
+**核心理念**：评估 → 改进 → 实测验证 → 人类确认 → 保留或回滚 → 生成成果卡片
+
+**8维度评估体系（总分100）**：
+
+| 维度 | 权重 | 说明 |
+|------|------|------|
+| **结构维度（60分）** | | |
+| 1. Frontmatter质量 | 8 | name规范、description包含触发词 |
+| 2. 工作流清晰度 | 15 | 步骤明确可执行、有序号 |
+| 3. 边界条件覆盖 | 10 | 处理异常情况、有fallback |
+| 4. 检查点设计 | 7 | 关键决策前有用户确认 |
+| 5. 指令具体性 | 15 | 不模糊、有具体参数/格式/示例 |
+| 6. 资源整合度 | 5 | references/scripts/assets引用正确 |
+| **效果维度（40分）** | | |
+| 7. 整体架构 | 15 | 结构层次清晰、与生态一致 |
+| 8. 实测表现 | 25 | 用测试prompt跑一遍，输出质量是否符合宣称能力 |
+
+**优化循环**：
+```
+Phase 0: 初始化 → 确认优化范围、创建git分支
+Phase 0.5: 测试Prompt设计 → 为每个skill设计2-3个测试prompt
+Phase 1: 基线评估 → 结构评分 + 效果评分（子agent独立评估）
+Phase 2: 优化循环 → 诊断→改进→评估→决策（keep/revert）
+Phase 2.5: 探索性重写 → 突破局部最优（需用户同意）
+Phase 3: 汇总报告 → 生成分数变化表和成果卡片
+```
+
+**五条核心原则**：
+1. 单一可编辑资产 — 每次只改一个SKILL.md
+2. 双重评估 — 结构评分 + 效果验证
+3. 棘轮机制 — 只保留改进，自动回滚退步
+4. 独立评分 — 效果维度用子agent评估
+5. 人在回路 — 每个skill优化完后暂停等用户确认
+
+**使用方式**：
+- 全量优化：`"优化所有skills"` → Phase 0-3完整流程
+- 单个优化：`"优化 XX skill"` → 只对指定skill执行
+- 仅评估不改：`"评估所有skills的质量"` → 只执行Phase 0.5-1
+- 查看历史：`"看看skill优化历史"` → 读取results.tsv
 
 ---
 
@@ -924,9 +1008,9 @@ presentation-template.md     -> e:\SPLLM\wiki\templates\presentation-template.md
 
 ---
 
-**文档版本**：1.4  
+**文档版本**：1.7  
 **创建日期**：2026-05-08  
-**最后更新**：2026-05-10（补充 GitHub 仓库信息、prompt-flow v1.2 整合提示词策略、商业思维素材处理）  
+**最后更新**：2026-05-11（新增 darwin-skill 技能优化器）  
 **GitHub 仓库**：https://github.com/tuzfanfan/SPLLM （Private，main 分支）  
 **Git 配置**：user.name=tuzfanfan, user.email=447049333@qq.com
 **维护者**：LLM Agent  

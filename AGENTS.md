@@ -58,6 +58,7 @@
 
 ```
 e:\SPLLM/
+├── book/                 # Layer 1：精品书籍素材（配合 book2skill 技能）
 ├── raw/                  # Layer 1：原始材料（只读，不修改）
 ├── skills/               # 技能插件目录
 │   ├── hv-analysis/      # 横纵分析法深度研究技能（v2.0，含商业化分析）
@@ -393,6 +394,92 @@ skills/khazix-writer/
 - 绝对禁区（禁用词/标点禁令/结构性套话）
 - 四层自检体系（L1硬性规则→L2风格一致性→L3内容质量→L4活人感终审）
 
+#### book2skill（书籍蒸馏）
+
+| 属性 | 值 |
+|------|-----|
+| 名称 | book2skill |
+| 来源 | [github.com/kangarooking/cangjie-skill](https://github.com/kangarooking/cangjie-skill) |
+| 用途 | 将一本书的方法论/框架/原则蒸馏为原子化、可被 agent 调用的 skills（RIA-TV++ 流水线） |
+| 位置 | `e:\SPLLM\skills\book2skill/` |
+| 触发规则 | 按需触发（用户说"拆书"/"蒸馏一本书"/"把XX书做成skill"时） |
+
+**文件结构**：
+```
+skills/book2skill/
+├── SKILL.md                      # 技能定义（RIA-TV++ 六阶段流水线 + 质量红线）
+├── methodology/                  # 方法论文档（6个阶段的详细说明）
+│   ├── 00-overview.md
+│   ├── 01-stage0-adler.md
+│   ├── 02-stage1-parallel-extract.md
+│   ├── 03-stage1.5-triple-verify.md
+│   ├── 04-stage2-ria-plus.md
+│   ├── 05-stage3-zettelkasten.md
+│   └── 06-stage4-pressure-test.md
+├── extractors/                   # 5个并行提取器 prompt
+│   ├── framework-extractor.md
+│   ├── principle-extractor.md
+│   ├── case-extractor.md
+│   ├── counter-example-extractor.md
+│   └── glossary-extractor.md
+└── templates/                    # 输出模板
+    ├── BOOK_OVERVIEW.md.template
+    ├── INDEX.md.template
+    ├── SKILL.md.template
+    └── test-prompts.json.template
+```
+
+**核心方法论**：
+- RIA-TV++ 六阶段流水线（Adler理解→并行提取→三重验证→RIA++构造→Zettelkasten链接→压力测试）
+- 三重验证（跨域佐证/预测力/独特性），通过率通常 25-50%
+- RIA++ 结构（Reading/Interpretation/A1书中案例/A2未来触发/E可执行步骤/B边界盲点）
+- 生态定位：nuwa-skill（蒸馏人）+ book2skill（蒸馏书）+ darwin-skill（进化skill）
+
+#### darwin-skill（技能优化器）
+
+| 属性 | 值 |
+|------|-----|
+| 名称 | darwin-skill |
+| 来源 | [github.com/alchaincyf/darwin-skill](https://github.com/alchaincyf/darwin-skill) |
+| 用途 | 像训练模型一样优化 Agent Skills，借鉴 Karpathy autoresearch 的自主实验循环 |
+| 位置 | `e:\SPLLM\skills\darwin-skill/` |
+| 触发规则 | 按需触发（用户说"优化skill"/"skill评分"/"达尔文"/"darwin"时） |
+
+**文件结构**：
+```
+skills/darwin-skill/
+├── SKILL.md                      # 技能定义（8维度评估+优化循环）
+├── templates/                    # 成果卡片模板
+│   ├── result-card.html          # 3风格主模板（swiss/terminal/newspaper）
+│   ├── result-card-dark.html
+│   └── result-card-white.html
+├── scripts/                      # 截图脚本
+│   └── screenshot.mjs            # 2x高清截图，生成成果卡片PNG
+├── assets/                       # 视觉资源
+└── results.tsv                   # 优化历史记录
+```
+
+**核心方法论**：
+- 8维度评估体系（结构60分+效果40分，总分100）
+- 棘轮机制：只保留有改进的commit，自动回滚退步
+- 双重评估：结构评分（静态分析）+ 效果验证（跑测试看输出）
+- 人在回路：每个skill优化完后暂停等用户确认
+
+**优化循环**：
+```
+Phase 0: 初始化 → 确认优化范围、创建git分支
+Phase 0.5: 测试Prompt设计 → 为每个skill设计2-3个测试prompt
+Phase 1: 基线评估 → 结构评分 + 效果评分（子agent独立评估）
+Phase 2: 优化循环 → 诊断→改进→评估→决策（keep/revert）
+Phase 2.5: 探索性重写 → 突破局部最优（需用户同意）
+Phase 3: 汇总报告 → 生成分数变化表和成果卡片
+```
+
+**与 book2skill 的关系**：
+- book2skill：从书籍中提取新skill
+- darwin-skill：优化已有skill的质量
+- 生态定位：nuwa-skill（蒸馏人）+ book2skill（蒸馏书）+ darwin-skill（进化skill）
+
 ### 5.3 技能使用约定
 
 1. **按需加载**：Agent 在执行对应任务时读取 SKILL.md，不需要预加载
@@ -445,9 +532,9 @@ skills/khazix-writer/
 
 ---
 
-**文档版本**：1.3
+**文档版本**：1.6
 **创建日期**：2026-05-09
-**最后更新**：2026-05-10（补充 GitHub 仓库信息、prompt-flow v1.2 整合提示词策略、商业思维素材处理）
+**最后更新**：2026-05-11（新增 darwin-skill 技能优化器）
 **GitHub 仓库**：https://github.com/tuzfanfan/SPLLM （Private，main 分支）
 **维护者**：LLM Agent
 **关联文档**：[[SCHEMA.md]], [[CLAUDE.md]], [[wiki/index.md]], [[wiki/log.md]]

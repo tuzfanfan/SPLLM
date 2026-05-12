@@ -52,15 +52,15 @@ e:\SPLLM/
 
 ## 3. 核心工作流程
 
-### 3.1 Ingest（处理Daily Feed）
+### 3.1 Ingest（处理新内容）
 
-**触发条件**：用户要求处理daily-feed中的新内容
+**触发条件**：用户要求处理 daily-feed、raw、book、books 中的新内容
 
 **操作步骤**：
 
 1. **检查新文件**
    ```
-   列出 daily-feed/ 目录中的所有文件
+   列出 daily-feed/、raw/、book/、books/ 目录中的所有文件
    对比 log.md 中记录的最后处理时间
    识别未处理的新文件
    ```
@@ -109,10 +109,18 @@ e:\SPLLM/
 **示例对话**：
 ```
 用户：处理daily-feed中的新内容
-你：好的，我发现了3个新文件。让我逐一处理...
+你：好的，我检查了 daily-feed/、raw/、book/、books/ 四个目录，发现了3个新文件。让我逐一处理...
 [处理过程]
 完成！我创建了3个来源摘要，更新了5个实体页面和2个概念页面。
 主要发现：...
+```
+
+**示例对话（book文件夹）**：
+```
+用户：我的book新增了素材，请处理
+你：好的，我检查了 book/ 目录，发现新增了约1,500本电子书。让我识别主题分类并进行ingest处理...
+[分类处理过程]
+完成！我按主题分类创建了7个来源摘要页面，涵盖商业管理、历史人文、自我提升、财经投资等主题。
 ```
 
 ### 3.2 Digest（处理Source Material）
@@ -837,11 +845,11 @@ graph TD
 
 **处理新来源**：
 ```
-用户：处理daily-feed中的新内容
-你：好的，我发现了3个新文件：
-1. 2026-05-08-AI视频生成新动态.md
-2. 2026-05-08-竞品分析报告.md
-3. 2026-05-08-技术趋势预测.md
+用户：处理新内容（或：处理daily-feed/raw/book/books中的新内容）
+你：好的，我检查了 daily-feed/、raw/、book/、books/ 四个目录，发现了3个新文件：
+1. 2026-05-08-AI视频生成新动态.md（在daily-feed中）
+2. 2026-05-08-品牌营销方法论.md（在raw中）
+3. 电子书合集（在book中）
 
 让我逐一处理...
 [处理过程]
@@ -933,7 +941,7 @@ wiki/presentations/AI视频生成市场分析-2026-05-08.md
 
 | 操作 | 命令/步骤 |
 |------|----------|
-| 处理daily-feed | 1. 列目录 2. 读文件 3. 创建摘要 4. 更新实体/概念 5. 更新index 6. 记录log |
+| 处理新内容（daily-feed/raw/book/books） | 1. 检查四个目录 2. 识别新文件 3. 读文件 4. 创建摘要 5. 更新实体/概念 6. 更新index 7. 记录log |
 | 创建实体页面 | 使用entity-template.md，放在entities/目录 |
 | 创建概念页面 | 使用concept-template.md，放在concepts/目录 |
 | 更新index.md | 添加新页面条目，更新统计信息 |
@@ -1008,9 +1016,9 @@ presentation-template.md     -> e:\SPLLM\wiki\templates\presentation-template.md
 
 ---
 
-**文档版本**：1.7  
+**文档版本**：1.8  
 **创建日期**：2026-05-08  
-**最后更新**：2026-05-11（新增 darwin-skill 技能优化器）  
+**最后更新**：2026-05-12（修正 Ingest 触发条件：daily-feed/raw/book/books 四个目录）  
 **GitHub 仓库**：https://github.com/tuzfanfan/SPLLM （Private，main 分支）  
 **Git 配置**：user.name=tuzfanfan, user.email=447049333@qq.com
 **维护者**：LLM Agent  

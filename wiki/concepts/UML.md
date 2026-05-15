@@ -1,0 +1,20 @@
+---
+title: UML
+date: 2026-05-14
+type: concept
+status: active
+---
+
+# UML
+
+## 定义
+
+（待补充）
+
+## 相关书籍
+
+（待补充）
+
+## 延伸阅读
+
+（待补充）

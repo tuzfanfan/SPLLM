@@ -1,0 +1,20 @@
+---
+title: "William Shakespeare"
+type: concept
+date_created: "2026-05-13"
+related_sources: ["The Tempest"]
+tags: ["概念"]
+---
+
+# William Shakespeare
+
+## 定义
+
+William Shakespeare是与本知识库中多本书籍相关的核心概念。
+
+## 相关来源
+
+- [[The Tempest]]
+
+## 关联概念
+

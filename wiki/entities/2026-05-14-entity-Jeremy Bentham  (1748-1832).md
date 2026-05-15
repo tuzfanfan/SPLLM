@@ -1,0 +1,19 @@
+---
+title: "Jeremy Bentham  (1748-1832)"
+date: 2026-05-14
+type: entity
+entity_type: person
+status: active
+---
+
+# Jeremy Bentham  (1748-1832)
+
+## 简介
+
+Jeremy Bentham  (1748-1832)是一位作家/作者。
+
+## 主要作品
+
+## 相关概念
+
+## 延伸阅读

@@ -10,7 +10,7 @@
 
 你是这个Wiki的专职维护者。你的工作是：
 
-1. **处理来源材料**：阅读daily-feed和source-material中的内容，提取关键信息
+1. **处理来源材料**：阅读daily-feed、raw中的内容，以及通过AList网盘API读取夸克网盘中的电子书，提取关键信息
 2. **维护知识库**：创建和更新Wiki页面，确保知识结构化且相互关联
 3. **回答查询**：基于Wiki内容回答用户问题，提供有引用的答案
 4. **生成输出**：帮助用户将洞察转化为演示文稿、产品文档等
@@ -27,11 +27,11 @@
 
 ```
 e:\SPLLM/
-├── book/                 # 📖 精品书籍素材（配合 book2skill 进行书籍蒸馏）
-├── daily-feed/           # 📰 每日市场信息（你读取，不修改）
-├── source-material/      # 📚 深度资料（你读取，不修改）
-├── raw/assets/           # 📎 原始资源
-├── skills/               # 🔧 技能插件（如 hv-analysis 横纵分析法、neat-freak 知识清理、prompt-flow 提示词决策流程、oral-copy 口播文案与公众号长文、khazix-writer 卡兹克写作风格、book2skill 书籍蒸馏、darwin-skill 技能优化器）
+├── book/                 # 📖 精品书籍素材（已迁移至网盘，仅剩毛选合集）
+├── books/                # 📖 书籍蒸馏产物（如 mao-xuanji/ 毛选10个技能）
+├── daily-feed/           # 📰 每日市场信息、AI工具手册（你读取，不修改）
+├── raw/                  # 📎 原始素材（品牌营销、创业方法论文档）
+├── skills/               # 🔧 技能插件（8个：hv-analysis、neat-freak、prompt-flow、oral-copy、khazix-writer、book2skill、darwin-skill、aihot）
 ├── SCHEMA.md             # 📖 完整规范文档
 ├── CLAUDE.md             # 📖 本文件（你的操作指南）
 ├── AGENTS.md             # 📖 维基构建约定与工作流程说明
@@ -48,19 +48,31 @@ e:\SPLLM/
     └── templates/        # 页面模板（参考用）
 ```
 
+### 网盘资源（AList）
+
+```
+夸克网盘（通过AList访问）
+├── Web界面：http://localhost:5244（用户名/密码：admin/admin）
+├── WebDAV：http://localhost:5244/dav/夸克/电子书数据_md/
+├── 在线预览：http://localhost:5244/夸克/电子书数据_md/
+├── 电子书数量：1,817本（.md格式）
+└── 用途：电子书素材的主要存储位置，替代本地book文件夹
+```
+
 ---
 
 ## 3. 核心工作流程
 
 ### 3.1 Ingest（处理新内容）
 
-**触发条件**：用户要求处理 daily-feed、raw、book、books 中的新内容
+**触发条件**：用户要求处理 daily-feed、raw、books 中的新内容，或要求处理网盘电子书
 
 **操作步骤**：
 
 1. **检查新文件**
    ```
-   列出 daily-feed/、raw/、book/、books/ 目录中的所有文件
+   列出 daily-feed/、raw/、books/ 目录中的所有文件
+   如需处理电子书，通过AList API获取网盘文件列表
    对比 log.md 中记录的最后处理时间
    识别未处理的新文件
    ```
@@ -95,6 +107,7 @@ e:\SPLLM/
    - 在来源摘要中链接到相关实体和概念页面
    - 在实体和概念页面中添加反向链接
    - 确保链接使用wikilink格式：`[[页面名称]]`
+   - 为有对应网盘文件的页面添加 `webdav_url` 字段（在线预览链接）
 
 7. **更新索引**
    - 更新 `wiki/index.md`
@@ -109,23 +122,23 @@ e:\SPLLM/
 **示例对话**：
 ```
 用户：处理daily-feed中的新内容
-你：好的，我检查了 daily-feed/、raw/、book/、books/ 四个目录，发现了3个新文件。让我逐一处理...
+你：好的，我检查了 daily-feed/、raw/、books/ 三个目录，发现了3个新文件。让我逐一处理...
 [处理过程]
 完成！我创建了3个来源摘要，更新了5个实体页面和2个概念页面。
 主要发现：...
 ```
 
-**示例对话（book文件夹）**：
+**示例对话（网盘电子书）**：
 ```
-用户：我的book新增了素材，请处理
-你：好的，我检查了 book/ 目录，发现新增了约1,500本电子书。让我识别主题分类并进行ingest处理...
+用户：处理网盘中的电子书
+你：好的，我通过AList API获取了网盘文件列表，共1,817本电子书。让我识别主题分类并进行ingest处理...
 [分类处理过程]
-完成！我按主题分类创建了7个来源摘要页面，涵盖商业管理、历史人文、自我提升、财经投资等主题。
+完成！我按主题分类创建了来源摘要页面，并为每个页面添加了webdav_url在线预览链接。
 ```
 
-### 3.2 Digest（处理Source Material）
+### 3.2 Digest（处理深度资料）
 
-**触发条件**：用户要求处理source-material中的内容
+**触发条件**：用户要求对网盘电子书或raw中的文档进行深度分析
 
 **操作步骤**：
 
@@ -941,7 +954,7 @@ wiki/presentations/AI视频生成市场分析-2026-05-08.md
 
 | 操作 | 命令/步骤 |
 |------|----------|
-| 处理新内容（daily-feed/raw/book/books） | 1. 检查四个目录 2. 识别新文件 3. 读文件 4. 创建摘要 5. 更新实体/概念 6. 更新index 7. 记录log |
+| 处理新内容（daily-feed/raw/books/网盘） | 1. 检查目录+网盘API 2. 识别新文件 3. 读文件 4. 创建摘要 5. 更新实体/概念 6. 添加webdav_url 7. 更新index 8. 记录log |
 | 创建实体页面 | 使用entity-template.md，放在entities/目录 |
 | 创建概念页面 | 使用concept-template.md，放在concepts/目录 |
 | 更新index.md | 添加新页面条目，更新统计信息 |
@@ -964,7 +977,11 @@ skills/khazix-writer/SKILL.md -> e:\SPLLM\skills\khazix-writer\SKILL.md
 index.md                     -> e:\SPLLM\wiki\index.md
 log.md                       -> e:\SPLLM\wiki\log.md
 daily-feed/                  -> e:\SPLLM\daily-feed\
-source-material/             -> e:\SPLLM\source-material\
+raw/                         -> e:\SPLLM\raw\
+books/                       -> e:\SPLLM\books\
+网盘电子书                    -> http://localhost:5244/夸克/电子书数据_md/（在线预览）
+网盘WebDAV                   -> http://localhost:5244/dav/夸克/电子书数据_md/（API操作）
+网盘API                      -> http://localhost:5244/api/fs/list（POST，需token认证）
 entities/                    -> e:\SPLLM\wiki\entities\
 concepts/                    -> e:\SPLLM\wiki\concepts\
 sources/                     -> e:\SPLLM\wiki\sources\
@@ -1000,7 +1017,7 @@ presentation-template.md     -> e:\SPLLM\wiki\templates\presentation-template.md
 
 ### 11.2 避免的错误
 
-1. ❌ 不要直接修改daily-feed/或source-material/中的文件
+1. ❌ 不要直接修改daily-feed/或raw/中的文件
 2. ❌ 不要创建没有frontmatter的页面
 3. ❌ 不要使用相对路径链接（如`./page.md`）
 4. ❌ 不要遗漏更新index.md和log.md
@@ -1018,7 +1035,7 @@ presentation-template.md     -> e:\SPLLM\wiki\templates\presentation-template.md
 
 **文档版本**：1.8  
 **创建日期**：2026-05-08  
-**最后更新**：2026-05-12（修正 Ingest 触发条件：daily-feed/raw/book/books 四个目录）  
+**最后更新**：2026-05-15（新增网盘资源整合：AList网盘替代本地book文件夹、webdav_url在线预览链接、更新目录架构）  
 **GitHub 仓库**：https://github.com/tuzfanfan/SPLLM （Private，main 分支）  
 **Git 配置**：user.name=tuzfanfan, user.email=447049333@qq.com
 **维护者**：LLM Agent  

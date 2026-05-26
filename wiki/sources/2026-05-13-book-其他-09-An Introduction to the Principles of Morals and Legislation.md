@@ -1,14 +1,20 @@
 ---
-title: "An Introduction to the Principles of Morals and Legislation"
-author: "Jeremy Bentham"
-category: "哲学/法学"
-source_collection: "1500本当当网电子书合集"
-source_number: 9
-date_created: "2026-05-13"
-tags: ["功利主义", "快乐与痛苦", "法理学", "立法原则", "Jeremy Bentham", "道德哲学"]
+title: An Introduction to the Principles of Morals and Legislation
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 功利主义
+- 快乐与痛苦
+- 法理学
+- 立法原则
+- Jeremy Bentham
+- 道德哲学
+sources: []
 type: source
-source_file: "An Introduction to the Principles of Morals and Legislation-Jeremy Bentham.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/An Introduction to the Principles of Morals and Legislation-Jeremy Bentham.md"
+status: active
+author: Jeremy Bentham
+source_file: An Introduction to the Principles of Morals and Legislation-Jeremy Bentham.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/An Introduction to the Principles of
 ---
 
 # An Introduction to the Principles of Morals and Legislation

@@ -1,9 +1,15 @@
 ---
 title: AGI
-created: 2026-05-13
-updated: 2026-05-13
-tags: [概念, AI技术, 通用人工智能, 商业革命]
-sources: [raw/GET_2026-05-08_10-03-01_红杉资本AI Ascent演讲深度解析：AGI时代的人类价值重估与商业革命.md, raw/GET_2026-05-09_04-12-52_硅谷教育撤资事件深度解析：AI时代普通人的教育价值危机.md]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 概念
+- AI技术
+- 通用人工智能
+- 商业革命
+sources:
+- 2026-05-13-raw-红杉资本AI Ascent演讲
+- 2026-05-13-raw-硅谷教育撤资事件
 type: concept
 status: active
 ---

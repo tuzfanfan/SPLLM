@@ -1,9 +1,13 @@
 ---
 title: 科技IT-书库分类
-created: 2026-05-13
-updated: 2026-05-13
-tags: [概念, 书库分类, 科技IT]
-sources: [2026-05-13-book-电子书库总目录]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 概念
+- 书库分类
+- 科技IT
+sources:
+- 2026-05-13-book-电子书库总目录
 type: concept
 status: active
 ---

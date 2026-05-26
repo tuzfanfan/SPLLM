@@ -1,10 +1,13 @@
 ---
 title: 来源标题
 created: YYYY-MM-DD
-updated: YYYY-MM-DD
-tags: [来源, 类别]
-sources: [原始文件路径]
-type: source
+updated: '2026-05-24'
+tags:
+- 来源
+- 类别
+sources:
+- 原始文件路径
+type: template
 status: active
 ---
 
@@ -58,13 +61,13 @@ status: active
 
 ## 相关实体
 
-- [[实体1]] - 关联说明
-- [[实体2]] - 关联说明
+- 实体1 - 关联说明
+- 实体2 - 关联说明
 
 ## 相关概念
 
-- [[概念1]] - 关联说明
-- [[概念2]] - 关联说明
+- 概念1 - 关联说明
+- 概念2 - 关联说明
 
 ## 后续行动
 

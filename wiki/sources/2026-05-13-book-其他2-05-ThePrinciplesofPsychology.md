@@ -1,16 +1,22 @@
 ---
-title: "The Principles of Psychology"
-author: "William James"
-date: 2026-05-13
-category: "其他"
-tags: ["心理学", "哲学", "意识", "詹姆斯", "实用主义"]
-source_type: "book"
-source_file: "ThePrinciplesofPsychology-William James.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/ThePrinciplesofPsychology-William James.md"
-source_path: "1500本当当网电子书合集1/ThePrinciplesofPsychology-WilliamJames(1842-191).md"
+title: The Principles of Psychology
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 心理学
+- 哲学
+- 意识
+- 詹姆斯
+- 实用主义
+sources: []
+type: source
+status: active
+author: William James
+source_file: ThePrinciplesofPsychology-William James.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/ThePrinciplesofPsychology-William James.md
 ---
 
-# The Principles of Psychology
+# ThePrinciplesofPsychology
 
 ## 基本信息
 - **作者**: William James (威廉·詹姆斯)
@@ -35,14 +41,14 @@ source_path: "1500本当当网电子书合集1/ThePrinciplesofPsychology-William
 - 没有心理修改发生而不伴随或跟随身体变化
 
 ## 相关概念
-- [[意识]]
+- 意识
 - [[联想主义]]
-- [[精神主义]]
-- [[大脑生理学]]
-- [[实用主义]]
+- 精神主义
+- 大脑生理学
+- 实用主义
 
 ## 相关实体
 - [[威廉·詹姆斯]]
-- [[赫尔巴特]]
+- 赫尔巴特
 - [[休谟]]
-- [[密尔]]
+- 密尔

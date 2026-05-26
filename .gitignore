@@ -4,6 +4,13 @@
 # WorkBuddy session memory (personal, not for repo)
 .workbuddy/
 
+# Local agent runtime state
+.codex/
+.claudian/
+.config.toml.lock
+.tmp_fabric_patterns
+outputs/
+
 # OS files
 Thumbs.db
 Desktop.ini
@@ -24,3 +31,7 @@ node_modules/
 
 # Large files (>100MB, GitHub limit)
 daily-feed/*.docx
+
+# Private deliverables
+wiki/products/
+wiki/presentations/

@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "prompt": "这套融资 PPT 我做完了，帮我挑毛病，重点看逻辑和说服力。",
+    "expected": "触发 presentation-critic，优先输出严重问题。"
+  },
+  {
+    "id": 2,
+    "prompt": "你帮我 review 一下这份 deck，看看页面顺序和图表有没有真的在证明观点。",
+    "expected": "触发 presentation-critic，并覆盖叙事与证据层审查。"
+  }
+]

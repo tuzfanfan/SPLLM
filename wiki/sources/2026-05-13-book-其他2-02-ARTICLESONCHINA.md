@@ -1,16 +1,22 @@
 ---
-title: "ARTICLES ON CHINA"
-author: "M and N (Karl Marx)"
-date: 2026-05-13
-category: "其他"
-tags: ["马克思", "中国革命", "鸦片战争", "历史", "政治"]
-source_type: "book"
-source_file: "ARTICLESONCHINA-M and N (Karl Marx).md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/ARTICLESONCHINA-M and N (Karl Marx).md"
-source_path: "1500本当当网电子书合集1/ARTICLESONCHINA-MandN.md"
+title: ARTICLES ON CHINA
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 马克思
+- 中国革命
+- 鸦片战争
+- 历史
+- 政治
+sources: []
+type: source
+status: active
+author: M and N (Karl Marx)
+source_file: ARTICLESONCHINA-M and N (Karl Marx).md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/ARTICLESONCHINA-M and N (Karl Marx).md
 ---
 
-# ARTICLES ON CHINA
+# ARTICLESONCHINA
 
 ## 基本信息
 - **作者**: M and N (Karl Marx)
@@ -37,12 +43,12 @@ source_path: "1500本当当网电子书合集1/ARTICLESONCHINA-MandN.md"
 
 ## 相关概念
 - [[鸦片战争]]
-- [[太平天国运动]]
+- 太平天国运动
 - [[殖民主义]]
-- [[贸易平衡]]
+- 贸易平衡
 
 ## 相关实体
 - [[卡尔·马克思]]
 - [[太平天国]]
-- [[东印度公司]]
-- [[满清王朝]]
+- 东印度公司
+- 满清王朝

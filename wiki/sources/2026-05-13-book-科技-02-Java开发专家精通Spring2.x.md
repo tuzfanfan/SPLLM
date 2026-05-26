@@ -1,12 +1,18 @@
 ---
 title: Java开发专家精通Spring2.x
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- Java
+- Spring
+- 编程
+- Web开发
+sources: []
+type: source
+status: active
 author: 张钰
-source_file: "Java开发专家精通Spring2.x-张钰.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Java开发专家精通Spring2.x-张钰.md"
-category: 科技IT
-source_book: 1500本当当网电子书合集1
-tags: [Java, Spring, 编程, Web开发]
-date: 2026-05-13
+source_file: Java开发专家精通Spring2.x-张钰.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Java开发专家精通Spring2.x-张钰.md
 ---
 
 # Java开发专家精通Spring2.x Java Web开发
@@ -19,7 +25,7 @@ date: 2026-05-13
 
 ## 核心概念
 
-- [[设计模式]]
+- 设计模式
 - Java开发
 - Spring框架
 - Web开发

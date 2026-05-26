@@ -1,10 +1,13 @@
 ---
-title: "William James"
+title: William James
+created: '2026-05-14'
+updated: '2026-05-26'
+tags:
+- 实体
+- person
+sources:
 type: entity
-entity_type: "person"
-date_created: "2026-05-13"
-related_sources: ["The Principles of Psychology"]
-tags: ["实体", "person"]
+status: active
 ---
 
 # William James
@@ -24,4 +27,3 @@ William James是《The Principles of Psychology》的作者。
 - [[心理学]]
 - [[内省]]
 - [[感知]]
-

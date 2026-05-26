@@ -1,10 +1,12 @@
 ---
 title: 实体名称
 created: YYYY-MM-DD
-updated: YYYY-MM-DD
-tags: [实体, 类别]
+updated: '2026-05-24'
+tags:
+- 实体
+- 类别
 sources: []
-type: entity
+type: template
 status: active
 ---
 
@@ -38,13 +40,13 @@ status: active
 
 ## 相关概念
 
-- [[概念1]]
-- [[概念2]]
+- 概念1
+- 概念2
 
 ## 相关实体
 
-- [[实体1]]
-- [[实体2]]
+- 实体1
+- 实体2
 
 ## 时间线
 

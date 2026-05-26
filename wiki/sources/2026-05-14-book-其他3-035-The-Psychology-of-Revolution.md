@@ -1,12 +1,19 @@
 ---
 title: The Psychology of Revolution
-author: Gustave Le Bon
-date: 2026-05-14
-tags: [革命心理学, 群体心理, 勒庞, 社会运动, 历史分析]
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 革命心理学
+- 群体心理
+- 勒庞
+- 社会运动
+- 历史分析
+sources: []
 type: source
-source_file: "The-Psychology-of-Revolution-Gustave Le Bon.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/The-Psychology-of-Revolution-Gustave Le Bon.md"
-status: processed
+status: active
+author: Gustave Le Bon
+source_file: The-Psychology-of-Revolution-Gustave Le Bon.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/The-Psychology-of-Revolution-Gustave
 ---
 
 # The Psychology of Revolution

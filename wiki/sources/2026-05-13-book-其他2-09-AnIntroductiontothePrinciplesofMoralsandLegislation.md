@@ -1,16 +1,22 @@
 ---
-title: "An Introduction to the Principles of Morals and Legislation"
-author: "Jeremy Bentham"
-date: 2026-05-13
-category: "其他"
-tags: ["功利主义", "法学", "伦理学", "边沁", "立法"]
-source_type: "book"
-source_file: "AnIntroductiontothePrinciplesofMoralsandLegislation-Jeremy Bentham.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/AnIntroductiontothePrinciplesofMoralsandLegislation-Jeremy Bentham.md"
-source_path: "1500本当当网电子书合集1/AnIntroductiontothePrinciplesofMoralsandLegislation-JeremyBentham(1748-1832).md"
+title: An Introduction to the Principles of Morals and Legislation
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 功利主义
+- 法学
+- 伦理学
+- 边沁
+- 立法
+sources: []
+type: source
+status: active
+author: Jeremy Bentham
+source_file: AnIntroductiontothePrinciplesofMoralsandLegislation-Jeremy Bentham.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/AnIntroductiontothePrinciplesofMoralsandLegislation-Jeremy
 ---
 
-# An Introduction to the Principles of Morals and Legislation
+# AnIntroductiontothePrinciplesofMoralsandLegislation
 
 ## 基本信息
 - **作者**: Jeremy Bentham (杰里米·边沁)
@@ -35,8 +41,8 @@ source_path: "1500本当当网电子书合集1/AnIntroductiontothePrinciplesofMo
 - [[功利主义]]
 - [[立法原则]]
 - [[快乐与痛苦]]
-- [[犯罪分类]]
+- 犯罪分类
 
 ## 相关实体
-- [[杰里米·边沁]]
-- [[功利主义学派]]
+- 杰里米·边沁
+- 功利主义学派

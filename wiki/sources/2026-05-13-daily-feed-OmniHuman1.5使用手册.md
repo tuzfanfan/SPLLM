@@ -1,10 +1,14 @@
 ---
 title: 即梦数字人新模型 OmniHuman 1.5 使用手册
-created: 2026-05-13
-updated: 2026-05-13
-tags: [来源, daily-feed, AI视频, 数字人, 产品手册]
-sources:
-  - daily-feed/即梦数字人新模型 OmniHuman 1.5 使用手册.md
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 来源
+- daily-feed
+- AI视频
+- 数字人
+- 产品手册
+sources: []
 type: source
 status: active
 ---
@@ -17,7 +21,7 @@ status: active
 |------|-----|
 | **标题** | 即梦数字人新模型 OmniHuman 1.5 使用手册 |
 | **来源** | daily-feed |
-| **原始文件** | `daily-feed/即梦数字人新模型 OmniHuman 1.5 使用手册.md` |
+| **原始文件** | `http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%E5%8D%B3%E6%A2%A6%E6%95%B0%E5%AD%97%E4%BA%BA%E6%96%B0%E6%A8%A1%E5%9E%8B%20OmniHuman%201.5%20%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C.md` |
 | **处理日期** | 2026-05-13 |
 | **文档类型** | 产品使用手册 |
 
@@ -39,7 +43,7 @@ status: active
 
 ## 原始文件
 
-- [查看原始文件](file:///e:/SPLLM/daily-feed/即梦数字人新模型%20OmniHuman%201.5%20使用手册.md)
+- [查看原始文件](http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%E5%8D%B3%E6%A2%A6%E6%95%B0%E5%AD%97%E4%BA%BA%E6%96%B0%E6%A8%A1%E5%9E%8B%2520OmniHuman%25201.5%2520%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C.md)
 
 ---
 

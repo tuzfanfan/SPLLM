@@ -1,0 +1,172 @@
+{
+  "sources": [
+    {
+      "id": "jazzyear",
+      "label": "甲子光年",
+      "kind": "article",
+      "home_url": "https://www.jazzyear.com/",
+      "link_substrings": ["article_info.html?id="],
+      "detail_strategy": "paragraphs"
+    },
+    {
+      "id": "iresearch",
+      "label": "艾瑞网",
+      "kind": "article",
+      "home_url": "https://www.iresearch.cn/",
+      "link_substrings": ["news.iresearch.cn/content/"],
+      "detail_strategy": "paragraphs",
+      "use_apparent_encoding": true
+    },
+    {
+      "id": "199it",
+      "label": "199IT",
+      "kind": "article",
+      "home_url": "https://www.199it.com/",
+      "link_regex": "/archives/[0-9]+\\.html",
+      "detail_strategy": "paragraphs"
+    },
+    {
+      "id": "fxbaogao",
+      "label": "发现报告",
+      "kind": "article",
+      "home_url": "https://www.fxbaogao.com/",
+      "link_substrings": ["/detail/", "/insights/detail/"],
+      "detail_strategy": "paragraphs"
+    },
+    {
+      "id": "tophub-tech",
+      "label": "今日热榜-科技",
+      "kind": "list",
+      "home_url": "https://tophub.today/c/tech",
+      "list_strategy": "html_hotlist"
+    },
+    {
+      "id": "redian",
+      "label": "热点日报",
+      "kind": "list",
+      "home_url": "https://www.redian.me/",
+      "list_strategy": "redian_signed_api"
+    },
+    {
+      "id": "newsnow",
+      "label": "NewsNow 实时新闻",
+      "kind": "list",
+      "home_url": "https://newsnow.busiyi.world/c/realtime",
+      "list_strategy": "newsnow_api",
+      "api_url": "https://newsnow.busiyi.world/api/s",
+      "source_ids": [
+        "ithome",
+        "36kr",
+        "36kr-renqi",
+        "cls-telegraph",
+        "wallstreetcn-quick",
+        "zhihu",
+        "weibo"
+      ]
+    },
+    {
+      "id": "zhihu-hot-list",
+      "label": "知乎热榜",
+      "kind": "list",
+      "home_url": "https://www.zhihu.com/hot",
+      "list_strategy": "zhihu_hot_list_mcp",
+      "mcp_sse_url": "https://developer.zhihu.com/api/mcp/hot_list/v1/sse",
+      "mcp_tool_name": "hot_list",
+      "mcp_protocol_version": "2024-11-05",
+      "api_key_env": "ZHIHU_ACCESS_SECRET"
+    },
+    {
+      "id": "rss-36kr-main",
+      "label": "36氪综合资讯 RSS",
+      "kind": "rss",
+      "home_url": "https://36kr.com/rss-center",
+      "feed_url": "https://36kr.com/feed",
+      "rss_fetch_detail": false,
+      "rss_use_content_field": true
+    },
+    {
+      "id": "rss-36kr-newsflash",
+      "label": "36氪快讯 RSS",
+      "kind": "rss",
+      "home_url": "https://36kr.com/rss-center",
+      "feed_url": "https://36kr.com/feed-newsflash",
+      "rss_fetch_detail": false,
+      "rss_use_content_field": true
+    },
+    {
+      "id": "rss-techcrunch",
+      "label": "TechCrunch RSS",
+      "kind": "rss",
+      "home_url": "https://techcrunch.com/tag/rss/",
+      "feed_url": "https://techcrunch.com/feed/",
+      "rss_fetch_detail": false,
+      "rss_use_content_field": true
+    },
+    {
+      "id": "rss-guardian-world",
+      "label": "The Guardian World RSS",
+      "kind": "rss",
+      "home_url": "https://www.theguardian.com/world",
+      "feed_url": "https://www.theguardian.com/world/rss",
+      "rss_fetch_detail": false,
+      "rss_use_content_field": true
+    },
+    {
+      "id": "rss-guardian-technology",
+      "label": "The Guardian Technology RSS",
+      "kind": "rss",
+      "home_url": "https://www.theguardian.com/technology",
+      "feed_url": "https://www.theguardian.com/technology/rss",
+      "rss_fetch_detail": false,
+      "rss_use_content_field": true
+    },
+    {
+      "id": "rss-ars-technica",
+      "label": "Ars Technica RSS",
+      "kind": "rss",
+      "home_url": "https://arstechnica.com/rss-feeds/",
+      "feed_url": "https://feeds.arstechnica.com/arstechnica/index/",
+      "rss_fetch_detail": false,
+      "rss_use_content_field": true
+    },
+    {
+      "id": "rss-npr-top",
+      "label": "NPR Top News RSS",
+      "kind": "rss",
+      "home_url": "https://www.npr.org/rss/",
+      "feed_url": "https://feeds.npr.org/1001/rss.xml",
+      "rss_fetch_detail": false,
+      "rss_use_content_field": true
+    },
+    {
+      "id": "rss-npr-technology",
+      "label": "NPR Technology RSS",
+      "kind": "rss",
+      "home_url": "https://www.npr.org/rss/",
+      "feed_url": "https://feeds.npr.org/1019/rss.xml",
+      "rss_fetch_detail": false,
+      "rss_use_content_field": true
+    },
+    {
+      "id": "rebang",
+      "label": "热榜聚合",
+      "kind": "reminder",
+      "home_url": "https://rebang.today/",
+      "note": "已确认存在公开 menu_tabs 元数据接口，但 /v1/items 仍需前端内部参数组合，当前未稳定还原。"
+    },
+    {
+      "id": "robo-datayes",
+      "label": "萝卜投研",
+      "kind": "reminder",
+      "home_url": "https://robo.datayes.com/",
+      "note": "站点可访问，但主数据网关 gw.datayes.com 当前公开请求多返回 Need login，尚未确认稳定匿名内容接口。"
+    },
+    {
+      "id": "bcg-publications",
+      "label": "BCG Publications",
+      "kind": "reminder",
+      "home_url": "https://www.bcg.com/publications",
+      "note": "当前环境直接请求仍返回 403。"
+    }
+  ]
+}

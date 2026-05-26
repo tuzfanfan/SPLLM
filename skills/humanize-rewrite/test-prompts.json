@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "prompt": "这段文案有点 AI 味，帮我改得更像人写的，但别改掉原来的意思。",
+    "expected": "触发 humanize-rewrite。"
+  },
+  {
+    "id": 2,
+    "prompt": "把这版稿子改自然一点、顺口一点，数字和事实都不要动。",
+    "expected": "触发 humanize-rewrite，并锁定不可改内容。"
+  }
+]

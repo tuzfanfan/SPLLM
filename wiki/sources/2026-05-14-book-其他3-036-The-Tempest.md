@@ -1,12 +1,19 @@
 ---
 title: The Tempest
-author: William Shakespeare
-date: 2026-05-14
-tags: [莎士比亚, 戏剧, 古典文学, 英国文学, 暴风雨]
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 莎士比亚
+- 戏剧
+- 古典文学
+- 英国文学
+- 暴风雨
+sources: []
 type: source
-source_file: "The-Tempest-William Shakespeare.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/The-Tempest-William Shakespeare.md"
-status: processed
+status: active
+author: William Shakespeare
+source_file: The-Tempest-William Shakespeare.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/The-Tempest-William Shakespeare.md
 ---
 
 # The Tempest
@@ -19,7 +26,7 @@ status: processed
 
 ## 相关概念
 
-[[莎士比亚]] [[戏剧]] [[古典文学]] [[英国文学]] [[暴风雨]]
+[[莎士比亚]] 戏剧 古典文学 [[英国文学]] [[暴风雨]]
 
 ## 笔记
 

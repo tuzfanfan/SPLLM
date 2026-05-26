@@ -1,9 +1,16 @@
 ---
 title: Storydoing营销
-created: 2026-05-13
-updated: 2026-05-13
-tags: [Storydoing, 品牌叙事, 共创, 用户参与, 潘多拉]
-sources: [2026-05-13-讲故事营销战略是双刃剑, 2026-05-13-品牌叙事理论研究学术文献]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- Storydoing
+- 品牌叙事
+- 共创
+- 用户参与
+- 潘多拉
+sources:
+- 2026-05-13-讲故事营销战略是双刃剑
+- 2026-05-13-品牌叙事理论研究学术文献
 type: concept
 status: active
 ---

@@ -1,8 +1,12 @@
 ---
 title: 销售话术
+created: '2026-05-14'
+updated: '2026-05-26'
+tags:
+- concepts
+sources:
 type: concept
-category: 营销销售
-date: 2026-05-13
+status: active
 ---
 
 # 销售话术

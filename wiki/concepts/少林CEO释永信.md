@@ -1,9 +1,13 @@
 ---
-title: "少林CEO释永信"
-date: 2026-05-14
+title: 少林CEO释永信
+created: '2026-05-15'
+updated: '2026-05-26'
+tags:
+- concepts
+sources:
 type: concept
 status: active
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/少林CEO释永信-李良忠,宋倩.md"
+webdav_url: http://localhost:5244/夸克/电子书数据_md/少林CEO释永信-李良忠,宋倩.md
 ---
 
 # 少林CEO释永信

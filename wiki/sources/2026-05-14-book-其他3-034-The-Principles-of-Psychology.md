@@ -1,12 +1,19 @@
 ---
 title: The Principles of Psychology
-author: William James
-date: 2026-05-14
-tags: [心理学原理, 意识流, 威廉詹姆斯, 心理功能, 认知心理学]
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 心理学原理
+- 意识流
+- 威廉詹姆斯
+- 心理功能
+- 认知心理学
+sources: []
 type: source
-source_file: "The-Principles-of-Psychology-William James.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/The-Principles-of-Psychology-William James.md"
-status: processed
+status: active
+author: William James
+source_file: The-Principles-of-Psychology-William James.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/The-Principles-of-Psychology-William
 ---
 
 # The Principles of Psychology
@@ -19,7 +26,7 @@ status: processed
 
 ## 相关概念
 
-[[心理学原理]] [[意识流]] [[威廉詹姆斯]] [[心理功能]] [[认知心理学]]
+[[心理学原理]] [[意识流]] [[威廉·詹姆斯]] [[心理功能]] [[认知心理学]]
 
 ## 笔记
 

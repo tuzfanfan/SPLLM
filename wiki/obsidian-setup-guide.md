@@ -1,10 +1,12 @@
 ---
 title: Obsidian配置指南
-created: 2026-05-08
-updated: 2026-05-08
-tags: [配置, Obsidian]
+created: '2026-05-08'
+updated: '2026-05-24'
+tags:
+- 配置
+- Obsidian
 sources: []
-type: concept
+type: source
 status: active
 ---
 
@@ -47,7 +49,7 @@ status: active
 - **默认新笔记位置**：指定到Wiki子目录
 - **附件文件夹路径**：`wiki/assets`
 - **内部链接类型**：Wiki链接
-- **使用 [[Wikilinks]]**：✅ 启用
+- **使用 Wikilinks**：✅ 启用
 - **为 wikilinks 检测 Markdown 链接**：✅ 启用
 
 #### 编辑器设置

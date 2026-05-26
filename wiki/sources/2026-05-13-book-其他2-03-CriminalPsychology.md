@@ -1,16 +1,21 @@
 ---
-title: "Criminal Psychology"
-author: "Hans Gustav Adolf Gross"
-date: 2026-05-13
-category: "其他"
-tags: ["犯罪心理学", "法学", "心理学", "司法"]
-source_type: "book"
-source_file: "CriminalPsychology-Hans Gustav Adolf Gross.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/CriminalPsychology-Hans Gustav Adolf Gross.md"
-source_path: "1500本当当网电子书合集1/CriminalPsychology-Gross,HansGustavAdolf.md"
+title: Criminal Psychology
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 犯罪心理学
+- 法学
+- 心理学
+- 司法
+sources: []
+type: source
+status: active
+author: Hans Gustav Adolf Gross
+source_file: CriminalPsychology-Hans Gustav Adolf Gross.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/CriminalPsychology-Hans Gustav Adolf
 ---
 
-# Criminal Psychology
+# CriminalPsychology
 
 ## 基本信息
 - **作者**: Hans Gustav Adolf Gross (汉斯·格罗斯)
@@ -34,10 +39,10 @@ source_path: "1500本当当网电子书合集1/CriminalPsychology-Gross,HansGust
 
 ## 相关概念
 - [[犯罪心理学]]
-- [[刑事科学]]
+- 刑事科学
 - [[司法心理学]]
-- [[证据法]]
+- 证据法
 
 ## 相关实体
-- [[汉斯·格罗斯]]
-- [[格拉茨大学]]
+- 汉斯·格罗斯
+- 格拉茨大学

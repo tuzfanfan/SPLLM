@@ -1,16 +1,21 @@
 ---
-title: "Outlines of Psychology"
-author: "Wilhelm Max Wundt"
-date: 2026-05-13
-category: "其他"
-tags: ["心理学", "哲学", "科学方法论", "冯特"]
-source_type: "book"
-source_file: "OutlinesofPsychology-Wilhelm Max Wundt.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/OutlinesofPsychology-Wilhelm Max Wundt.md"
-source_path: "1500本当当网电子书合集1/OutlinesofPsychology-Wundt,WilhelmMax.md"
+title: Outlines of Psychology
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 心理学
+- 哲学
+- 科学方法论
+- 冯特
+sources: []
+type: source
+status: active
+author: Wilhelm Max Wundt
+source_file: OutlinesofPsychology-Wilhelm Max Wundt.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/OutlinesofPsychology-Wilhelm Max Wundt.md
 ---
 
-# Outlines of Psychology
+# OutlinesofPsychology
 
 ## 基本信息
 - **作者**: Wilhelm Max Wundt (威廉·冯特)
@@ -38,10 +43,10 @@ source_path: "1500本当当网电子书合集1/OutlinesofPsychology-Wundt,Wilhel
 
 ## 相关概念
 - [[实验心理学]]
-- [[内省法]]
+- 内省法
 - [[心理科学]]
-- [[经验主义]]
+- 经验主义
 
 ## 相关实体
 - [[威廉·冯特]]
-- [[查尔斯·贾德]]
+- 查尔斯·贾德

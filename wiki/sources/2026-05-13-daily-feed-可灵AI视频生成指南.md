@@ -1,9 +1,15 @@
 ---
 title: 可灵AI视频生成指南
-created: 2026-05-13
-updated: 2026-05-13
-tags: [来源, daily-feed, AI视频, 可灵, 产品手册]
-sources: [daily-feed/可灵AI使用指南_视频生成_整合文档.md]
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 来源
+- daily-feed
+- AI视频
+- 可灵
+- 产品手册
+sources:
+- http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%E5%8F%AF%E7%81%B5AI%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97_%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90_%E6%95%B4%E5%90%88%E6%96%87%E6%A1%A3.md
 type: source
 status: active
 ---
@@ -16,7 +22,7 @@ status: active
 |------|-----|
 | **标题** | 可灵AI使用指南 - 视频生成（整合文档） |
 | **来源** | daily-feed |
-| **文件路径** | `daily-feed/可灵AI使用指南_视频生成_整合文档.md` |
+| **文件路径** | `http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%E5%8F%AF%E7%81%B5AI%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97_%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90_%E6%95%B4%E5%90%88%E6%96%87%E6%A1%A3.md` |
 | **处理日期** | 2026-05-13 |
 | **文档类型** | 产品使用指南 |
 
@@ -52,7 +58,7 @@ status: active
 
 ## 原始文件
 
-- [查看原始文件](file:///e:/SPLLM/daily-feed/可灵AI使用指南_视频生成_整合文档.md)
+- [查看原始文件](http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%E5%8F%AF%E7%81%B5AI%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97_%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90_%E6%95%B4%E5%90%88%E6%96%87%E6%A1%A3.md)
 
 ---
 

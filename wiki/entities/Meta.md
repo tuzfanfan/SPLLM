@@ -1,9 +1,14 @@
 ---
 title: Meta
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, 公司, 科技巨头, AI开源]
-sources: [raw/20260504_从数据标注到数字资产_AI时代下的商业转型与资产重构.md]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- 公司
+- 科技巨头
+- AI开源
+sources:
+- 2026-05-13-raw-从数据标注到数字资产
 type: entity
 status: active
 ---

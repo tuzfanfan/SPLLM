@@ -1,16 +1,21 @@
 ---
-title: "The Tempest"
-author: "William Shakespeare"
-date: 2026-05-13
-category: "其他"
-tags: ["莎士比亚", "戏剧", "英国文学", "经典"]
-source_type: "book"
-source_file: "TheTempest-William Shakespeare.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/TheTempest-William Shakespeare.md"
-source_path: "1500本当当网电子书合集1/TheTempest-SHAKESPEARE,WILLIAM(1564-1616).md"
+title: The Tempest
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 莎士比亚
+- 戏剧
+- 英国文学
+- 经典
+sources: []
+type: source
+status: active
+author: William Shakespeare
+source_file: TheTempest-William Shakespeare.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/TheTempest-William Shakespeare.md
 ---
 
-# The Tempest
+# TheTempest
 
 ## 基本信息
 - **作者**: William Shakespeare (威廉·莎士比亚)
@@ -33,11 +38,11 @@ source_path: "1500本当当网电子书合集1/TheTempest-SHAKESPEARE,WILLIAM(15
 
 ## 相关概念
 - [[莎士比亚]]
-- [[哥特小说]]
-- [[超自然]]
+- 哥特小说
+- 超自然
 - [[英国文学]]
 
 ## 相关实体
-- [[威廉·莎士比亚]]
-- [[沃尔特·司各特]]
-- [[康沃利斯勋爵]]
+- 威廉·莎士比亚
+- 沃尔特·司各特
+- 康沃利斯勋爵

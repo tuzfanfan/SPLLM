@@ -1,14 +1,19 @@
 ---
-title: "The Tempest"
-author: "William Shakespeare"
-category: "文学/戏剧"
-source_collection: "1500本当当网电子书合集"
-source_number: 7
-date_created: "2026-05-13"
-tags: ["莎士比亚", "戏剧", "英国文学", "文艺复兴", "William Shakespeare"]
+title: The Tempest
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 莎士比亚
+- 戏剧
+- 英国文学
+- 文艺复兴
+- William Shakespeare
+sources: []
 type: source
-source_file: "The Tempest-William Shakespeare.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/The Tempest-William Shakespeare.md"
+status: active
+author: William Shakespeare
+source_file: The Tempest-William Shakespeare.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/The Tempest-William Shakespeare.md
 ---
 
 # The Tempest
@@ -23,7 +28,7 @@ webdav_url: "http://localhost:5244/夸克/电子书数据_md/The Tempest-William
 ## 关键概念
 
 - [[莎士比亚]]
-- [[戏剧]]
+- 戏剧
 - [[英国文学]]
 - [[文艺复兴]]
 - [[William Shakespeare]]

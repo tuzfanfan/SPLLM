@@ -1,19 +1,22 @@
 ---
-title: "ARTICLES ON CHINA"
-author: "M and N"
-date: 2026-05-14
-tags: [个人成长]
+title: ARTICLES ON CHINA
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 个人成长
+sources: []
 type: source
-source_file: "ARTICLES ON CHINA-M and N.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/ARTICLES ON CHINA-M and N.md"
-status: processed
+status: active
+author: M and N
+source_file: ARTICLES ON CHINA-M and N.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/ARTICLES ON CHINA-M and N.md
 ---
 
 # ARTICLES ON CHINA
 
-**作者**: [[M and N]]
+**作者**: M and N
 
-**核心概念**: [[个人成长]]
+**核心概念**: 个人成长
 
 ## 简介
 
@@ -25,4 +28,4 @@ status: processed
 
 ## 相关概念
 
-- [[个人成长]]
+- 个人成长

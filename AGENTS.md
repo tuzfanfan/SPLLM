@@ -63,7 +63,7 @@ e:\SPLLM/
 ├── skills/               # 技能插件目录
 │   ├── hv-analysis/      # 横纵分析法深度研究技能（v2.0，含商业化分析）
 │   ├── neat-freak/       # 知识同步与清理技能
-│   ├── prompt-flow/      # 提示词决策流程技能（v1.1，全局固定触发）
+│   ├── prompt-flow/      # 提示词决策流程技能（全局 guidance 已接管，此处保留项目级补充语义）
 │   ├── oral-copy/        # 口播文案与公众号长文创作技能（v2.0，四大类型）
 │   └── khazix-writer/    # 卡兹克公众号长文写作风格技能
 ├── SCHEMA.md             # Layer 4：完整规范文档（面向人类）
@@ -155,9 +155,12 @@ status: draft|active|archived
 
 ### 4.1 Ingest（摄取资料）
 
-**目标**：将 raw/ 目录中的原始材料转化为结构化的 Wiki 页面
+**目标**：将 `daily-feed/`、`raw/` 目录中的原始材料，以及通过 AList 访问的夸克网盘电子书素材，转化为结构化的 Wiki 页面
 
-**输入**：`raw/` 目录中的新文件
+**输入**：
+- `daily-feed/` 目录中的新文件
+- `raw/` 目录中的新文件
+- AList 网盘中的电子书素材（夸克网盘 `电子书数据_md/`）
 **输出**：
 - `wiki/sources/` 中的来源摘要页面
 - 更新或新建的 entity / concept 页面
@@ -165,28 +168,51 @@ status: draft|active|archived
 
 **流程**：
 ```
-raw/新文件 → 阅读分析 → 提取实体/概念/数据
+daily-feed/新文件 / raw/新文件 / 网盘电子书 → 阅读分析 → 提取实体/概念/数据
     → 创建 source 摘要 → 更新 entity 页面 → 更新 concept 页面
     → 建立 wikilink 交叉引用 → 更新 index + log
 ```
 
+**固定 Prompt 协议**：
+
+Ingest 任务内部统一采用“材料 - 指令 - 输出 - schema”四段结构。
+
+```text
+<materials>原始文件、网盘条目、旧页面片段</materials>
+<instructions>抽取实体/概念/数据/洞察，并说明更新动作</instructions>
+<output>source 摘要、entity/concept 更新项、index/log 更新项</output>
+<schema>frontmatter、章节、wikilink、webdav_url、引用格式</schema>
+```
+
 **质量标准**：
-- 每个来源文件对应一个 source 摘要页面
+- 每个来源文件或电子书条目对应一个 source 摘要页面
 - 提取所有可识别的实体和概念，不遗漏
 - source 页面必须链接到相关 entity 和 concept 页面
 - entity/concept 页面必须添加反向链接
+- 对有网盘原文的来源，优先补充 `webdav_url` 或等效在线预览链接
 
 ### 4.2 Digest（消化深度资料）
 
 **目标**：对深度资料进行方法论级别的理解和提炼
 
-**输入**：`source-material/` 或 `raw/` 中的深度文章、研究报告
+**输入**：`raw/` 中的深度文章、研究报告，或 AList 网盘中的电子书/长文资料
 **输出**：
 - 带有方法论框架的 source 摘要
 - 更新的 concept 页面（增加方法论、可操作步骤）
 - 可选：与用户讨论后的应用建议
 
-**与 Ingest 的区别**：Ingest 侧重信息提取，Digest 侧重深度理解和知识内化。
+**固定 Prompt 协议**：
+
+Digest 任务也统一采用“材料 - 指令 - 输出 - schema”四段结构，但要求显式区分事实、作者观点和可迁移方法。
+
+```text
+<materials>深度文章、研究报告、书籍章节、相关旧页</materials>
+<instructions>提炼方法论、识别论证逻辑、抽取可操作框架</instructions>
+<output>结构化摘要、方法论框架、适用场景、应用建议</output>
+<schema>核心观点、方法框架、适用边界、关联知识、引用格式</schema>
+```
+
+**与 Ingest 的区别**：Ingest 侧重信息提取，Digest 侧重深度理解和知识内化。`source-material/` 已不再作为当前仓库的扫描入口。
 
 ### 4.3 Query（回答问题）
 
@@ -266,6 +292,17 @@ raw/新文件 → 阅读分析 → 提取实体/概念/数据
 | 链接有效性 | 是否有死链、断链、格式错误 |
 | 元数据完整性 | frontmatter 是否完整、日期格式是否正确 |
 | 质量评估 | 是否有内容薄弱的页面、信息缺口 |
+
+**固定 Prompt 协议**：
+
+Check 任务统一采用“材料 - 指令 - 输出 - schema”四段结构。
+
+```text
+<materials>待检查页面、索引、日志、模板、统计信息</materials>
+<instructions>检查一致性、完整性、死链、孤立页、字段缺失、内容薄弱处</instructions>
+<output>健康检查报告、问题清单、修复建议、优先级</output>
+<schema>问题级别、定位页面、问题说明、修复动作、是否需人工确认</schema>
+```
 
 **输出**：健康检查报告 + 修复建议
 
@@ -348,6 +385,20 @@ Step 6: Monitor    → 监控前几次运行，继续优化
 
 ### 5.2 已安装技能
 
+#### aweskill（本地技能仓库管理）
+
+| 属性 | 值 |
+|------|-----|
+| 名称 | aweskill |
+| 来源 | [github.com/mugpeng/aweskill](https://github.com/mugpeng/aweskill) |
+| 用途 | 管理和投影跨 agent 的 Skill，中央仓库用于统一存放和分发技能资产 |
+| 位置 | 由 `aweskill store where --verbose` 确认 |
+
+**本项目约定**：
+- 中央技能仓库放在当前工作空间：`E:\SPLLM\.aweskill`
+- 对应环境变量：`AWESKILL_HOME=E:\SPLLM`
+- 这样 aweskill 的 central store、备份和 bundle 都跟着项目走，便于多个 agent 共用同一套技能资产
+
 #### hv-analysis（横纵分析法）
 
 | 属性 | 值 |
@@ -397,9 +448,9 @@ skills/neat-freak/
 | 名称 | prompt-flow |
 | 版本 | v1.2（整合AI视频/图像生成提示词策略） |
 | 来源 | 基于 Andrew Ng《AI Prompting for Everyone》全三模块课程 + 即梦/可灵官方使用手册 |
-| 用途 | 每次用户提问时自动执行的四阶段决策流程（反向沟通→类别判断→生成→自检），支持AI视频/图像生成提示词优化 |
+| 用途 | 作为全局 `AGENTS.md` 中的默认前置思考框架：先理解意图、补齐高影响上下文、判断任务类别、再生成结果；本项目中继续用于 AI 视频/图像提示词优化与复杂请求澄清 |
 | 位置 | `e:\SPLLM\skills\prompt-flow/` |
-| 触发规则 | **固定触发**，优先于其他技能执行 |
+| 触发规则 | **全局默认已由 `C:\Users\Administrator\.codex\AGENTS.md` 接管**；本仓库不再单独声明“固定触发”，仅保留项目级补充约定 |
 
 **文件结构**：
 ```
@@ -409,11 +460,43 @@ skills/prompt-flow/
 
 **核心原则**（P1-P8）：上下文为王、避免谄媚、渐进式大纲、迭代头脑风暴、信息路径选择、评分标准驱动批评、多模态成本意识、代码与数据分析
 
-**提示词类别**（A-G + E5）：
-- A信息查找、B头脑风暴、C写作、D批评/评估、E多模态、F代码/应用、G推理/复杂任务
-- **E5 AI视频/图像生成（即梦/可灵）**：结构化提示词工程法，包含六步流程（平台选择→结构模板→要素填充→进阶技巧→关键词优化→质量检查）
+## Execution style
+
+- Do not turn prompt-flow into a ritual the user has to watch every time.
+- For simple requests, run the flow silently and answer directly.
+- For ambiguous or strategic requests, briefly expose the reasoning frame and assumptions.
+- Be concise, practical, and forward-moving.
+
+## Generation gate
+
+- For any generation task, including multimodal generation, writing, presentations, reports, prompts, plans, or other content-producing requests, you must run `prompt-flow` before generating the final output.
+- After `prompt-flow`, you must first present your execution judgment to the user. That judgment must include the task category, the real goal, the key assumptions, the main risks or boundaries, and the recommended output path.
+- Do not begin the actual generation step until the user explicitly confirms that you may proceed.
 
 **与 oral-copy 的协同**：当生成AI视频/图像提示词时，prompt-flow 提供结构框架（镜头+情绪+动作+背景 / 主体+运动+背景+镜头+光影+氛围），oral-copy 提供影视级叙事语言风格，两者结合可生成既符合技术要求又具有专业质感的提示词
+
+#### thinking-extend（任务收尾延伸）
+
+| 属性 | 值 |
+|------|-----|
+| 名称 | thinking-extend |
+| 版本 | v1.0 |
+| 来源 | 项目内生技能 |
+| 用途 | 在主任务完成后回看 `wiki/`，做强关联发现、弱关联跨界观察，并追问 1 个高质量延伸问题 |
+| 位置 | `e:\SPLLM\skills\thinking-extend/` |
+| 触发规则 | **项目级默认收尾动作**；每次主任务完成后都必须执行一次“是否进入 thinking-extend”的判断 |
+
+**文件结构**：
+```
+skills/thinking-extend/
+└── SKILL.md                      # 技能定义（收尾规则、分层检索、跨界思考、延伸问题生成）
+```
+
+**项目级约定**：
+- `thinking-extend` 不是可选装饰，而是默认收尾层
+- 推荐顺序：`主任务执行 -> 结果交付 -> thinking-extend`
+- 除非用户明确关闭、任务纯机械、或 `wiki/` 没有足够关联内容，否则不应跳过
+- 执行时必须优先检查 `concepts / entities / sources`，不能只在 `products/` 中找关联
 
 #### oral-copy（口播文案与公众号长文创作）
 

@@ -1,9 +1,15 @@
 ---
 title: GTM策略
-created: 2026-05-13
-updated: 2026-05-13
-tags: [概念, 营销策略, 出海, 跨文化]
-sources: [raw/GET_2026-05-08_09-40-20_高语境文化下的GTM策略转型：从功能推销到心理安全构建.md, raw/梅赛德斯奔驰电动自行车推广信息分析.md]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 概念
+- 营销策略
+- 出海
+- 跨文化
+sources:
+- 2026-05-13-raw-高语境文化GTM策略转型
+- 2026-05-13-raw-梅赛德斯奔驰电动自行车
 type: concept
 status: active
 ---

@@ -1,12 +1,19 @@
 ---
 title: Outlines of Psychology
-author: Wilhelm Wundt
-date: 2026-05-14
-tags: [心理学, 冯特, 实验心理学, 心理科学, 认知研究]
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 心理学
+- 冯特
+- 实验心理学
+- 心理科学
+- 认知研究
+sources: []
 type: source
-source_file: "Outlines-of-Psychology-Wilhelm Wundt.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Outlines-of-Psychology-Wilhelm Wundt.md"
-status: processed
+status: active
+author: Wilhelm Wundt
+source_file: Outlines-of-Psychology-Wilhelm Wundt.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Outlines-of-Psychology-Wilhelm Wundt.md
 ---
 
 # Outlines of Psychology

@@ -1,9 +1,12 @@
 ---
 title: Anker
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, 公司, 3C]
-sources: []
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- 公司
+- 3C
+sources:
 type: entity
 status: active
 ---
@@ -37,7 +40,7 @@ status: active
 ## 相关概念
 
 - [[海外营销]] - 跨界联名实战案例
-- [[联名营销]] - Co-Branding方法论
+- 联名营销 - Co-Branding方法论
 
 ## 参考来源
 

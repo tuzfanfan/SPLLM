@@ -1,9 +1,14 @@
 ---
 title: Epic Games
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, 公司, 游戏引擎, 凸性收益]
-sources: [raw/竞争优势情绪.md]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- 公司
+- 游戏引擎
+- 凸性收益
+sources:
+- 2026-05-13-raw-竞争优势情绪反脆弱盈利
 type: entity
 status: active
 ---

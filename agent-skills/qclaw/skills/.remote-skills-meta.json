@@ -1,0 +1,158 @@
+{
+  "skills": {
+    "startup-validator": {
+      "type": "inspiration",
+      "version": 1,
+      "sha256": "ccc6ea11c769133dda7cadb8be8dda3d8dbc817b8c4c2f806390a42235a26141",
+      "installed_at": "2026-04-06T18:10:46+08:00"
+    },
+    "persona-switch": {
+      "type": "system",
+      "version": 7,
+      "sha256": "086dfdecc4b8c803e76d77cd41be662ee14dd896178c9f07c0d48a9d50e0b56e",
+      "installed_at": "2026-05-24T01:14:41+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 1
+    },
+    "fbs_bookwriter": {
+      "type": "system",
+      "version": 1,
+      "sha256": "da13f5db6eff9c0fda94adec0dab3da95c55d3959a016853202997367cdb7faa",
+      "installed_at": "2026-04-29T21:34:30+08:00"
+    },
+    "aippt": {
+      "type": "system",
+      "version": 2,
+      "sha256": "c5fdc2d21fab9c05f3256433148c056a84bc592532c5cbaa3c7b715d90740669",
+      "installed_at": "2026-05-09T13:46:43+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 3
+    },
+    "kdocs": {
+      "type": "system",
+      "version": 1,
+      "sha256": "0b45bb8b99309d1547c8919c9499c4bdb3a5d5278a771b279d7280b500c50e17",
+      "installed_at": "2026-05-08T13:58:50+08:00"
+    },
+    "wecom-weisheng-scrm": {
+      "type": "system",
+      "version": 1,
+      "sha256": "0fa70e1c42017eee6cce4c7c67426446674d1f6375416a845892509b657166e8",
+      "installed_at": "2026-05-08T18:58:57+08:00",
+      "icon": "https://webcdn.m.qq.com/webcdn/qclaw/skills/icons/1778225940017_wecom-weisheng-scrm.png",
+      "install_mode": 1,
+      "effect_scope": 3
+    },
+    "another_them": {
+      "type": "system",
+      "version": 1,
+      "sha256": "c935a76e8776983444e219f8bbca0ce57acc18f436ffb738bc8f7ada8fe86029",
+      "installed_at": "2026-05-14T02:44:59+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 1
+    },
+    "imap-smtp-email": {
+      "type": "system",
+      "version": 4,
+      "sha256": "05547425dd61f362968db90ebdc8e5aa4c0903e4dccd6d49ef0d888d890c2b44",
+      "installed_at": "2026-05-14T02:44:59+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 3
+    },
+    "cloud-upload-backup": {
+      "type": "system",
+      "version": 2,
+      "sha256": "4498bd7998da5537f2a79994019ceb59a6aa5ef5289c9ea003d68520e4f05484",
+      "installed_at": "2026-05-15T20:35:02+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 1
+    },
+    "docx": {
+      "type": "system",
+      "version": 1,
+      "sha256": "bf9c69ae27eac952ff4dd9efd0d720186cb0e1fcb9ffcee7d42ab2d1a3d5ee9b",
+      "installed_at": "2026-05-15T20:35:02+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 1
+    },
+    "email-skill": {
+      "type": "system",
+      "version": 2,
+      "sha256": "e5a9a5e294f5f56e22bd8360468da7134988ab0088aa77b64ea646b2928caeaa",
+      "installed_at": "2026-05-15T20:35:02+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 1
+    },
+    "mcporter": {
+      "type": "system",
+      "version": 1,
+      "sha256": "8286e8078fe0c364c213c34b107373cd53c55dc09d7f340fec6aed0e64d19daa",
+      "installed_at": "2026-05-15T20:35:02+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 1
+    },
+    "multi-search-engine": {
+      "type": "system",
+      "version": 2,
+      "sha256": "9894175e54c64b7570c36437ea7dec9a8e2dc90b440f03aaa863ac73930e9a63",
+      "installed_at": "2026-05-15T20:35:02+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 1
+    },
+    "pdf": {
+      "type": "system",
+      "version": 1,
+      "sha256": "768e3412353cde595a0734df14220d301dbabd5905f75f0148015da4c07ea08b",
+      "installed_at": "2026-05-15T20:35:02+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 1
+    },
+    "xlsx": {
+      "type": "system",
+      "version": 1,
+      "sha256": "3b285b45b9005bb9ad0c876f2d9ffd17bdce2615afb5be82e23b3513ef47a252",
+      "installed_at": "2026-05-15T20:35:02+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 1
+    },
+    "bdpan-storage": {
+      "type": "system",
+      "version": 1,
+      "sha256": "153ae3012297795c723c5a7c42060cd72d75976ed807a5d01ca5dd50d3157b49",
+      "installed_at": "2026-05-21T02:32:03+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 3
+    },
+    "meituan-travel": {
+      "type": "system",
+      "version": 1,
+      "sha256": "9925ae7e4942b6eb051be698040c152574355253b520496a2c90f4c932bdcc29",
+      "installed_at": "2026-05-21T23:41:18+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 3
+    },
+    "tencent-esign-contract": {
+      "type": "system",
+      "version": 1,
+      "sha256": "848b5cf0f11362cb2ca6d1ff9fddeb6c57a3129941f57ff4d9cd11d2d11a6683",
+      "installed_at": "2026-05-21T23:41:18+08:00",
+      "icon": "",
+      "install_mode": 1,
+      "effect_scope": 3
+    }
+  },
+  "last_sync": "2026-05-24T11:51:54+08:00"
+}

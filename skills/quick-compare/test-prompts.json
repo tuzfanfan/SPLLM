@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "prompt": "快速对比一下 Notion 和 Obsidian 的关键差异，帮我判断怎么选。",
+    "expected": "触发 quick-compare。"
+  },
+  {
+    "id": 2,
+    "prompt": "帮我横向看一下这两个 AI 视频工具的共同点和不同点，不用写成长报告。",
+    "expected": "触发 quick-compare，并保持轻量。"
+  }
+]

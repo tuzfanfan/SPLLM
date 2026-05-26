@@ -1,10 +1,14 @@
 ---
 title: 9种AI真人视频过审方法 + Seedance 2.0 长视频叙事四法
-created: 2026-05-13
-updated: 2026-05-13
-tags: [来源, daily-feed, AI视频, 合规, 创作方法]
-sources:
-  - daily-feed/9种AI真人视频过审方法-Seedance2.0长视频叙事四法.md
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 来源
+- daily-feed
+- AI视频
+- 合规
+- 创作方法
+sources: []
 type: source
 status: active
 ---
@@ -17,7 +21,7 @@ status: active
 |------|-----|
 | **标题** | 9种AI真人视频过审方法 + Seedance 2.0 长视频叙事四法 |
 | **来源** | 微信公众号文章 |
-| **原始文件** | `daily-feed/9种AI真人视频过审方法-Seedance2.0长视频叙事四法.md` |
+| **原始文件** | `http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/9%E7%A7%8DAI%E7%9C%9F%E4%BA%BA%E8%A7%86%E9%A2%91%E8%BF%87%E5%AE%A1%E6%96%B9%E6%B3%95-Seedance2.0%E9%95%BF%E8%A7%86%E9%A2%91%E5%8F%99%E4%BA%8B%E5%9B%9B%E6%B3%95.md` |
 | **获取日期** | 2026-05-10 |
 | **处理日期** | 2026-05-13 |
 | **文档类型** | 创作方法教程 |
@@ -44,7 +48,7 @@ status: active
 
 ## 原始文件
 
-- [查看原始文件](file:///e:/SPLLM/daily-feed/9种AI真人视频过审方法-Seedance2.0长视频叙事四法.md)
+- [查看原始文件](http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/9%E7%A7%8DAI%E7%9C%9F%E4%BA%BA%E8%A7%86%E9%A2%91%E8%BF%87%E5%AE%A1%E6%96%B9%E6%B3%95-Seedance2.0%E9%95%BF%E8%A7%86%E9%A2%91%E5%8F%99%E4%BA%8B%E5%9B%9B%E6%B3%95.md)
 
 ---
 

@@ -1,9 +1,14 @@
 ---
 title: Balsamiq
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, 产品, 设计工具, 创业案例]
-sources: [raw/2年如何做到300万？.md]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- 产品
+- 设计工具
+- 创业案例
+sources:
+- 2026-05-13-raw-2年如何做到300万
 type: entity
 status: active
 ---

@@ -1,10 +1,13 @@
 ---
-title: "William Shakespeare"
+title: William Shakespeare
+created: '2026-05-14'
+updated: '2026-05-26'
+tags:
+- 实体
+- person
+sources:
 type: entity
-entity_type: "person"
-date_created: "2026-05-13"
-related_sources: ["The Tempest"]
-tags: ["实体", "person"]
+status: active
 ---
 
 # William Shakespeare
@@ -22,6 +25,5 @@ William Shakespeare是《The Tempest》的作者。
 ## 关联概念
 
 - [[莎士比亚]]
-- [[戏剧]]
+- 戏剧
 - [[英国文学]]
-

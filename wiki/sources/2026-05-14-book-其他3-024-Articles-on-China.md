@@ -1,17 +1,24 @@
 ---
 title: Articles on China
-author: Karl Marx
-date: 2026-05-14
-tags: [中国革命, 鸦片战争, 帝国主义, 殖民主义, 马克思主义]
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 中国革命
+- 鸦片战争
+- 帝国主义
+- 殖民主义
+- 马克思主义
+sources: []
 type: source
-source_file: "Articles-on-China-Karl Marx.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Articles-on-China-Karl Marx.md"
-status: processed
+status: active
+author: Karl Marx
+source_file: Articles-on-China-Karl Marx.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Articles-on-China-Karl Marx.md
 ---
 
 # Articles on China
 
-**作者**: [[Karl Marx]]
+**作者**: Karl Marx
 
 ## 核心内容
 

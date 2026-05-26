@@ -1,0 +1,14 @@
+{
+  "lastUpdatedAt": "2026-05-08T18:51:42.388Z",
+  "lastSkillName": "aihot",
+  "lastAction": "install",
+  "history": [
+    {
+      "skillName": "aihot",
+      "action": "install",
+      "agentId": "agent-9a348b48",
+      "timestamp": "2026-05-08T18:51:42.388Z"
+    }
+  ],
+  "lastAgentId": "agent-9a348b48"
+}

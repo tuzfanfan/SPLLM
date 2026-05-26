@@ -1,10 +1,12 @@
 ---
 title: 对比主题
 created: YYYY-MM-DD
-updated: YYYY-MM-DD
-tags: [对比, 类别]
+updated: '2026-05-24'
+tags:
+- 对比
+- 类别
 sources: []
-type: comparison
+type: template
 status: active
 ---
 
@@ -81,13 +83,13 @@ radar-beta
 
 ## 相关实体
 
-- [[对象A]]
-- [[对象B]]
+- 对象A
+- 对象B
 
 ## 相关概念
 
-- [[概念1]]
-- [[概念2]]
+- 概念1
+- 概念2
 
 ## 参考来源
 

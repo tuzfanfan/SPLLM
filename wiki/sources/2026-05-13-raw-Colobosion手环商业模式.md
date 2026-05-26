@@ -1,14 +1,9 @@
 ---
-title: "Colobosion手环高溢价案例：领养海洋动物商业模式"
-created: 2026-05-13
-updated: 2026-05-13
-tags:
-  - 跨境电商
-  - 商业模式创新
-  - 情感价值营销
-  - 义乌案例
-sources:
-  - "raw/source-get笔记-义乌低成本手环的高溢价案例：Colobosion的_领养海洋动物_商业模式解析.md"
+title: Colobosion手环高溢价案例：领养海洋动物商业模式
+created: '2026-05-13'
+updated: '2026-05-24'
+tags: []
+sources: []
 type: source
 status: active
 ---
@@ -24,7 +19,7 @@ status: active
 
 ### 商业概况
 
-- **品牌**: [[entity-Colobosion]]
+- **品牌**: entity-Colobosion
 - **产品**: 成本不到1欧的编织手环，售价26欧
 - **业绩**: 月销售额50万-70万美金，毛利率超90%
 
@@ -71,6 +66,6 @@ status: active
 
 ## 关联页面
 
-- [[entity-Colobosion]]
-- [[concept-情感价值营销]]
-- [[concept-公益绑定商业模式]]
+- entity-Colobosion
+- concept-情感价值营销
+- concept-公益绑定商业模式

@@ -1,18 +1,13 @@
 ---
 title: Facebook之父马克·扎克伯格：后乔布斯时代的传奇
-created: 2026-05-13
-updated: 2026-05-13
-tags:
-  - 技术驱动创新
-  - 社交媒体
-  - 平台经济
-  - 创业传奇
-sources:
-  - Facebook之父马克·扎克伯格：后乔布斯时代的传奇-林志共,王静.md
-type: book-summary
-source_file: "Facebook之父马克·扎克伯格-林志共,王静.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Facebook之父马克·扎克伯格-林志共,王静.md"
+created: '2026-05-13'
+updated: '2026-05-24'
+tags: []
+sources: []
+type: source
 status: active
+source_file: Facebook之父马克·扎克伯格-林志共,王静.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Facebook之父马克·扎克伯格-林志共,王静.md
 ---
 
 # Facebook之父马克·扎克伯格：后乔布斯时代的传奇
@@ -70,7 +65,7 @@ Facebook不仅是一个社交网站，更是改变了人们接收、传播信息
 ## 关联实体
 
 - [[马克·扎克伯格]]
-- [[Facebook/Meta]]
+- Facebook/Meta
 
 ## 关联概念
 

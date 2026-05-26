@@ -1,10 +1,13 @@
 ---
-title: "Hans Gross"
+title: Hans Gross
+created: '2026-05-14'
+updated: '2026-05-26'
+tags:
+- 实体
+- person
+sources:
 type: entity
-entity_type: "person"
-date_created: "2026-05-13"
-related_sources: ["Criminal Psychology"]
-tags: ["实体", "person"]
+status: active
 ---
 
 # Hans Gross
@@ -24,4 +27,3 @@ Hans Gross是《Criminal Psychology》的作者。
 - [[犯罪学]]
 - [[司法心理学]]
 - [[证言分析]]
-

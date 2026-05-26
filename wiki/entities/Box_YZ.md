@@ -1,9 +1,14 @@
 ---
 title: Box_YZ
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, 公司, AI运营, 无人公司]
-sources: [raw/20260429_全球首个无人公司Box_YZ运营模式与盈利逻辑深度解析.md]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- 公司
+- AI运营
+- 无人公司
+sources:
+- 2026-05-13-raw-全球首个无人公司Box_YZ
 type: entity
 status: active
 ---

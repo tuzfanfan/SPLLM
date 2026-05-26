@@ -1,9 +1,12 @@
 ---
 title: LABUBU
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, 产品, IP]
-sources: []
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- 产品
+- IP
+sources:
 type: entity
 status: active
 ---

@@ -1,9 +1,13 @@
 ---
 title: Seedream 4.5
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, AI产品, 图像生成, 即梦]
-sources: []
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- AI产品
+- 图像生成
+- 即梦
+sources:
 type: entity
 status: active
 ---

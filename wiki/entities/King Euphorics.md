@@ -1,9 +1,12 @@
 ---
 title: King Euphorics
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, 品牌, 饮料]
-sources: []
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- 品牌
+- 饮料
+sources:
 type: entity
 status: active
 ---
@@ -36,7 +39,7 @@ status: active
 
 - [[清醒社交]] - 品牌开创的品类概念
 - [[理性感性化]] - 目标消费群体特征
-- [[身份消费]] - 为身份认同付费
+- 身份消费 - 为身份认同付费
 
 ## 参考来源
 

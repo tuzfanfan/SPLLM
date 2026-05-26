@@ -1,9 +1,16 @@
 ---
 title: AI Agent
-created: 2026-05-13
-updated: 2026-05-13
-tags: [概念, AI技术, 智能体, 自动化]
-sources: [raw/20260429_全球首个无人公司Box_YZ运营模式与盈利逻辑深度解析.md, raw/GET_2026-05-08_20-23-17_GitHub本周开源热榜Top10深度分析（2026年5月）：AI Agent与开发效率工具主导趋势.md, raw/GET_2026-05-08_10-03-01_红杉资本AI Ascent演讲深度解析：AGI时代的人类价值重估与商业革命.md]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 概念
+- AI技术
+- 智能体
+- 自动化
+sources:
+- 2026-05-13-raw-全球首个无人公司Box_YZ
+- 2026-05-13-raw-GitHub开源热榜Top10分析
+- 2026-05-13-raw-红杉资本AI Ascent演讲
 type: concept
 status: active
 ---

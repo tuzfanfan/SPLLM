@@ -1,19 +1,22 @@
 ---
-title: "The World's Desire"
-author: "H.Rider Haggard(1856-1925)"
-date: 2026-05-14
-tags: [个人成长]
+title: The World's Desire
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 个人成长
+sources: []
 type: source
-source_file: "The World's Desire-H.Rider Haggard(1856-1925).md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/The World's Desire-H.Rider Haggard(1856-1925).md"
-status: processed
+status: active
+author: H.Rider Haggard(1856-1925)
+source_file: The World's Desire-H.Rider Haggard(1856-1925).md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/The World's Desire-H.Rider Haggard(1856-1925).md
 ---
 
 # The World's Desire
 
-**作者**: [[H.Rider Haggard(1856-1925)]]
+**作者**: H.Rider Haggard(1856-1925)
 
-**核心概念**: [[个人成长]]
+**核心概念**: 个人成长
 
 ## 简介
 
@@ -25,4 +28,4 @@ status: processed
 
 ## 相关概念
 
-- [[个人成长]]
+- 个人成长

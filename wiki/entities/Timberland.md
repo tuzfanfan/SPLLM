@@ -1,9 +1,15 @@
 ---
 title: Timberland
-created: 2026-05-13
-updated: 2026-05-13
-tags: [Timberland, 户外品牌, 品牌故事, 英雄之旅, 用户主角化]
-sources: [2026-05-13-品牌叙事从独白变成伙伴]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- Timberland
+- 户外品牌
+- 品牌故事
+- 英雄之旅
+- 用户主角化
+sources:
+- 2026-05-13-品牌叙事从独白变成伙伴
 type: entity
 status: active
 ---

@@ -1,10 +1,12 @@
 ---
 title: 概念名称
 created: YYYY-MM-DD
-updated: YYYY-MM-DD
-tags: [概念, 类别]
+updated: '2026-05-24'
+tags:
+- 概念
+- 类别
 sources: []
-type: concept
+type: template
 status: active
 ---
 
@@ -52,13 +54,13 @@ graph TD
 
 ## 相关实体
 
-- [[实体1]]
-- [[实体2]]
+- 实体1
+- 实体2
 
 ## 相关概念
 
-- [[概念1]]
-- [[概念2]]
+- 概念1
+- 概念2
 
 ## 发展趋势
 

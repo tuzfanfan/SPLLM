@@ -1,9 +1,12 @@
 ---
 title: Media Markt
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, 公司, 零售]
-sources: []
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- 公司
+- 零售
+sources:
 type: entity
 status: active
 ---
@@ -34,14 +37,14 @@ status: active
 
 ## 相关实体
 
-- [[Fnac&Darty]] - 法国及南欧龙头
-- [[Currys]] - 英国全渠道之王
-- [[Euronics]] - 顶级采购联盟
+- Fnac&Darty - 法国及南欧龙头
+- Currys - 英国全渠道之王
+- Euronics - 顶级采购联盟
 
 ## 相关概念
 
 - [[海外营销]] - 欧洲渠道营销核心目标
-- [[渠道营销]] - Channel Marketing实践
+- 渠道营销 - Channel Marketing实践
 
 ## 参考来源
 

@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我把这篇文章里提到的书、论文、人物和案例都抽出来。",
+    "expected": "触发 reference-extractor，并按类型归类。"
+  },
+  {
+    "id": 2,
+    "prompt": "看看这份研究笔记都引用了哪些外部对象，顺便标出值得建页的候选。",
+    "expected": "触发 reference-extractor。"
+  }
+]

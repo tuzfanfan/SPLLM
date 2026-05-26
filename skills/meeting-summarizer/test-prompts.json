@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我把这段产品周会 transcript 整理成会议纪要，重点列出决定了什么、谁负责什么、还有哪些风险。",
+    "expected": "触发 meeting-summarizer，输出结构化纪要和待办。"
+  },
+  {
+    "id": 2,
+    "prompt": "这里有一段复盘讨论记录，帮我提炼结论、问题原因和后续动作。",
+    "expected": "触发 meeting-summarizer，并将会议类型偏向复盘会。"
+  }
+]

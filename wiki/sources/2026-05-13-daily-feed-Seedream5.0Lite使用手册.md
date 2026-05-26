@@ -1,9 +1,15 @@
 ---
 title: Seedream 5.0 Lite 用户手册
-created: 2026-05-13
-updated: 2026-05-13
-tags: [来源, daily-feed, AI图像, 即梦, 产品手册]
-sources: [daily-feed/Seedream 5.0 Lite 用户手册.md]
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 来源
+- daily-feed
+- AI图像
+- 即梦
+- 产品手册
+sources:
+- http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/Seedream%205.0%20Lite%20%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C.md
 type: source
 status: active
 ---
@@ -16,7 +22,7 @@ status: active
 |------|-----|
 | **标题** | Seedream 5.0 Lite 用户手册 |
 | **来源** | daily-feed |
-| **文件路径** | `daily-feed/Seedream 5.0 Lite 用户手册.md` |
+| **文件路径** | `http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/Seedream%205.0%20Lite%20%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C.md` |
 | **处理日期** | 2026-05-13 |
 | **文档类型** | 产品使用手册 |
 
@@ -51,7 +57,7 @@ status: active
 
 ## 原始文件
 
-- [查看原始文件](file:///e:/SPLLM/daily-feed/Seedream%205.0%20Lite%20用户手册.md)
+- [查看原始文件](http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/Seedream%25205.0%2520Lite%2520%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C.md)
 
 ---
 

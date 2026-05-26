@@ -1,14 +1,21 @@
 ---
-title: "The Principles of Psychology"
-author: "William James"
-category: "心理学"
-source_collection: "1500本当当网电子书合集"
-source_number: 5
-date_created: "2026-05-13"
-tags: ["心理学", "内省", "感知", "William James", "意识", "经验", "意志"]
+title: The Principles of Psychology
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 心理学
+- 内省
+- 感知
+- William James
+- 意识
+- 经验
+- 意志
+sources: []
 type: source
-source_file: "The Principles of Psychology-William James.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/The Principles of Psychology-William James.md"
+status: active
+author: William James
+source_file: The Principles of Psychology-William James.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/The Principles of Psychology-William
 ---
 
 # The Principles of Psychology
@@ -26,8 +33,8 @@ The Principles of Psychology
 - [[内省]]
 - [[感知]]
 - [[William James]]
-- [[意识]]
-- [[经验]]
+- 意识
+- 经验
 - [[意志]]
 
 ## 目录结构

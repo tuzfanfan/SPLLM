@@ -1,11 +1,14 @@
 ---
 title: 智能多帧功能使用手册（1.0 + 2.0）
-created: 2026-05-13
-updated: 2026-05-13
-tags: [来源, daily-feed, AI视频, 长视频, 产品手册]
-sources:
-  - daily-feed/智能多帧功能使用手册.md
-  - daily-feed/智能多帧2.0功能使用手册.md
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 来源
+- daily-feed
+- AI视频
+- 长视频
+- 产品手册
+sources: []
 type: source
 status: active
 ---
@@ -18,7 +21,7 @@ status: active
 |------|-----|
 | **标题** | 智能多帧功能使用手册 + 智能多帧2.0功能使用手册 |
 | **来源** | daily-feed |
-| **原始文件** | `daily-feed/智能多帧功能使用手册.md` + `daily-feed/智能多帧2.0功能使用手册.md` |
+| **原始文件** | `http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%E6%99%BA%E8%83%BD%E5%A4%9A%E5%B8%A7%E5%8A%9F%E8%83%BD%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C.md` + `http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%E6%99%BA%E8%83%BD%E5%A4%9A%E5%B8%A72.0%E5%8A%9F%E8%83%BD%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C.md` |
 | **处理日期** | 2026-05-13 |
 | **文档类型** | 产品使用手册 |
 
@@ -43,8 +46,8 @@ status: active
 
 ## 原始文件
 
-- [查看原始文件 - 1.0](file:///e:/SPLLM/daily-feed/智能多帧功能使用手册.md)
-- [查看原始文件 - 2.0](file:///e:/SPLLM/daily-feed/智能多帧2.0功能使用手册.md)
+- [查看原始文件 - 1.0](http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%E6%99%BA%E8%83%BD%E5%A4%9A%E5%B8%A7%E5%8A%9F%E8%83%BD%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C.md)
+- [查看原始文件 - 2.0](http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%E6%99%BA%E8%83%BD%E5%A4%9A%E5%B8%A72.0%E5%8A%9F%E8%83%BD%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C.md)
 
 ---
 

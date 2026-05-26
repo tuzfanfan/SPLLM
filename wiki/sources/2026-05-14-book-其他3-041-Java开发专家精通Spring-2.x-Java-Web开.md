@@ -1,17 +1,24 @@
 ---
 title: Java开发专家精通Spring 2.x Java Web开发
-author: 张钰
-date: 2026-05-14
-tags: [Spring框架, Java开发, Web开发, 编程技术, 软件架构]
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- Spring框架
+- Java开发
+- Web开发
+- 编程技术
+- 软件架构
+sources: []
 type: source
-source_file: "Java开发专家精通Spring-2.x-Java-Web开-张钰.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Java开发专家精通Spring-2.x-Java-Web开-张钰.md"
-status: processed
+status: active
+author: 张钰
+source_file: Java开发专家精通Spring-2.x-Java-Web开-张钰.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Java开发专家精通Spring-2.x-Java-Web开-张钰.md
 ---
 
 # Java开发专家精通Spring 2.x Java Web开发
 
-**作者**: [[张钰]]
+**作者**: 张钰
 
 ## 核心内容
 

@@ -1,14 +1,13 @@
 ---
 title: 演示文稿标题
 created: YYYY-MM-DD
-updated: YYYY-MM-DD
-tags: [演示, 类别]
+updated: '2026-05-24'
+tags:
+- 演示
+- 类别
 sources: []
-type: presentation
+type: template
 status: draft
-marp: true
-theme: default
-paginate: true
 ---
 
 # 演示文稿标题
@@ -87,4 +86,4 @@ graph LR
 ---
 
 > 此演示文稿由LLM基于Wiki内容生成
-> 关联Wiki页面：[[相关页面1]], [[相关页面2]]
+> 关联Wiki页面：相关页面1, 相关页面2

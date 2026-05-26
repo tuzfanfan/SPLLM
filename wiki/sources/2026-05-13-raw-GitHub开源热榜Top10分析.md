@@ -1,9 +1,15 @@
 ---
 title: GitHub开源热榜Top10深度分析（2026年5月）
-created: 2026-05-13
-updated: 2026-05-13
-tags: [来源, AI技术, GitHub, 开源, AI Agent]
-sources: [raw/GET_2026-05-08_20-23-17_GitHub本周开源热榜Top10深度分析（2026年5月）：AI Agent与开发效率工具主导趋势.md]
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 来源
+- AI技术
+- GitHub
+- 开源
+- AI Agent
+sources:
+- raw/GET_2026-05-08_20-23-17_GitHub本周开源热榜Top10深度分析（2026年5月）：AI Agent与开发效率工具主导趋势.md
 type: source
 status: active
 ---

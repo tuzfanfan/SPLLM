@@ -1,9 +1,15 @@
 ---
 title: 即梦 Seedance 2.0 使用手册（全新多模态创作体验）
-created: 2026-05-13
-updated: 2026-05-13
-tags: [来源, daily-feed, AI视频, 即梦, 产品手册]
-sources: [daily-feed/🎬 即梦 Seedance 2.0 使用手册（全新多模态创作体验）.md]
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 来源
+- daily-feed
+- AI视频
+- 即梦
+- 产品手册
+sources:
+- http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%F0%9F%8E%AC%20%E5%8D%B3%E6%A2%A6%20Seedance%202.0%20%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%EF%BC%88%E5%85%A8%E6%96%B0%E5%A4%9A%E6%A8%A1%E6%80%81%E5%88%9B%E4%BD%9C%E4%BD%93%E9%AA%8C%EF%BC%89.md
 type: source
 status: active
 ---
@@ -16,7 +22,7 @@ status: active
 |------|-----|
 | **标题** | 即梦 Seedance 2.0 使用手册（全新多模态创作体验） |
 | **来源** | daily-feed |
-| **文件路径** | `daily-feed/🎬 即梦 Seedance 2.0 使用手册（全新多模态创作体验）.md` |
+| **文件路径** | `http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%F0%9F%8E%AC%20%E5%8D%B3%E6%A2%A6%20Seedance%202.0%20%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%EF%BC%88%E5%85%A8%E6%96%B0%E5%A4%9A%E6%A8%A1%E6%80%81%E5%88%9B%E4%BD%9C%E4%BD%93%E9%AA%8C%EF%BC%89.md` |
 | **处理日期** | 2026-05-13 |
 | **文档类型** | 产品使用手册 |
 
@@ -59,7 +65,7 @@ Seedance 2.0 是即梦平台推出的多模态AI视频生成模型，标志着�
 
 ## 原始文件
 
-- [查看原始文件](file:///e:/SPLLM/daily-feed/🎬%20即梦%20Seedance%202.0%20使用手册（全新多模态创作体验）.md)
+- [查看原始文件](http://127.0.0.1:5244/%E5%A4%B8%E5%85%8B/%E6%97%A7%E5%BA%93/%E5%BF%83%E7%90%86%E5%AD%A6500%E6%9C%AC%EF%BC%88AI%E8%AF%AD%E6%96%99%EF%BC%89/daily-feed/%F0%9F%8E%AC%2520%E5%8D%B3%E6%A2%A6%2520Seedance%25202.0%2520%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C%EF%BC%88%E5%85%A8%E6%96%B0%E5%A4%9A%E6%A8%A1%E6%80%81%E5%88%9B%E4%BD%9C%E4%BD%93%E9%AA%8C%EF%BC%89.md)
 
 ---
 

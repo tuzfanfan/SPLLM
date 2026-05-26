@@ -1,9 +1,15 @@
 ---
 title: 活人感Prompt文章整理
-created: 2026-05-13
-updated: 2026-05-13
-tags: [来源, AI技术, 提示词工程, 活人感, AI写作]
-sources: [raw/活人感prompt文章整理.md]
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 来源
+- AI技术
+- 提示词工程
+- 活人感
+- AI写作
+sources:
+- raw/活人感prompt文章整理.md
 type: source
 status: active
 ---

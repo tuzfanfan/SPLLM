@@ -1,11 +1,17 @@
 ---
-title: "谢家华(Zappos)"
-created: 2026-05-13
-updated: 2026-05-13
-tags: ['企业家', 'Zappos', '电子商务', '企业文化', '幸福学']
-sources: ['[[三双鞋]]']
-type: "person"
-status: "active"
+title: 谢家华(Zappos)
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 企业家
+- Zappos
+- 电子商务
+- 企业文化
+- 幸福学
+sources:
+- 2026-05-14-book-合集4-008-三双鞋
+type: entity
+status: active
 ---
 
 # 谢家华(Zappos)

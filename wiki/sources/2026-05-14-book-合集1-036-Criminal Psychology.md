@@ -1,19 +1,22 @@
 ---
-title: "Criminal Psychology"
-author: "Gross,Hans Gustav Adolf"
-date: 2026-05-14
-tags: [个人成长]
+title: Criminal Psychology
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 个人成长
+sources: []
 type: source
-source_file: "Criminal Psychology-Gross,Hans Gustav Adolf.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Criminal Psychology-Gross,Hans Gustav Adolf.md"
-status: processed
+status: active
+author: Gross,Hans Gustav Adolf
+source_file: Criminal Psychology-Gross,Hans Gustav Adolf.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Criminal Psychology-Gross,Hans Gustav
 ---
 
 # Criminal Psychology
 
-**作者**: [[Gross,Hans Gustav Adolf]]
+**作者**: Gross,Hans Gustav Adolf
 
-**核心概念**: [[个人成长]]
+**核心概念**: 个人成长
 
 ## 简介
 
@@ -25,4 +28,4 @@ status: processed
 
 ## 相关概念
 
-- [[个人成长]]
+- 个人成长

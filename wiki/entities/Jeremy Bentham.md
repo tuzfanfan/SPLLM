@@ -1,10 +1,13 @@
 ---
-title: "Jeremy Bentham"
+title: Jeremy Bentham
+created: '2026-05-14'
+updated: '2026-05-26'
+tags:
+- 实体
+- person
+sources:
 type: entity
-entity_type: "person"
-date_created: "2026-05-13"
-related_sources: ["An Introduction to the Principles of Morals and Legislation"]
-tags: ["实体", "person"]
+status: active
 ---
 
 # Jeremy Bentham
@@ -24,4 +27,3 @@ Jeremy Bentham是《An Introduction to the Principles of Morals and Legislation�
 - [[功利主义]]
 - [[快乐与痛苦]]
 - [[法理学]]
-

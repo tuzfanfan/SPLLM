@@ -1,14 +1,21 @@
 ---
-title: "Outlines of Psychology"
-author: "Wilhelm Wundt"
-category: "心理学"
-source_collection: "1500本当当网电子书合集"
-source_number: 4
-date_created: "2026-05-13"
-tags: ["心理学", "内省", "感知", "Wilhelm Wundt", "意识", "经验", "意志"]
+title: Outlines of Psychology
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 心理学
+- 内省
+- 感知
+- Wilhelm Wundt
+- 意识
+- 经验
+- 意志
+sources: []
 type: source
-source_file: "Outlines of Psychology-Wilhelm Wundt.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Outlines of Psychology-Wilhelm Wundt.md"
+status: active
+author: Wilhelm Wundt
+source_file: Outlines of Psychology-Wilhelm Wundt.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Outlines of Psychology-Wilhelm Wundt.md
 ---
 
 # Outlines of Psychology
@@ -26,8 +33,8 @@ Outlines of Psychology
 - [[内省]]
 - [[感知]]
 - [[Wilhelm Wundt]]
-- [[意识]]
-- [[经验]]
+- 意识
+- 经验
 - [[意志]]
 
 ## 目录结构

@@ -1,19 +1,22 @@
 ---
-title: "The Principles of Psychology"
-author: "William James(1842-191)"
-date: 2026-05-14
-tags: [个人成长]
+title: The Principles of Psychology
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 个人成长
+sources: []
 type: source
-source_file: "The Principles of Psychology-William James(1842-191).md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/The Principles of Psychology-William James(1842-191).md"
-status: processed
+status: active
+author: William James(1842-191)
+source_file: The Principles of Psychology-William James(1842-191).md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/The Principles of Psychology-William
 ---
 
 # The Principles of Psychology
 
-**作者**: [[William James(1842-191)]]
+**作者**: William James(1842-191)
 
-**核心概念**: [[个人成长]]
+**核心概念**: 个人成长
 
 ## 简介
 
@@ -25,4 +28,4 @@ status: processed
 
 ## 相关概念
 
-- [[个人成长]]
+- 个人成长

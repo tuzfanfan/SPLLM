@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "skills": {
+    "aweskill": {
+      "source": "mugpeng/aweskill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mugpeng/aweskill.git",
+      "ref": "main",
+      "subpath": "resources/skills/aweskill",
+      "computedHash": "f750578b83a42a42efeea87476ce583104d7d91e74f8212c37d179347fec1258",
+      "installedAt": "2026-05-15T13:48:05.458Z",
+      "updatedAt": "2026-05-15T13:48:05.458Z"
+    },
+    "aweskill-doctor": {
+      "source": "mugpeng/aweskill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mugpeng/aweskill.git",
+      "ref": "main",
+      "subpath": "resources/skills/aweskill-doctor",
+      "computedHash": "18d9d6b4e2900ed4adb19eb2b1e687f713d9afc1f7e4abfa681fa60f6511a026",
+      "installedAt": "2026-05-15T13:48:05.474Z",
+      "updatedAt": "2026-05-15T13:48:05.474Z"
+    }
+  }
+}

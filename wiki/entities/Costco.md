@@ -1,9 +1,12 @@
 ---
 title: Costco
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, 公司, 零售]
-sources: []
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- 公司
+- 零售
+sources:
 type: entity
 status: active
 ---

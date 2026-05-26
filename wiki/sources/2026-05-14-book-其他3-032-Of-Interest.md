@@ -1,17 +1,24 @@
 ---
 title: Of Interest
-author: David Hume
-date: 2026-05-14
-tags: [利息理论, 经济学, 休谟, 货币理论, 商业发展]
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 利息理论
+- 经济学
+- 休谟
+- 货币理论
+- 商业发展
+sources: []
 type: source
-source_file: "Of-Interest-David Hume.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Of-Interest-David Hume.md"
-status: processed
+status: active
+author: David Hume
+source_file: Of-Interest-David Hume.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Of-Interest-David Hume.md
 ---
 
 # Of Interest
 
-**作者**: [[David Hume]]
+**作者**: David Hume
 
 ## 核心内容
 
@@ -19,7 +26,7 @@ status: processed
 
 ## 相关概念
 
-[[利息理论]] [[经济学]] [[休谟]] [[货币理论]] [[商业发展]]
+[[利息理论]] 经济学 [[休谟]] [[货币理论]] [[商业发展]]
 
 ## 笔记
 

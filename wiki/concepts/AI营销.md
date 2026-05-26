@@ -1,9 +1,12 @@
 ---
 title: AI营销
-created: 2026-05-13
-updated: 2026-05-13
-tags: [概念, 营销策略, 技术趋势]
-sources: []
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 概念
+- 营销策略
+- 技术趋势
+sources:
 type: concept
 status: active
 ---

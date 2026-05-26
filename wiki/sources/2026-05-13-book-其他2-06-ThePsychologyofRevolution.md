@@ -1,16 +1,22 @@
 ---
-title: "The Psychology of Revolution"
-author: "Gustave le Bon"
-date: 2026-05-13
-category: "其他"
-tags: ["革命心理学", "群体心理学", "历史", "法国", "政治"]
-source_type: "book"
-source_file: "ThePsychologyofRevolution-Gustave le Bon.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/ThePsychologyofRevolution-Gustave le Bon.md"
-source_path: "1500本当当网电子书合集1/ThePsychologyofRevolution-leBon,Gustave.md"
+title: The Psychology of Revolution
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 革命心理学
+- 群体心理学
+- 历史
+- 法国
+- 政治
+sources: []
+type: source
+status: active
+author: Gustave le Bon
+source_file: ThePsychologyofRevolution-Gustave le Bon.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/ThePsychologyofRevolution-Gustave le
 ---
 
-# The Psychology of Revolution
+# ThePsychologyofRevolution
 
 ## 基本信息
 - **作者**: Gustave le Bon (古斯塔夫·勒庞)
@@ -37,11 +43,11 @@ source_path: "1500本当当网电子书合集1/ThePsychologyofRevolution-leBon,G
 ## 相关概念
 - [[革命心理学]]
 - [[群体心理学]]
-- [[乌合之众]]
-- [[历史心理学]]
+- 乌合之众
+- 历史心理学
 
 ## 相关实体
-- [[古斯塔夫·勒庞]]
-- [[亨利二世]]
-- [[吉斯公爵]]
-- [[玛丽·斯图亚特]]
+- 古斯塔夫·勒庞
+- 亨利二世
+- 吉斯公爵
+- 玛丽·斯图亚特

@@ -1,9 +1,16 @@
 ---
 title: Mastering Strategic Storytelling 2025
-created: 2026-05-13
-updated: 2026-05-13
-tags: [品牌故事, 战略叙事, 多渠道营销, 品牌真实性, AI营销, 社交媒体]
-sources: [2025-04-15-Mastering-Strategic-Storytelling-InfluencersTime]
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 品牌故事
+- 战略叙事
+- 多渠道营销
+- 品牌真实性
+- AI营销
+- 社交媒体
+sources:
+- raw/2025-04-15-Mastering-Strategic-Storytelling-InfluencersTime.md
 type: source
 status: active
 ---
@@ -59,11 +66,11 @@ status: active
 ## 相关概念
 
 - [[品牌叙事]]
-- [[多渠道营销]]
-- [[品牌真实性]]
+- 多渠道营销
+- 品牌真实性
 - [[AI营销]]
 
 ## 相关实体
 
-- [[Eli Turner]]
-- [[Simon Sinek]]
+- Eli Turner
+- Simon Sinek

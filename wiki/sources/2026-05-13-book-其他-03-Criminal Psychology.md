@@ -1,14 +1,20 @@
 ---
-title: "Criminal Psychology"
-author: "Hans Gross"
-category: "心理学/犯罪学"
-source_collection: "1500本当当网电子书合集"
-source_number: 3
-date_created: "2026-05-13"
-tags: ["犯罪学", "司法心理学", "证言分析", "Hans Gross", "犯罪心理学", "刑法"]
+title: Criminal Psychology
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 犯罪学
+- 司法心理学
+- 证言分析
+- Hans Gross
+- 犯罪心理学
+- 刑法
+sources: []
 type: source
-source_file: "Criminal Psychology-Hans Gross.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Criminal Psychology-Hans Gross.md"
+status: active
+author: Hans Gross
+source_file: Criminal Psychology-Hans Gross.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Criminal Psychology-Hans Gross.md
 ---
 
 # Criminal Psychology
@@ -27,7 +33,7 @@ webdav_url: "http://localhost:5244/夸克/电子书数据_md/Criminal Psychology
 - [[证言分析]]
 - [[Hans Gross]]
 - [[犯罪心理学]]
-- [[刑法]]
+- 刑法
 
 ## 目录结构
 

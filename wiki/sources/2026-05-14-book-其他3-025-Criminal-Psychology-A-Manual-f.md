@@ -1,12 +1,19 @@
 ---
 title: Criminal Psychology: A Manual for Judges, Practitioners, and Students
-author: Hans Gross
-date: 2026-05-14
-tags: [犯罪心理学, 司法心理学, 刑事侦查, 犯罪学, 心理学]
+created: '2026-05-14'
+updated: '2026-05-24'
+tags:
+- 犯罪心理学
+- 司法心理学
+- 刑事侦查
+- 犯罪学
+- 心理学
+sources: []
 type: source
-source_file: "Criminal-Psychology-A-Manual-f-Hans Gross.md"
-webdav_url: "http://localhost:5244/夸克/电子书数据_md/Criminal-Psychology-A-Manual-f-Hans Gross.md"
-status: processed
+status: active
+author: Hans Gross
+source_file: Criminal-Psychology-A-Manual-f-Hans Gross.md
+webdav_url: http://localhost:5244/夸克/电子书数据_md/Criminal-Psychology-A-Manual-f-Hans
 ---
 
 # Criminal Psychology: A Manual for Judges, Practitioners, and Students

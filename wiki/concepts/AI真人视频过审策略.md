@@ -1,10 +1,13 @@
 ---
 title: AI真人视频过审策略
-created: 2026-05-13
-updated: 2026-05-13
-tags: [概念, AI视频, 合规, 创作方法]
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 概念
+- AI视频
+- 合规
+- 创作方法
 sources:
-  - daily-feed/9种AI真人视频过审方法-Seedance2.0长视频叙事四法.md
 type: concept
 status: active
 ---

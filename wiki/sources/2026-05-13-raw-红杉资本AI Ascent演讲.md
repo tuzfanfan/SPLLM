@@ -1,9 +1,15 @@
 ---
 title: 红杉资本AI Ascent演讲深度解析
-created: 2026-05-13
-updated: 2026-05-13
-tags: [来源, AI技术, AGI, 红杉资本, AI商业]
-sources: [raw/GET_2026-05-08_10-03-01_红杉资本AI Ascent演讲深度解析：AGI时代的人类价值重估与商业革命.md]
+created: '2026-05-13'
+updated: '2026-05-24'
+tags:
+- 来源
+- AI技术
+- AGI
+- 红杉资本
+- AI商业
+sources:
+- raw/GET_2026-05-08_10-03-01_红杉资本AI Ascent演讲深度解析：AGI时代的人类价值重估与商业革命.md
 type: source
 status: active
 ---

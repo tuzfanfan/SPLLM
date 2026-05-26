@@ -1,9 +1,13 @@
 ---
 title: 可灵AI
-created: 2026-05-13
-updated: 2026-05-13
-tags: [实体, AI平台, 快手, 视频生成]
-sources: []
+created: '2026-05-13'
+updated: '2026-05-26'
+tags:
+- 实体
+- AI平台
+- 快手
+- 视频生成
+sources:
 type: entity
 status: active
 ---

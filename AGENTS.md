@@ -6,6 +6,12 @@
 
 ---
 
+## 0. Warm Context
+
+执行需要工作空间规则的任务时，先读取 `WORKSPACE_CONTEXT.md` 获取短版上下文；只有在需要完整流程、模板或历史约定时，再读取 `AGENTS.md`、`CLAUDE.md`、`SCHEMA.md`、`SOUL.md` 等长文档。
+
+---
+
 ## 1. 维基是什么
 
 ### 1.1 核心定位
@@ -88,7 +94,7 @@ e:\SPLLM/
 |------|------|------|------|
 | Entity | `entities/` | 公司、产品、人物、品牌等具体对象 | `泡泡玛特.md`, `王一博.md` |
 | Concept | `concepts/` | 技术范式、方法论、趋势等抽象概念 | `品牌叙事.md`, `GEO.md` |
-| Source | `sources/` | 原始材料的结构化摘要 | `2026-04-29-全球首个无人公司Box-YZ运营模式.md` |
+| Source | `sources/` | 原始材料的结构化摘要 | `AI技术-全球首个无人公司Box-YZ运营模式.md` |
 | Comparison | `comparisons/` | 多个实体/概念的横向对比 | （按需创建） |
 | Product | `products/` | 概念产品定义、研究报告 | （按需创建） |
 | Presentation | `presentations/` | Marp 格式演示文稿 | （按需创建） |
@@ -103,7 +109,7 @@ e:\SPLLM/
 |------|------|------|
 | Entity 文件名 | `实体名称.md`（使用常用中文名） | `泡泡玛特.md`, `Box-YZ.md` |
 | Concept 文件名 | `概念名称.md` | `品牌叙事.md`, `AI-Agent.md` |
-| Source 文件名 | `YYYY-MM-DD-来源标题.md` | `2026-05-01-GEO时代的品牌获客革命.md` |
+| Source 文件名 | `行业维度-来源标题.md`（日期放在 frontmatter 或来源信息中） | `品牌营销-GEO时代的品牌获客革命.md` |
 | Product 文件名 | `[研究对象]_横纵分析报告.md` | `泡泡玛特_横纵分析报告.md` |
 | 标签 | 小写中文或英文，用连字符连接 | `品牌营销`, `AI视频`, `消费趋势` |
 
@@ -270,7 +276,7 @@ Digest 任务也统一采用“材料 - 指令 - 输出 - schema”四段结构�
 **PDF 转换**：使用 fpdf2（Windows 环境无 GTK，不可用 WeasyPrint）
 - 依赖：`pip install fpdf2 --break-system-packages`
 - 中文字体：C:/Windows/Fonts/msyh.ttc（微软雅黑）
-- 临时脚本：`c:\Users\Administrator\.trae-cn\work\69fdfc469bf12e8ac9660a06\md2pdf.py`
+- 转换脚本：优先使用对应 Skill 自带的 `scripts/md_to_pdf.py`
 
 **篇幅要求**：全文 16,000 - 40,000 字
 - 纵向分析：6,000 - 15,000 字
@@ -450,7 +456,7 @@ skills/neat-freak/
 | 来源 | 基于 Andrew Ng《AI Prompting for Everyone》全三模块课程 + 即梦/可灵官方使用手册 |
 | 用途 | 作为全局 `AGENTS.md` 中的默认前置思考框架：先理解意图、补齐高影响上下文、判断任务类别、再生成结果；本项目中继续用于 AI 视频/图像提示词优化与复杂请求澄清 |
 | 位置 | `e:\SPLLM\skills\prompt-flow/` |
-| 触发规则 | **全局默认已由 `C:\Users\Administrator\.codex\AGENTS.md` 接管**；本仓库不再单独声明“固定触发”，仅保留项目级补充约定 |
+| 触发规则 | **全局默认由用户环境中的全局 `AGENTS.md` 接管**；本仓库不再单独声明“固定触发”，仅保留项目级补充约定 |
 
 **文件结构**：
 ```
@@ -495,8 +501,11 @@ skills/thinking-extend/
 **项目级约定**：
 - `thinking-extend` 不是可选装饰，而是默认收尾层
 - 推荐顺序：`主任务执行 -> 结果交付 -> thinking-extend`
+- 主任务交付后，不再默认“答案发出就算结束”，而要继续执行一次收尾判断
 - 除非用户明确关闭、任务纯机械、或 `wiki/` 没有足够关联内容，否则不应跳过
+- 只要不满足跳过条件，就必须补做一次 `thinking-extend` 判断
 - 执行时必须优先检查 `concepts / entities / sources`，不能只在 `products/` 中找关联
+- 默认至少给出一版最小化输出：`任务回看 + 关联发现 + 1 个延伸问题`
 
 #### oral-copy（口播文案与公众号长文创作）
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Webpage To Markdown"
+  short_description: "Convert a webpage URL into clean, LLM-ready Markdown."
+  default_prompt: "Convert this webpage into clean Markdown and save the result if needed."

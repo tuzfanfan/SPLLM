@@ -6,6 +6,12 @@
 
 ---
 
+## 0. Warm Context
+
+执行任务前，如果需要快速恢复工作空间规则，先读取 `WORKSPACE_CONTEXT.md`。它是短版 always-on context；本文件用于补充完整操作流程和细节规范。
+
+---
+
 1. **?????????**?????aily-feed??aw??utputs??????????????AList???API????????????????????????????????????????
 
 你是这个Wiki的专职维护者。你的工作是：
@@ -31,7 +37,7 @@ e:\SPLLM/
 ├── books/                # 📖 书籍蒸馏产物（如 mao-xuanji/ 毛选10个技能）
 ├── daily-feed/           # 📰 每日市场信息、AI工具手册（你读取，不修改）
 ├── raw/                  # 📎 原始素材（品牌营销、创业方法论文档）
-├── skills/               # 🔧 技能插件（8个：hv-analysis、neat-freak、prompt-flow、oral-copy、khazix-writer、book2skill、darwin-skill、aihot）
+├── skills/               # 🔧 技能插件（热点采集统一由 hotspot-radar 管理，内含 AI HOT 数据源）
 ????? Ingest???????????????????????????????????????? `outputs/` ???
 ├── CLAUDE.md             # 📖 本文件（你的操作指南）
 ├── AGENTS.md             # 📖 维基构建约定与工作流程说明
@@ -114,7 +120,8 @@ Ingest 类任务在内部组织 prompt 时，统一采用“材料 - 指令 - �
 
 3. **创建来源摘要**
    - 在 `wiki/sources/` 创建新页面
-   - 文件名格式：`YYYY-MM-DD-来源标题.md`
+   - 文件名格式：`行业维度-来源标题.md`
+   - 日期写入 frontmatter 的 `created` / `updated` 或来源信息表，不放入 source 文件名
    - 使用 `source-template.md` 作为参考
    - 包含：来源信息、核心观点、关键数据、洞察、相关实体/概念
 
@@ -795,7 +802,9 @@ status: active
 
 #### 来源摘要（sources/）
 
-**文件名**：`YYYY-MM-DD-来源标题.md`
+**文件名**：`行业维度-来源标题.md`
+
+**命名说明**：不要使用 `YYYY-MM-DD-` 前缀；日期写入 frontmatter 或来源信息表。维度不确定时先用 `综合研究`，后续再细化。
 
 **结构**：
 ```markdown
@@ -1237,6 +1246,6 @@ presentation-template.md     -> e:\SPLLM\wiki\templates\presentation-template.md
 **创建日期**：2026-05-08  
 **最后更新**：2026-05-15（新增网盘资源整合：AList网盘替代本地book文件夹、webdav_url在线预览链接、更新目录架构）  
 **GitHub 仓库**：https://github.com/tuzfanfan/SPLLM （Private，main 分支）  
-**Git 配置**：user.name=tuzfanfan, user.email=447049333@qq.com
+**Git 配置**：由仓库维护者在本地环境中配置，不写入公开文档
 **维护者**：LLM Agent  
 **关联文档**：[[SCHEMA.md]], [[AGENTS.md]], [[index.md]], [[log.md]]

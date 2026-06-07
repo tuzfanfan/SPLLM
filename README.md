@@ -1,206 +1,70 @@
-﻿# SPLLM - 缁撴瀯鍖栫煡璇嗗簱涓庢妧鑳界郴缁?
-> **S**tructured **P**ersonal **L**earning & **L**LM **M**anagement
+# SPLLM
 
-涓€涓熀浜嶰bsidian鏋勫缓鐨勩€佷笌LLM娣卞害闆嗘垚鐨勪釜浜虹煡璇嗙鐞嗙郴缁燂紝鏀寔涔︾睄钂搁銆佹蹇垫彁鍙栥€佹妧鑳界敓鎴愬拰AI杈呭姪鍒涗綔銆?
----
+SPLLM (Structured Personal Learning and LLM Management) is an LLM-first
+knowledge and workflow operating system.
 
-## 馃幆 椤圭洰鎰挎櫙
+This repository publishes the reusable architecture and Skill layer only.
+Private knowledge, raw material, generated deliverables, runtime output, and
+personal configuration are intentionally excluded.
 
-灏嗛浂鏁ｇ殑瀛︿範璧勬枡杞寲涓虹粨鏋勫寲鐨勭煡璇嗚祫浜э紝閫氳繃AI杈呭姪瀹炵幇锛?- **鐭ヨ瘑娌夋穩**锛氳嚜鍔ㄦ彁鍙栦功绫?鏂囩珷涓殑鏍稿績姒傚康鍜屽疄浣?- **鎶€鑳界敓鎴?*锛氬皢鐭ヨ瘑鎻愮偧涓哄彲澶嶇敤鐨勬妧鑳芥ā鍧?- **鏅鸿兘妫€绱?*锛氶€氳繃姒傚康缃戠粶蹇€熷畾浣嶇浉鍏崇煡璇?- **鍒涗綔杈呭姪**锛氬熀浜庣煡璇嗗簱鐢熸垚楂樿川閲忓唴瀹?
----
+## Core Model
 
-## 馃搧 椤圭洰缁撴瀯
-
-```
-SPLLM/
-鈹溾攢鈹€ 馃摎 wiki/                    # 鏍稿績鐭ヨ瘑搴擄紙Obsidian Vault锛?鈹?  鈹溾攢鈹€ sources/               # 鏉ユ簮鎽樿锛?,791涓級- 涔︾睄/鏂囩珷鎽樿
-鈹?  鈹溾攢鈹€ concepts/              # 姒傚康椤甸潰锛?,240涓級- 鎶借薄姒傚康/涓婚
-鈹?  鈹溾攢鈹€ entities/              # 瀹炰綋椤甸潰锛?,244涓級- 浜虹墿/鍏徃/浜у搧
-鈹?  鈹斺攢鈹€ index.md               # 鐭ヨ瘑搴撴€荤储寮?鈹?鈹溾攢鈹€ 馃敡 skills/                  # 鎶€鑳芥彃浠剁郴缁?鈹?  鈹溾攢鈹€ hv-analysis/           # 妯旱鍒嗘瀽娉?v2.0
-鈹?  鈹溾攢鈹€ book2skill/            # 涔︾睄钂搁锛圧IA-TV++锛?鈹?  鈹溾攢鈹€ prompt-flow/           # 鎻愮ず璇嶅喅绛栨祦绋?v1.3
-鈹?  鈹溾攢鈹€ oral-copy/             # 鍙ｆ挱鏂囨涓庡叕浼楀彿闀挎枃
-鈹?  鈹溾攢鈹€ neat-freak/            # 鐭ヨ瘑搴撴竻鐞?鈹?  鈹溾攢鈹€ khazix-writer/         # 鍗″吂鍏嬪啓浣滈鏍?鈹?  鈹溾攢鈹€ darwin-skill/          # 鎶€鑳戒紭鍖栧櫒
-鈹?  鈹斺攢鈹€ aihot/                 # AI鐑偣鏌ヨ
-鈹?鈹溾攢鈹€ 馃摉 books/                   # 涔︾睄钂搁浜х墿
-鈹?  鈹斺攢鈹€ mao-xuanji/            # 姣涙辰涓滈€夐泦鎶€鑳藉寲锛?0涓妧鑳斤級
-鈹?鈹溾攢鈹€ 馃摪 daily-feed/              # 姣忔棩甯傚満淇℃伅锛?5涓狝I宸ュ叿鎵嬪唽锛?鈹溾攢鈹€ 馃搸 raw/                     # 鍘熷绱犳潗锛?2涓搧鐗岃惀閿€鏂囨。锛?鈹溾攢鈹€ 馃搫 CLAUDE.md                # Agent鎿嶄綔鎸囧崡 v1.8
-鈹溾攢鈹€ 馃搫 AGENTS.md                # 宸ヤ綔娴佺▼璇存槑 v1.6
-鈹溾攢鈹€ 馃搫 SCHEMA.md                # 瀹屾暣瑙勮寖鏂囨。
-鈹斺攢鈹€ 馃搫 README.md                # 鏈枃浠?```
-
----
-
-## 馃殌 鏍稿績鍔熻兘
-
-### 1. 鐭ヨ瘑搴擄紙Wiki锛?
-鍩轰簬Obsidian鐨勪笁灞傜煡璇嗘灦鏋勶細
-
-| 绫诲瀷 | 鏁伴噺 | 鐢ㄩ€?| 绀轰緥 |
-|------|------|------|------|
-| **Sources** | 2,791 | 鏉ユ簮鎽樿 | 涔︾睄鎽樿銆佹枃绔犳憳褰?|
-| **Concepts** | 1,240 | 鎶借薄姒傚康 | "蹇冪悊瀛?銆?鎶曡祫"銆?鎸佷箙鎴? |
-| **Entities** | 1,244 | 鍏蜂綋瀹炰綋 | "椹簯"銆?鑻规灉鍏徃"銆?鑴戠櫧閲? |
-
-**鍏宠仈鏂瑰紡**锛?- 鍙屽悜閾炬帴锛歚[[姒傚康鍚峕]`
-- 缃戠洏鍏宠仈锛氭瘡涓猻ource鍖呭惈 `webdav_url` 鎸囧悜澶稿厠缃戠洏鍘熷鏂囦欢
-- 鏍囩绯荤粺锛歚#tag` 鍜?frontmatter 鏍囩
-
-### 2. 鎶€鑳界郴缁燂紙Skills锛?
-鍙鐢ㄧ殑AI杈呭姪鎶€鑳芥ā鍧楋細
-
-#### hv-analysis v2.0 - 妯旱鍒嗘瀽娉?鍏淮搴﹀晢涓氬垎鏋愭鏋讹細
-- 闇€姹傚満鏅€佽В鍐虫柟妗堛€佸晢涓氭ā寮?- 绔炰簤浼樺娍銆侀闄╂寫鎴樸€佸闀块杞?
-#### book2skill - 涔︾睄钂搁
-RIA-TV++ 鍏樁娈垫祦姘寸嚎锛?1. **R**ead - 绮楄瀹氫綅
-2. **I**nterpret - 绮捐鎷嗚В
-3. **A**nnotate - 鏍囨敞鎻愮偧
-4. **T**ransform - 杞瘧閲嶆瀯
-5. **V**alidate - 楠岃瘉娴嬭瘯
-6. **I**ntegrate - 鏁村悎鍙戝竷
-
-#### prompt-flow v1.3 - 鎻愮ず璇嶅喅绛?浜旈樁娈靛喅绛栨祦绋嬶細
-1. 鍙嶅悜娌熼€氾紙鏄庣‘闇€姹傦級
-2. 缁村害鍒ゆ柇锛堥€夋嫨绫诲埆锛?3. 绫诲埆鍒ゆ柇锛堢‘瀹氬瓙绫伙級
-4. 鐢熸垚鍐呭
-5. 鑷浼樺寲
-
-绫诲埆浣撶郴锛欰(鍐欎綔)銆丅(鍒嗘瀽)銆丆(鍒涙剰)銆丏(涔︾睄)銆丒(AI鐢熸垚)
-
-### 3. 缃戠洏鏁村悎
-
-**澶稿厠缃戠洏锛圓List锛?*锛?- Web鐣岄潰锛歚http://localhost:5244`
-- WebDAV锛歚http://localhost:5244/dav/澶稿厠/鐢靛瓙涔︽暟鎹甠md/`
-- API锛歚http://localhost:5244/api/fs/list`
-- 宸插瓨鍌細1,817鏈數瀛愪功
-
-**鍏宠仈鏈哄埗**锛?- wiki涓?,236涓枃浠跺寘鍚?`webdav_url`
-- 鐐瑰嚮閾炬帴鐩存帴鍦ㄧ嚎棰勮锛堥潪涓嬭浇锛?- 鏈湴book鏂囦欢澶瑰凡娓呯┖锛屽噺杞荤‖鐩樿礋鎷?
----
-
-## 馃攧 宸ヤ綔娴佺▼
-
-### Ingest锛堢煡璇嗘憚鍏ワ級
-```
-daily-feed/ + raw/ + 缃戠洏鐢靛瓙涔?    鈫?鎻愬彇鎽樿 鈫?wiki/sources/
-鎻愬彇瀹炰綋 鈫?wiki/entities/
-鎻愬彇姒傚康 鈫?wiki/concepts/
-娣诲姞缃戠洏閾炬帴 鈫?webdav_url
-鏇存柊绱㈠紩 鈫?wiki/index.md
+```text
+inputs -> structured knowledge -> reusable workflows -> deliverables
+ raw       wiki (private)          skills (public)      outputs (private)
 ```
 
-### Digest锛堢煡璇嗘秷鍖栵級
+The system is organized around four layers:
+
+1. **Context layer**: compact operating context and agent instructions.
+2. **Knowledge layer**: source, entity, concept, comparison, and product pages.
+3. **Workflow layer**: reusable Skills that encode repeatable methods.
+4. **Output layer**: reports, presentations, media, and other generated work.
+
+Only the context, specification, and workflow layers are published here.
+
+## Repository Contents
+
+| Path | Published content |
+|---|---|
+| `ARCHITECTURE.md` | Condensed system architecture and information flow |
+| `AGENTS.md` | Agent-facing project rules |
+| `CLAUDE.md` | Detailed operating guide |
+| `SCHEMA.md` | Knowledge page and metadata specification |
+| `WORKSPACE_CONTEXT.md` | Compact warm context |
+| `WORKSPACE_STRUCTURE.md` | Workspace ownership and path conventions |
+| `skills/` | Reviewed reusable Skills |
+| `wiki/`, `raw/`, `outputs/`, etc. | Empty directory skeletons only |
+
+## Privacy Boundary
+
+The GitHub repository does **not** contain:
+
+- Wiki page contents
+- Raw source files or books
+- Daily-feed materials
+- Reports, presentations, PDFs, images, or generated outputs
+- Agent-local state, authentication files, cookies, or environment files
+- API keys, access tokens, passwords, or personal contact details
+
+See [SECURITY.md](SECURITY.md) for the publication policy.
+
+## Skills
+
+Each Skill is a self-contained workflow under `skills/<skill-name>/`, normally
+with a `SKILL.md` entrypoint and optional `references/`, `scripts/`, `assets/`,
+or `templates/`.
+
+Skills may describe environment-variable names or credential setup, but real
+credential values must never be committed.
+
+## Local Workspace
+
+The complete local workspace can populate the empty private directories:
+
+```text
+book/ daily-feed/ outputs/ raw/ records/ reports/ scripts/ wiki/
 ```
-缃戠洏鐢靛瓙涔? raw鏂囨。
-    鈫?book2skill 钂搁
-    鈫?鐢熸垚鎶€鑳芥ā鍧?鈫?skills/
-```
 
-### Create锛堝唴瀹瑰垱浣滐級
-```
-prompt-flow 鍐崇瓥
-    鈫?閫夋嫨鎶€鑳斤紙oral-copy/hv-analysis/etc锛?    鈫?鐢熸垚鍐呭
-```
-
----
-
-## 馃洜锔?鎶€鏈爤
-
-| 缁勪欢 | 鎶€鏈?|
-|------|------|
-| 鐭ヨ瘑搴?| Obsidian + Markdown |
-| 鐗堟湰鎺у埗 | Git + GitHub |
-| 缃戠洏鏈嶅姟 | AList v3 + 澶稿厠缃戠洏 |
-| PDF鐢熸垚 | fpdf2 (Python) |
-| 鑷姩鍖?| PowerShell / Python |
-
----
-
-## 馃搳 椤圭洰缁熻
-
-| 鎸囨爣 | 鏁伴噺 |
-|------|------|
-| 鐭ヨ瘑搴撴€婚〉闈?| 5,275 |
-| 鎶€鑳芥ā鍧?| 20涓?|
-| 缃戠洏鐢靛瓙涔?| 1,817鏈?|
-| 鍘熷绱犳潗 | 82涓枃妗?|
-| AI宸ュ叿鎵嬪唽 | 15涓?|
-| 姣涢€夋妧鑳?| 10涓?|
-
----
-
-## 馃摑 浣跨敤鎸囧崡
-
-### 蹇€熷紑濮?
-1. **鍏嬮殕浠撳簱**
-   ```bash
-   git clone https://github.com/tuzfanfan/SPLLM.git
-   cd SPLLM
-   ```
-
-2. **鐢∣bsidian鎵撳紑**
-   - 鎵撳紑Obsidian
-   - "Open folder as vault" 鈫?閫夋嫨 `SPLLM/wiki/`
-
-3. **鍚姩AList锛堝闇€缃戠洏璁块棶锛?*
-   ```bash
-   # AList闇€鍗曠嫭瀹夎閰嶇疆
-   # 榛樿璁块棶 http://localhost:5244
-   ```
-
-### 娣诲姞鏂板唴瀹?
-1. 灏嗘枃浠舵斁鍏?`daily-feed/` 鎴?`raw/`
-2. 瑙﹀彂Ingest娴佺▼锛堥€氳繃Agent锛?3. 鑷姩鎻愬彇骞剁敓鎴恮iki椤甸潰
-
-### 涔︾睄钂搁
-
-1. 纭繚涔︾睄鍦ㄥじ鍏嬬綉鐩?2. 杩愯 book2skill 鎶€鑳?3. 鎸塕IA-TV++娴佺▼澶勭悊
-4. 杈撳嚭鍒?`skills/` 鎴?`books/`
-
----
-
-## 馃敆 閲嶈閾炬帴
-
-- **GitHub浠撳簱**锛歨ttps://github.com/tuzfanfan/SPLLM
-- **CLAUDE.md**锛欰gent鎿嶄綔鎸囧崡
-- **AGENTS.md**锛氬伐浣滄祦绋嬭鏄?- **SCHEMA.md**锛氬畬鏁磋鑼冩枃妗?
----
-
-## 馃搮 鏇存柊鏃ュ織
-
-### 2026-05-15
-- Wiki鍋ュ悍搴︽竻鐞嗭細鍒犻櫎1,591涓┖澹?閲嶅/涔辩爜椤甸潰
-- 缃戠洏璧勬簮鏁村悎锛?,236涓枃浠舵坊鍔爓ebdav_url
-- CLAUDE.md鏇存柊鑷硋1.8
-
-### 2026-05-14
-- 鎵归噺澶勭悊1,472鏈數瀛愪功鍒皐iki
-- 涓婁紶鐢靛瓙涔﹀埌澶稿厠缃戠洏
-- 娓呯┖鏈湴book鏂囦欢澶?
-### 2026-05-11
-- 瀹夎book2skill銆乨arwin-skill
-- 姣涙辰涓滈€夐泦鎷嗕功璇曠偣
-- prompt-flow鍗囩骇鑷硋1.3
-
-### 2026-05-10
-- 椤圭洰涓婁紶GitHub
-- oral-copy鍗囩骇鑷硋2.0
-- 鐢熸垚AI鎻愮ず璇嶇瓥鐣ユ寚鍗?
-### 2026-05-09
-- 椤圭洰鍒濆鍖?- 鎼缓缁村熀鏋舵瀯
-- 瀹夎棣栨壒鎶€鑳?
----
-
-## 馃懁 缁存姢鑰?
-- **鍒涘缓鑰?*锛歵uzfanfan
-- **閭**锛?47049333@qq.com
-- **AI鍔╂墜**锛欳laude (Anthropic)
-
----
-
-## 馃搫 璁稿彲璇?
-Private Repository - 涓汉鐭ヨ瘑绠＄悊绯荤粺
-
----
-
-> 馃挕 **鎻愮ず**锛氭湰椤圭洰鏄珮搴︿釜浜哄寲鐨勭煡璇嗙鐞嗙郴缁燂紝寤鸿鏍规嵁鑷韩闇€姹傝皟鏁寸粨鏋勫拰娴佺▼銆?
+Those directories are represented in Git only by `.gitkeep` files.
 

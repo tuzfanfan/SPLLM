@@ -1,6 +1,13 @@
 {
   "sources": [
     {
+      "id": "aihot",
+      "label": "AI HOT",
+      "kind": "aihot_api",
+      "home_url": "https://aihot.virxact.com/",
+      "api_url": "https://aihot.virxact.com/api/public/items"
+    },
+    {
       "id": "jazzyear",
       "label": "甲子光年",
       "kind": "article",
@@ -150,9 +157,11 @@
     {
       "id": "rebang",
       "label": "热榜聚合",
-      "kind": "reminder",
+      "kind": "list",
       "home_url": "https://rebang.today/",
-      "note": "已确认存在公开 menu_tabs 元数据接口，但 /v1/items 仍需前端内部参数组合，当前未稳定还原。"
+      "api_url": "https://api.rebang.today",
+      "list_strategy": "rebang_today_api",
+      "note": "默认抓取全站今日热榜 top/today；接口属于前端内部协议，改版后需重新验证。"
     },
     {
       "id": "robo-datayes",

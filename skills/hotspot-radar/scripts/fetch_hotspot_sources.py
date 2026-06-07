@@ -29,6 +29,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "references" / "sources.json"
 DEFAULT_OUTPUT_ROOT = Path(r"E:\SPLLM\outputs\hotspot-radar")
 DEFAULT_NEWSAPI_AGGREGATOR_URL = "https://eventregistry.org/api/v1/article/getArticles"
+DEFAULT_AIHOT_URL = "https://aihot.virxact.com/api/public/items"
+DEFAULT_REBANG_API_ROOT = "https://api.rebang.today"
 UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0 Safari/537.36"
@@ -192,6 +194,47 @@ def fetch_rss_list(session: requests.Session, source: Source, limit: int) -> lis
     return parse_rss_items(xml_text, feed_url, limit)
 
 
+def fetch_rebang_list(session: requests.Session, source: Source, limit: int) -> list[dict[str, str]]:
+    api_root = (source.api_url or DEFAULT_REBANG_API_ROOT).rstrip("/")
+    headers = {
+        "Origin": "https://rebang.today",
+        "Referer": "https://rebang.today/",
+    }
+    menu_response = session.get(f"{api_root}/v1/menu_tabs", headers=headers, timeout=30)
+    menu_response.raise_for_status()
+    menu_response.encoding = "utf-8"
+    menu_payload = menu_response.json()
+    menu_tabs = menu_payload.get("data", {}).get("menu_tabs", [])
+    if menu_payload.get("code") != 200 or not menu_tabs:
+        raise RuntimeError("Rebang menu metadata is unavailable")
+
+    response = session.get(
+        f"{api_root}/v1/items",
+        params={"tab": "top", "sub_tab": "today", "page": 1, "version": 1},
+        headers=headers,
+        timeout=30,
+    )
+    response.raise_for_status()
+    response.encoding = "utf-8"
+    payload = response.json()
+    if payload.get("code") != 200:
+        raise RuntimeError(f"Rebang items request failed: {payload.get('msg', 'unknown error')}")
+
+    raw_items = payload.get("data", {}).get("list", "[]")
+    items = json.loads(raw_items) if isinstance(raw_items, str) else raw_items
+    return [
+        {
+            "title": normalize_text(str(item.get("title") or "")),
+            "url": str(item.get("www_url") or item.get("url") or item.get("mobile_url") or ""),
+            "summary": normalize_text(str(item.get("desc") or "")),
+            "source_id": str(item.get("tab_key") or ""),
+            "sub_tab": str(item.get("sub_tab") or ""),
+        }
+        for item in items
+        if item.get("title") and (item.get("www_url") or item.get("url") or item.get("mobile_url"))
+    ][:limit]
+
+
 def parse_newsapi_aggregator_items(payload: dict[str, Any], limit: int) -> list[dict[str, Any]]:
     containers: list[Any] = []
     for key in ("articles", "results", "items"):
@@ -262,6 +305,29 @@ def fetch_newsapi_aggregator_list(session: requests.Session, source: Source, lim
     response.raise_for_status()
     payload = response.json()
     return parse_newsapi_aggregator_items(payload, limit)
+
+
+def fetch_aihot_list(session: requests.Session, source: Source, limit: int) -> list[dict[str, Any]]:
+    params = {
+        "mode": "selected",
+        "take": max(1, min(limit, 100)),
+    }
+    response = session.get(source.api_url or DEFAULT_AIHOT_URL, params=params, timeout=30)
+    response.raise_for_status()
+    response.encoding = "utf-8"
+    payload = response.json()
+    return [
+        {
+            "title": normalize_text(str(item.get("title") or item.get("title_en") or "")),
+            "url": str(item.get("url") or ""),
+            "summary": normalize_text(str(item.get("summary") or "")),
+            "published_at": str(item.get("publishedAt") or ""),
+            "source_name": normalize_text(str(item.get("source") or "")),
+            "category": str(item.get("category") or ""),
+        }
+        for item in payload.get("items", [])
+        if item.get("url") and (item.get("title") or item.get("title_en"))
+    ][:limit]
 
 
 def filter_article_links(source: Source, links: list[dict[str, str]]) -> list[dict[str, str]]:
@@ -591,6 +657,8 @@ def probe_source(session: requests.Session, source: Source) -> dict[str, Any]:
                 items = fetch_newsnow_list(session, source, limit=12)
             elif source.list_strategy == "zhihu_hot_list_mcp":
                 items = fetch_zhihu_hot_list(session, source, limit=12)
+            elif source.list_strategy == "rebang_today_api":
+                items = fetch_rebang_list(session, source, limit=12)
             elif source.list_strategy == "html_hotlist":
                 items = fetch_tophub_list(session, source, limit=12)
             else:
@@ -617,6 +685,17 @@ def probe_source(session: requests.Session, source: Source) -> dict[str, Any]:
     if source.kind == "newsapi_aggregator":
         try:
             items = fetch_newsapi_aggregator_list(session, source, limit=12)
+            result["status"] = "ok" if items else "empty"
+            result["sample_count"] = len(items)
+            result["sample_items"] = items[:5]
+        except Exception as exc:
+            result["status"] = "error"
+            result["error"] = repr(exc)
+        return result
+
+    if source.kind == "aihot_api":
+        try:
+            items = fetch_aihot_list(session, source, limit=12)
             result["status"] = "ok" if items else "empty"
             result["sample_count"] = len(items)
             result["sample_items"] = items[:5]
@@ -732,6 +811,7 @@ def run_fetch(
         "list_sources": [],
         "rss_sources": [],
         "aggregator_sources": [],
+        "aihot_sources": [],
         "reminders": [],
     }
     for source in sources:
@@ -754,6 +834,8 @@ def run_fetch(
                     items = fetch_newsnow_list(session, source, limit=list_limit)
                 elif source.list_strategy == "zhihu_hot_list_mcp":
                     items = fetch_zhihu_hot_list(session, source, limit=list_limit)
+                elif source.list_strategy == "rebang_today_api":
+                    items = fetch_rebang_list(session, source, limit=list_limit)
                 else:
                     items = fetch_tophub_list(session, source, limit=list_limit)
                 payload = {
@@ -883,6 +965,59 @@ def run_fetch(
                 )
             except Exception as exc:
                 summary["aggregator_sources"].append(
+                    {
+                        "id": source.id,
+                        "label": source.label,
+                        "error": repr(exc),
+                    }
+                )
+            continue
+
+        if source.kind == "aihot_api":
+            try:
+                items = fetch_aihot_list(session, source, limit=list_limit)
+                payload = {
+                    "source": source.label,
+                    "api_url": source.api_url or DEFAULT_AIHOT_URL,
+                    "items": items,
+                }
+                feed_target = output_dir / "feeds" / f"{source.id}.json"
+                feed_target.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+                saved = []
+                source_dir = output_dir / "articles" / source.id
+                source_dir.mkdir(parents=True, exist_ok=True)
+                for item in items[:article_limit]:
+                    content = item.get("summary", "")
+                    if not content:
+                        continue
+                    article = {
+                        "title": item["title"],
+                        "url": item["url"],
+                        "published_at": item.get("published_at", ""),
+                        "content": [content],
+                    }
+                    slug_base = slugify(item["title"])[:80]
+                    digest = hashlib.md5(item["url"].encode("utf-8")).hexdigest()[:8]
+                    target = source_dir / f"{slug_base}-{digest}.md"
+                    label = source.label
+                    if item.get("source_name"):
+                        label = f"{source.label} / {item['source_name']}"
+                    write_article_markdown(article, target, label)
+                    saved.append({"title": item["title"], "url": item["url"], "file": str(target)})
+
+                summary["aihot_sources"].append(
+                    {
+                        "id": source.id,
+                        "label": source.label,
+                        "item_count": len(items),
+                        "saved_count": len(saved),
+                        "feed_file": str(feed_target),
+                        "sample": saved[:5],
+                    }
+                )
+            except Exception as exc:
+                summary["aihot_sources"].append(
                     {
                         "id": source.id,
                         "label": source.label,

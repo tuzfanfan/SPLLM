@@ -1,37 +1,67 @@
-# Obsidian
-.obsidian/
+# Private knowledge, source material, and generated output
+/book/**
+/daily-feed/**
+/outputs/**
+/raw/**
+/records/**
+/reports/**
+/scripts/**
+/wiki/**
 
-# WorkBuddy session memory (personal, not for repo)
-.workbuddy/
+# Preserve directory skeletons
+!/book/.gitkeep
+!/daily-feed/.gitkeep
+!/outputs/.gitkeep
+!/raw/.gitkeep
+!/records/.gitkeep
+!/reports/.gitkeep
+!/scripts/.gitkeep
+!/wiki/**/
+!/wiki/**/.gitkeep
 
-# Local agent runtime state
-.codex/
-.claudian/
-.config.toml.lock
-.tmp_fabric_patterns
-outputs/
+# Local agent and tool state
+/.agents/
+/.aweskill/
+/.claude/
+/.claudian/
+/.codex/
+/.obsidian/
+/.tmp/
+/.uploads/
+/.venv*/
+/agent-skills/
+/hermes-deploy/
+/report-overview-video/
 
-# OS files
-Thumbs.db
-Desktop.ini
-.DS_Store
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*credentials*
+*secrets*
 
-# Temp files
+# Runtime and generated files
+**/__pycache__/
+*.py[cod]
+*.log
+*.out
 *.tmp
 *.bak
-*.swp
-*~
-
-# Python cache
-__pycache__/
-*.pyc
-
-# Node modules
+*encoding-backup*
+skills/ai_daily_today.json
+skills/**/results.tsv
 node_modules/
 
-# Large files (>100MB, GitHub limit)
-daily-feed/*.docx
-
-# Private deliverables
-wiki/products/
-wiki/presentations/
+# Deliverables and binary source material
+*.pdf
+*.doc
+*.docx
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+*.zip

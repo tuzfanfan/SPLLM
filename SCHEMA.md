@@ -71,7 +71,8 @@ status: draft|active|archived
   - 发展趋势
 
 #### 3. 来源摘要 (`sources/`)
-- **命名**：`YYYY-MM-DD-来源标题.md`
+- **命名**：`行业维度-来源标题.md`
+- **日期**：写入 frontmatter 的 `created` / `updated` 或来源信息表，不放入 source 文件名
 - **内容结构**：
   - 来源信息
   - 核心观点
@@ -159,7 +160,7 @@ status: draft|active|archived
 ### Wiki页面
 - 实体：`实体名称.md`（使用中文或英文，保持一致）
 - 概念：`概念名称.md`
-- 来源：`YYYY-MM-DD-来源标题.md`
+- 来源：`行业维度-来源标题.md`
 - 对比：`对比主题.md`
 - 产品：`产品名称-概念.md`
 

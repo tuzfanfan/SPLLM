@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "ag-psd": "^30.1.1",
-    "detect-libc": "^2.1.2",
-    "pngjs": "^7.0.0"
-  }
-}

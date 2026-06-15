@@ -32,6 +32,12 @@
 /agent-skills/
 /hermes-deploy/
 /report-overview-video/
+/.tmp_fabric_patterns/
+
+# Private local exports
+/抖音收藏视频*.json
+/抖音收藏视频*.txt
+/抖音收藏视频*.md
 
 # Credentials and local configuration
 .env

@@ -276,7 +276,7 @@ Digest 任务也统一采用“材料 - 指令 - 输出 - schema”四段结构�
 **PDF 转换**：使用 fpdf2（Windows 环境无 GTK，不可用 WeasyPrint）
 - 依赖：`pip install fpdf2 --break-system-packages`
 - 中文字体：C:/Windows/Fonts/msyh.ttc（微软雅黑）
-- 转换脚本：优先使用对应 Skill 自带的 `scripts/md_to_pdf.py`
+- 临时脚本：`c:\Users\Administrator\.trae-cn\work\69fdfc469bf12e8ac9660a06\md2pdf.py`
 
 **篇幅要求**：全文 16,000 - 40,000 字
 - 纵向分析：6,000 - 15,000 字
@@ -456,7 +456,7 @@ skills/neat-freak/
 | 来源 | 基于 Andrew Ng《AI Prompting for Everyone》全三模块课程 + 即梦/可灵官方使用手册 |
 | 用途 | 作为全局 `AGENTS.md` 中的默认前置思考框架：先理解意图、补齐高影响上下文、判断任务类别、再生成结果；本项目中继续用于 AI 视频/图像提示词优化与复杂请求澄清 |
 | 位置 | `e:\SPLLM\skills\prompt-flow/` |
-| 触发规则 | **全局默认由用户环境中的全局 `AGENTS.md` 接管**；本仓库不再单独声明“固定触发”，仅保留项目级补充约定 |
+| 触发规则 | **全局默认已由 `C:\Users\Administrator\.codex\AGENTS.md` 接管**；本仓库不再单独声明“固定触发”，仅保留项目级补充约定 |
 
 **文件结构**：
 ```

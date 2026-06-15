@@ -1,0 +1,4 @@
+interface:
+  display_name: "exvideo_gen"
+  short_description: "Plan scripts, cinematic shots, storyboards, pages, and prompts for complex AI video projects."
+  default_prompt: "Use $exvideo-gen to structure my video brief, script, cinematic shot language, character cards, storyboard, page specs, and generation prompts."

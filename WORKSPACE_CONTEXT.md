@@ -1,7 +1,7 @@
 ---
 title: SPLLM Workspace Context
 created: 2026-06-04
-updated: 2026-06-04
+updated: 2026-06-15
 type: context
 status: active
 ---
@@ -104,6 +104,7 @@ At task completion, run this lightweight closing loop:
 - Claim checking: `claim-analyzer`.
 - Quick comparisons: `quick-compare`.
 - Webpage to clean markdown: `webpage-to-markdown`.
+- Unified webpage and social-export conversion: `net-to-markdown`.
 - Hotspot/news collection: `hotspot-radar`.
 - End-of-session cleanup and doc sync: `neat-freak`.
 - Post-task wiki reflection: `thinking-extend`.

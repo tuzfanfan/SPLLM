@@ -1,4 +1,5 @@
 # Loop Workflow Patterns
+
 Use this reference when `prompt-flow` needs to decide whether a task should stay as a single prompt / direct execution, or upgrade into a loop-aware workflow with verification and stop conditions.
 
 This is a lightweight orchestration layer. It is not a separate skill and should not make simple tasks heavy.
@@ -231,3 +232,4 @@ After a loop runs successfully:
 - Twice: consider documenting it in a reference or wiki concept.
 - Repeated and stable: consider turning it into a skill or script.
 - Periodic: consider automation, only after confirming schedule and stop conditions.
+

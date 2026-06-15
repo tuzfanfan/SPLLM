@@ -1,4 +1,5 @@
 # Task Spec Capsule Protocol
+
 Use this reference when a user request is ambiguous, strategic, generative, multi-step, or likely to affect the wiki, skills, reports, automations, code, or other durable workspace assets.
 
 ## Purpose
@@ -131,3 +132,4 @@ Recommended output path:
 ```
 
 For simple tasks, keep the capsule internal and answer directly.
+

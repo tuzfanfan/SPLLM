@@ -1246,6 +1246,6 @@ presentation-template.md     -> e:\SPLLM\wiki\templates\presentation-template.md
 **创建日期**：2026-05-08  
 **最后更新**：2026-05-15（新增网盘资源整合：AList网盘替代本地book文件夹、webdav_url在线预览链接、更新目录架构）  
 **GitHub 仓库**：https://github.com/tuzfanfan/SPLLM （Private，main 分支）  
-**Git 配置**：由仓库维护者在本地环境中配置，不写入公开文档
+**Git 配置**：user.name=tuzfanfan, user.email=447049333@qq.com
 **维护者**：LLM Agent  
 **关联文档**：[[SCHEMA.md]], [[AGENTS.md]], [[index.md]], [[log.md]]

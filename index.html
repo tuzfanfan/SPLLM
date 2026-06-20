@@ -3,218 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPLLM · 角色驱动的知识系统</title>
+    <title>SPLLM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700;900&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700;900&family=Noto+Serif+SC:wght@400;700;900&family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { overflow-x: hidden; }
-        body { font-family: "Noto Sans SC", "PingFang SC", sans-serif; background: #F5F0E6; color: #0A0A0A; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-        .bw { border: 4px solid #0A0A0A; }
-        .shadow-1 { box-shadow: 4px 4px 0 0 #0A0A0A; }
-        .shadow-2 { box-shadow: 6px 6px 0 0 #0A0A0A; }
+        body {
+            font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+            background: #F4EEE2;
+            color: #0A0A0A;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        /* NAV */
-        .nav { position: fixed; top: 0; left: 0; right: 0; background: #F5F0E6; border-bottom: 4px solid #0A0A0A; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
-        .nav-logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; }
-        .nav-logo span { background: #0A0A0A; color: #F5F0E6; padding: 4px 10px; margin-right: 2px; display: inline-block; }
-        .nav-menu { display: flex; gap: 28px; font-size: 14px; font-weight: 700; }
-        .nav-menu a { color: #0A0A0A; text-decoration: none; padding: 6px 12px; border: 3px solid transparent; }
-        .nav-menu a:hover { background: #0A0A0A; color: #F5F0E6; border: 3px solid #0A0A0A; }
+        /* ============ NAV ============ */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: #F4EEE2; border-bottom: 4px solid #0A0A0A;
+            padding: 16px 36px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .nav-logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; display: flex; gap: 4px; }
+        .nav-logo span { background: #0A0A0A; color: #F4EEE2; padding: 4px 10px; }
+        .nav-links { display: flex; gap: 24px; font-size: 13px; font-weight: 700; letter-spacing: 1px; }
+        .nav-links a { color: #0A0A0A; text-decoration: none; padding: 6px 10px; border: 3px solid transparent; transition: all 0.15s; }
+        .nav-links a:hover { background: #0A0A0A; color: #F4EEE2; }
 
-        /* HERO */
-        .hero { min-height: 100vh; padding: 80px 0 0; position: relative; background: #F5F0E6; border-bottom: 4px solid #0A0A0A; }
-        .hero-canvas { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; pointer-events: none; z-index: 0; }
-        .color-rect { position: absolute; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
-        .color-circle { position: absolute; border: 4px solid #0A0A0A; border-radius: 50%; box-shadow: 5px 5px 0 0 #0A0A0A; }
-        .bg-1 { background: #E07A3A; width: 280px; height: 380px; top: 40px; left: 60px; transform: rotate(-8deg); }
-        .bg-2 { background: #0A1A3A; width: 320px; height: 240px; top: 180px; right: 80px; transform: rotate(6deg); box-shadow: 8px 8px 0 0 #0A0A0A; }
-        .bg-3 { background: #7FB7D7; width: 160px; height: 160px; top: 520px; left: 22%; }
-        .bg-4 { background: #4A6A6A; width: 200px; height: 200px; top: 480px; right: 28%; }
-        .bg-5 { background: #9C6060; width: 100px; height: 140px; top: 640px; left: 50px; transform: rotate(10deg); box-shadow: 4px 4px 0 0 #0A0A0A; }
-        .bg-6 { background: #1E1E3A; width: 130px; height: 130px; top: 80px; right: 35%; }
-        .bg-7 { background: #C0A080; width: 150px; height: 80px; top: 400px; left: 42%; transform: rotate(-4deg); box-shadow: 4px 4px 0 0 #0A0A0A; }
-        .bg-8 { background: #2A2A2A; width: 60px; height: 60px; top: 580px; right: 14%; box-shadow: 3px 3px 0 0 #0A0A0A; }
-        .bg-9 { background: #2A4A6A; width: 90px; height: 200px; top: 700px; right: 100px; transform: rotate(3deg); box-shadow: 5px 5px 0 0 #0A0A0A; }
-        .deco-line { position: absolute; background: #0A0A0A; height: 4px; width: 200px; }
-        .deco-dot { position: absolute; width: 24px; height: 24px; background: #0A0A0A; border-radius: 50%; }
-        .line-1 { top: 340px; left: 0; width: 400px; }
-        .line-2 { top: 560px; right: 0; width: 300px; }
-        .dot-1 { top: 300px; left: 30%; }
-        .dot-2 { top: 440px; right: 28%; background: #E07A3A; }
-        .dot-3 { top: 680px; left: 48%; background: #7FB7D7; }
+        /* ============ HERO ============ */
+        .hero {
+            min-height: 100vh;
+            padding: 80px 0 0;
+            position: relative;
+            background: #F4EEE2;
+            border-bottom: 4px solid #0A0A0A;
+            overflow: hidden;
+        }
+        .canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+        .shape { position: absolute; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
+        .circle { position: absolute; border: 4px solid #0A0A0A; border-radius: 50%; box-shadow: 5px 5px 0 0 #0A0A0A; }
 
-        .hero-content { position: relative; z-index: 10; padding: 60px 48px 120px; max-width: 1400px; margin: 0 auto; }
-        .hero-tag { display: inline-flex; align-items: center; gap: 12px; background: #F5F0E6; border: 4px solid #0A0A0A; padding: 10px 20px; font-size: 14px; font-weight: 900; letter-spacing: 4px; box-shadow: 4px 4px 0 0 #0A0A0A; margin-bottom: 40px; }
-        .hero-tag .tag-dot { width: 12px; height: 12px; background: #E07A3A; border: 3px solid #0A0A0A; }
-        .hero-title { font-size: 130px; font-weight: 900; line-height: 0.92; letter-spacing: -6px; margin-bottom: 40px; position: relative; }
-        .hero-title .highlight { background: #E07A3A; padding: 0 20px; display: inline-block; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
-        .hero-title .highlight-2 { color: #F5F0E6; background: #0A1A3A; padding: 0 20px; display: inline-block; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
-        .hero-subtitle { font-size: 20px; font-weight: 700; max-width: 720px; line-height: 1.5; margin-bottom: 48px; }
-        .hero-subtitle strong { background: #0A0A0A; color: #F5F0E6; padding: 2px 8px; font-weight: 900; }
-        .hero-stats { display: flex; gap: 32px; margin-top: 80px; flex-wrap: wrap; }
-        .stat-item { background: #F5F0E6; border: 4px solid #0A0A0A; padding: 24px 32px; box-shadow: 6px 6px 0 0 #0A0A0A; min-width: 180px; }
-        .stat-item:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 0 #0A0A0A; transition: all 0.15s; }
-        .stat-num { font-size: 48px; font-weight: 900; line-height: 1; letter-spacing: -2px; margin-bottom: 8px; }
-        .stat-label { font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #0A0A0A; }
-        .stat-item.orange { background: #E07A3A; }
-        .stat-item.navy { background: #0A1A3A; color: #F5F0E6; }
-        .stat-item.sky { background: #7FB7D7; }
-        .stat-item.green { background: #4A6A6A; color: #F5F0E6; }
+        .s-1  { background: #E07A3A; width: 260px; height: 340px; top: 50px; left: 4%; transform: rotate(-7deg); }
+        .s-2  { background: #0A1A3A; width: 300px; height: 220px; top: 200px; right: 6%; transform: rotate(5deg); box-shadow: 8px 8px 0 0 #0A0A0A; }
+        .s-3  { background: #7FB7D7; width: 150px; height: 150px; top: 480px; left: 22%; }
+        .s-4  { background: #4A6A6A; width: 200px; height: 200px; top: 460px; right: 28%; }
+        .s-5  { background: #9C6060; width: 110px; height: 140px; top: 620px; left: 8%; transform: rotate(12deg); box-shadow: 4px 4px 0 0 #0A0A0A; }
+        .s-6  { background: #1E1E3A; width: 130px; height: 130px; top: 100px; right: 36%; }
+        .s-7  { background: #C0A080; width: 160px; height: 80px; top: 380px; left: 44%; transform: rotate(-3deg); box-shadow: 4px 4px 0 0 #0A0A0A; }
+        .s-8  { background: #2A2A2A; width: 60px; height: 60px; top: 560px; right: 12%; box-shadow: 3px 3px 0 0 #0A0A0A; }
+        .s-9  { background: #2A4A6A; width: 90px; height: 200px; top: 680px; right: 8%; transform: rotate(3deg); box-shadow: 5px 5px 0 0 #0A0A0A; }
+        .s-10 { background: #1E1E4A; width: 80px; height: 80px; top: 720px; left: 38%; }
+        .s-11 { background: #A0C0E0; width: 70px; height: 70px; top: 260px; left: 16%; }
+        .s-12 { background: #2A2A4A; width: 50px; height: 50px; top: 350px; right: 18%; }
 
-        .scroll-down { position: absolute; bottom: 40px; left: 48px; display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 700; letter-spacing: 4px; z-index: 10; }
-        .scroll-down .arrow { display: inline-block; width: 60px; height: 4px; background: #0A0A0A; position: relative; }
-        .scroll-down .arrow::after { content: ""; position: absolute; right: -16px; top: 50%; width: 12px; height: 12px; border-right: 4px solid #0A0A0A; border-bottom: 4px solid #0A0A0A; transform: translateY(-50%) rotate(-45deg); }
+        .deco-line { position: absolute; background: #0A0A0A; height: 4px; }
+        .line-a { top: 330px; left: 0; width: 360px; }
+        .line-b { top: 540px; right: 0; width: 280px; }
+        .deco-dot { position: absolute; width: 22px; height: 22px; background: #0A0A0A; border-radius: 50%; }
+        .dot-a { top: 290px; left: 32%; }
+        .dot-b { top: 430px; right: 30%; background: #E07A3A; }
+        .dot-c { top: 660px; left: 50%; background: #7FB7D7; }
 
-        /* PALETTE BANNER */
-        .palette-banner { background: #0A0A0A; padding: 80px 48px; border-bottom: 4px solid #0A0A0A; }
+        .hero-content { position: relative; z-index: 5; padding: 60px 48px 100px; max-width: 1400px; margin: 0 auto; }
+        .tag {
+            display: inline-flex; align-items: center; gap: 12px;
+            background: #F4EEE2; border: 4px solid #0A0A0A; padding: 10px 20px;
+            font-size: 13px; font-weight: 900; letter-spacing: 4px;
+            box-shadow: 4px 4px 0 0 #0A0A0A; margin-bottom: 36px;
+        }
+        .tag-dot { width: 12px; height: 12px; background: #E07A3A; border: 3px solid #0A0A0A; }
+
+        h1 {
+            font-size: clamp(56px, 11vw, 156px);
+            font-weight: 900; line-height: 0.92; letter-spacing: -0.05em;
+            margin-bottom: 36px;
+        }
+        h1 .hl1 { background: #E07A3A; padding: 0 22px; display: inline-block; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
+        h1 .hl2 { color: #F4EEE2; background: #0A1A3A; padding: 0 22px; display: inline-block; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
+        h1 .hl3 { background: #7FB7D7; padding: 0 22px; display: inline-block; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
+
+        .lead { font-size: 20px; font-weight: 500; max-width: 700px; line-height: 1.55; margin-bottom: 56px; }
+        .lead b { background: #0A0A0A; color: #F4EEE2; padding: 2px 8px; font-weight: 900; }
+
+        .stats { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 60px; }
+        .stat { background: #F4EEE2; border: 4px solid #0A0A0A; padding: 22px 28px; box-shadow: 6px 6px 0 0 #0A0A0A; min-width: 170px; transition: all 0.15s; }
+        .stat:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 0 #0A0A0A; }
+        .stat .n { font-size: 44px; font-weight: 900; line-height: 1; letter-spacing: -0.04em; }
+        .stat .l { font-size: 12px; font-weight: 700; letter-spacing: 2px; margin-top: 8px; }
+        .stat.c3  { background: #E07A3A; }
+        .stat.c2  { background: #0A1A3A; color: #F4EEE2; }
+        .stat.c6  { background: #7FB7D7; }
+        .stat.c4  { background: #4A6A6A; color: #F4EEE2; }
+
+        .scroll { position: absolute; bottom: 40px; left: 48px; display: flex; align-items: center; gap: 14px; font-size: 11px; font-weight: 700; letter-spacing: 4px; z-index: 5; }
+        .scroll .ar { display: inline-block; width: 60px; height: 4px; background: #0A0A0A; position: relative; }
+        .scroll .ar::after { content: ""; position: absolute; right: -16px; top: 50%; width: 12px; height: 12px; border-right: 4px solid #0A0A0A; border-bottom: 4px solid #0A0A0A; transform: translateY(-50%) rotate(-45deg); }
+
+        /* ============ PALETTE GRID (12 色) ============ */
+        .palette { background: #0A0A0A; padding: 90px 48px; border-bottom: 4px solid #0A0A0A; }
         .palette-inner { max-width: 1400px; margin: 0 auto; }
-        .palette-title { color: #F5F0E6; font-size: 44px; font-weight: 900; letter-spacing: -2px; margin-bottom: 8px; }
-        .palette-sub { color: #909090; font-size: 14px; font-weight: 700; letter-spacing: 2px; margin-bottom: 32px; }
-        .palette-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 0; border: 3px solid #0A0A0A; }
-        .palette-cell { aspect-ratio: 1; border-right: 3px solid #F5F0E6; border-bottom: 3px solid #F5F0E6; position: relative; display: flex; flex-direction: column; justify-content: flex-end; padding: 12px 8px; transition: transform 0.15s; cursor: pointer; }
-        .palette-cell:nth-child(12n) { border-right: none; }
-        .palette-cell:hover { transform: translate(-3px, -3px); z-index: 10; box-shadow: 6px 6px 0 0 #E07A3A; }
-        .palette-cell.p1 { background: #1E1E3A; }
-        .palette-cell.p2 { background: #0A1A3A; }
-        .palette-cell.p3 { background: #E07A3A; }
-        .palette-cell.p4 { background: #4A6A6A; }
-        .palette-cell.p5 { background: #2A2A2A; }
-        .palette-cell.p6 { background: #7FB7D7; }
-        .palette-cell.p7 { background: #9C6060; }
-        .palette-cell.p8 { background: #C0A080; }
-        .palette-cell.p9 { background: #2A4A6A; }
-        .palette-cell.p10 { background: #1E1E4A; }
-        .palette-cell.p11 { background: #A0C0E0; }
-        .palette-cell.p12 { background: #2A2A4A; }
-        .palette-cell .pnum { font-size: 11px; font-weight: 900; color: #F5F0E6; letter-spacing: 1px; opacity: 0.9; }
-        .palette-cell.p3 .pnum, .palette-cell.p6 .pnum, .palette-cell.p8 .pnum, .palette-cell.p11 .pnum { color: #0A0A0A; }
+        .palette-head { color: #F4EEE2; margin-bottom: 36px; }
+        .palette-head .sub { font-size: 13px; font-weight: 700; letter-spacing: 4px; color: #909090; margin-bottom: 12px; }
+        .palette-head h2 { font-size: 48px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+        .palette-head h2 em { color: #E07A3A; font-style: normal; }
 
-        /* SECTIONS */
-        .section { padding: 100px 48px; position: relative; border-bottom: 4px solid #0A0A0A; }
-        .section-inner { max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
-        .section-label { display: inline-block; background: #0A0A0A; color: #F5F0E6; padding: 8px 16px; font-size: 12px; font-weight: 900; letter-spacing: 4px; margin-bottom: 24px; }
-        .section-title { font-size: 64px; font-weight: 900; line-height: 1; letter-spacing: -2px; margin-bottom: 24px; }
-        .section-title .accent { background: #E07A3A; padding: 0 12px; display: inline-block; border: 3px solid #0A0A0A; box-shadow: 4px 4px 0 0 #0A0A0A; }
-        .section-desc { font-size: 18px; max-width: 720px; margin-bottom: 60px; font-weight: 500; }
+        .swatch-grid {
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 0;
+            border: 3px solid #0A0A0A; background: #0A0A0A;
+        }
+        .swatch { aspect-ratio: 1; position: relative; border: 3px solid #0A0A0A; transition: transform 0.15s; cursor: pointer; overflow: hidden; }
+        .swatch:hover { transform: translate(-3px, -3px); z-index: 5; box-shadow: 6px 6px 0 0 #E07A3A; }
+        .swatch::after {
+            content: ""; position: absolute; inset: 0;
+            background-image:
+                linear-gradient(45deg, rgba(0,0,0,0.08) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(0,0,0,0.08) 25%, transparent 25%);
+            background-size: 16px 16px;
+            background-position: 0 0, 8px 8px;
+        }
+        .swatch .label {
+            position: absolute; left: 14px; bottom: 12px; z-index: 2;
+            font-size: 11px; font-weight: 900; letter-spacing: 1px;
+            color: #F4EEE2; text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+        }
+        .swatch .hex {
+            position: absolute; right: 14px; top: 12px; z-index: 2;
+            font-size: 10px; font-weight: 700; letter-spacing: 1px;
+            color: #F4EEE2; opacity: 0.85;
+            background: rgba(0,0,0,0.5); padding: 3px 6px; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .swatch .num {
+            position: absolute; right: 14px; bottom: 12px; z-index: 2;
+            font-size: 22px; font-weight: 900; color: #F4EEE2; opacity: 0.7;
+        }
+        .sw-1  { background: #1E1E3A; }
+        .sw-2  { background: #0A1A3A; }
+        .sw-3  { background: #E07A3A; }
+        .sw-4  { background: #4A6A6A; }
+        .sw-5  { background: #2A2A2A; }
+        .sw-6  { background: #7FB7D7; }
+        .sw-7  { background: #9C6060; }
+        .sw-8  { background: #C0A080; }
+        .sw-9  { background: #2A4A6A; }
+        .sw-10 { background: #1E1E4A; }
+        .sw-11 { background: #A0C0E0; }
+        .sw-12 { background: #2A2A4A; }
 
-        /* SYSTEM FLOW */
-        .flow-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-        .flow-card { background: #F5F0E6; border: 4px solid #0A0A0A; padding: 32px 28px; position: relative; box-shadow: 6px 6px 0 0 #0A0A0A; transition: all 0.2s; min-height: 340px; }
-        .flow-card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 0 #0A0A0A; }
-        .flow-num { position: absolute; top: -20px; left: 24px; background: #0A0A0A; color: #F5F0E6; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 900; border: 4px solid #0A0A0A; }
-        .flow-card.c1 .flow-num { background: #2A2A2A; }
-        .flow-card.c2 .flow-num { background: #0A1A3A; color: #7FB7D7; }
-        .flow-card.c3 .flow-num { background: #9C6060; }
-        .flow-card.c4 .flow-num { background: #4A6A4A; }
-        .flow-chara { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin: 16px 0 8px; }
-        .flow-card.c1 .flow-chara { color: #2A2A2A; }
-        .flow-card.c2 .flow-chara { color: #0A1A3A; }
-        .flow-card.c3 .flow-chara { color: #9C6060; }
-        .flow-card.c4 .flow-chara { color: #4A6A4A; }
-        .flow-role { font-size: 13px; font-weight: 700; letter-spacing: 3px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 3px solid #0A0A0A; display: block; }
-        .flow-text { font-size: 15px; line-height: 1.7; font-weight: 500; }
+        /* ============ BAND SECTION ============ */
+        .band {
+            position: relative; padding: 110px 48px;
+            border-bottom: 4px solid #0A0A0A; overflow: hidden;
+        }
+        .band.b-orange { background: #E07A3A; color: #0A0A0A; }
+        .band.b-navy   { background: #0A1A3A; color: #F4EEE2; }
+        .band.b-cream  { background: #F4EEE2; color: #0A0A0A; }
+        .band.b-stone  { background: #4A6A6A; color: #F4EEE2; }
 
-        /* DOMAINS */
-        .domain-section { padding: 80px 0; border-top: 4px solid #0A0A0A; position: relative; }
-        .domain-section:first-of-type { border-top: none; }
-        .domain-content { max-width: 1400px; margin: 0 auto; padding: 0 48px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: center; position: relative; z-index: 2; }
-        .domain-visual { position: relative; height: 380px; display: flex; flex-direction: column; gap: 12px; }
-        .visual-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 8px; height: 100%; }
-        .visual-block { border: 4px solid #0A0A0A; box-shadow: 3px 3px 0 0 #0A0A0A; position: relative; transition: transform 0.15s; }
-        .visual-block:hover { transform: scale(1.03); z-index: 5; }
-        .visual-block .num { position: absolute; bottom: 8px; right: 10px; font-size: 11px; font-weight: 900; }
-        .domain-text h3 { font-size: 32px; font-weight: 900; margin-bottom: 12px; letter-spacing: -1px; }
-        .domain-text .domain-tag { display: inline-block; background: #0A0A0A; color: #F5F0E6; font-size: 11px; padding: 4px 10px; font-weight: 700; letter-spacing: 2px; margin-bottom: 16px; }
-        .domain-text .chara-name { font-size: 18px; font-weight: 900; margin-bottom: 20px; }
-        .domain-text p { font-size: 15px; line-height: 1.8; margin-bottom: 16px; font-weight: 500; }
-        .domain-traits { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
-        .domain-traits span { background: #F5F0E6; border: 3px solid #0A0A0A; padding: 6px 12px; font-size: 12px; font-weight: 700; }
+        .band-inner { max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
+        .band-label {
+            display: inline-block; background: #0A0A0A; color: #F4EEE2;
+            padding: 6px 14px; font-size: 11px; font-weight: 900; letter-spacing: 4px;
+            margin-bottom: 24px;
+        }
+        .band.b-navy .band-label, .band.b-stone .band-label { background: #F4EEE2; color: #0A0A0A; }
+        .band h2 {
+            font-size: clamp(40px, 6vw, 72px);
+            font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 20px;
+        }
+        .band h2 .hl { background: #0A0A0A; color: #F4EEE2; padding: 0 14px; display: inline-block; }
+        .band.b-cream h2 .hl { background: #E07A3A; }
+        .band p.lead-b { font-size: 18px; max-width: 720px; font-weight: 500; }
 
-        /* PRINCIPLES */
-        .principles-section { background: #E07A3A; padding: 100px 48px; border-bottom: 4px solid #0A0A0A; position: relative; overflow: hidden; }
-        .principles-inner { max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
-        .principles-title { font-size: 56px; font-weight: 900; letter-spacing: -2px; margin-bottom: 48px; line-height: 1; }
-        .principles-title small { font-size: 16px; font-weight: 700; letter-spacing: 4px; display: block; margin-bottom: 16px; }
-        .principles-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border: 4px solid #0A0A0A; background: #0A0A0A; }
-        .principle-cell { background: #F5F0E6; padding: 32px 24px; border-right: 4px solid #0A0A0A; position: relative; min-height: 260px; }
-        .principle-cell:last-child { border-right: none; }
-        .principle-cell:nth-child(even) { background: #E07A3A; }
-        .principle-num { font-size: 24px; font-weight: 900; border: 3px solid #0A0A0A; display: inline-block; padding: 4px 12px; margin-bottom: 20px; background: #0A0A0A; color: #F5F0E6; }
-        .principle-title { font-size: 20px; font-weight: 900; margin-bottom: 12px; line-height: 1.2; }
-        .principle-text { font-size: 14px; line-height: 1.6; font-weight: 500; }
+        .band-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
 
-        /* DIRECTIONS */
-        .directions-section { padding: 100px 48px; border-bottom: 4px solid #0A0A0A; }
-        .directions-inner { max-width: 1400px; margin: 0 auto; }
-        .directions-header { display: flex; align-items: baseline; gap: 24px; margin-bottom: 48px; flex-wrap: wrap; }
-        .directions-title { font-size: 56px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
-        .directions-label { font-size: 12px; font-weight: 700; letter-spacing: 3px; color: #666; }
-        .dir-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .dir-card { border: 4px solid #0A0A0A; box-shadow: 8px 8px 0 0 #0A0A0A; padding: 40px 32px; position: relative; min-height: 380px; transition: all 0.2s; overflow: hidden; }
-        .dir-card:hover { transform: translate(-3px, -3px); box-shadow: 11px 11px 0 0 #0A0A0A; }
-        .dir-card.d1 { background: linear-gradient(135deg, #4A6A6A 0%, #4A6A6A 60%, #C0A080 60%, #C0A080 100%); color: #F5F0E6; }
-        .dir-card.d2 { background: linear-gradient(135deg, #E07A3A 0%, #E07A3A 50%, #F5F0E6 50%, #F5F0E6 100%); }
-        .dir-card.d3 { background: linear-gradient(135deg, #7FB7D7 0%, #7FB7D7 55%, #1E1E3A 55%, #1E1E3A 100%); color: #F5F0E6; }
-        .dir-card .chara-tag { display: inline-block; background: #0A0A0A; color: #F5F0E6; padding: 8px 14px; font-size: 13px; font-weight: 900; letter-spacing: 2px; margin-bottom: 24px; position: relative; z-index: 2; }
-        .dir-card.d2 .chara-tag { background: #0A1A3A; }
-        .dir-card h3 { font-size: 32px; font-weight: 900; letter-spacing: -1px; margin-bottom: 16px; position: relative; z-index: 2; }
-        .dir-card p { font-size: 15px; line-height: 1.8; margin-bottom: 20px; font-weight: 500; position: relative; z-index: 2; }
-        .dir-card .deco-circle { position: absolute; border-radius: 50%; border: 4px solid #0A0A0A; z-index: 1; }
-        .dir-card.d1 .deco-circle { width: 120px; height: 120px; top: -20px; right: -20px; background: #E07A3A; }
-        .dir-card.d2 .deco-circle { width: 100px; height: 100px; bottom: -20px; left: -20px; background: #0A1A3A; }
-        .dir-card.d3 .deco-circle { width: 140px; height: 140px; top: 30%; right: -40px; background: #E07A3A; }
-        .dir-card .deco-sq { position: absolute; width: 60px; height: 60px; border: 4px solid #0A0A0A; z-index: 1; }
-        .dir-card.d1 .deco-sq { bottom: 30px; right: 40px; background: #E07A3A; transform: rotate(15deg); }
-        .dir-card.d3 .deco-sq { bottom: 40px; left: 30%; background: #7FB7D7; }
+        /* ============ MOSAIC SECTION ============ */
+        .mosaic { padding: 0; background: #F4EEE2; border-bottom: 4px solid #0A0A0A; }
+        .mosaic-grid {
+            display: grid; grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: 90px;
+        }
+        .m { border: 4px solid #0A0A0A; box-shadow: inset 0 0 0 0 transparent; position: relative; transition: all 0.2s; cursor: pointer; }
+        .m:hover { box-shadow: 8px 8px 0 0 #0A0A0A; transform: translate(-2px, -2px); z-index: 5; }
 
-        /* CTA */
-        .cta-section { background: #0A1A3A; color: #F5F0E6; padding: 120px 48px; position: relative; overflow: hidden; }
-        .cta-inner { max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
-        .cta-title { font-size: 88px; font-weight: 900; line-height: 1; letter-spacing: -4px; margin-bottom: 32px; }
-        .cta-title .accent { color: #E07A3A; }
-        .cta-desc { font-size: 18px; max-width: 600px; line-height: 1.8; margin-bottom: 48px; }
-        .cta-btns { display: flex; gap: 24px; flex-wrap: wrap; }
-        .cta-btn { display: inline-block; background: #F5F0E6; color: #0A0A0A; border: 4px solid #F5F0E6; padding: 20px 40px; font-size: 16px; font-weight: 900; letter-spacing: 2px; text-decoration: none; box-shadow: 6px 6px 0 0 #E07A3A; transition: all 0.2s; }
-        .cta-btn:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 0 #E07A3A; }
-        .cta-btn.secondary { background: transparent; color: #F5F0E6; border-color: #F5F0E6; box-shadow: 6px 6px 0 0 #7FB7D7; }
-        .cta-shape { position: absolute; z-index: 1; }
-        .cta-shape.s1 { width: 300px; height: 300px; background: #E07A3A; top: 10%; right: 5%; opacity: 0.3; border: 4px solid #E07A3A; }
-        .cta-shape.s2 { width: 200px; height: 200px; border: 6px solid #7FB7D7; border-radius: 50%; bottom: 10%; right: 20%; opacity: 0.4; }
-        .cta-shape.s3 { width: 80px; height: 80px; background: #E07A3A; border: 4px solid #F5F0E6; top: 60%; right: 8%; transform: rotate(45deg); }
-        .cta-shape.s4 { width: 40px; height: 40px; background: #7FB7D7; top: 20%; right: 40%; border-radius: 50%; }
+        /* ============ COMPOSITION GRID ============ */
+        .composition { padding: 100px 48px; background: #F4EEE2; border-bottom: 4px solid #0A0A0A; }
+        .comp-inner { max-width: 1400px; margin: 0 auto; }
+        .comp-head { margin-bottom: 48px; }
+        .comp-head .num { font-size: 11px; font-weight: 900; letter-spacing: 4px; color: #0A0A0A; margin-bottom: 12px; }
+        .comp-head h2 { font-size: clamp(40px, 6vw, 72px); font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
 
-        /* FOOTER */
-        .footer { background: #F5F0E6; padding: 60px 48px 40px; }
-        .footer-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
-        .footer-logo { font-size: 32px; font-weight: 900; letter-spacing: -1px; margin-bottom: 16px; }
-        .footer-logo span { background: #0A0A0A; color: #F5F0E6; padding: 4px 10px; margin-right: 2px; display: inline-block; border: 3px solid #0A0A0A; box-shadow: 3px 3px 0 0 #E07A3A; }
-        .footer-desc { font-size: 14px; line-height: 1.8; max-width: 400px; }
-        .footer-col h4 { font-size: 14px; font-weight: 900; letter-spacing: 2px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 3px solid #0A0A0A; display: inline-block; }
-        .footer-col a { display: block; color: #0A0A0A; text-decoration: none; font-size: 14px; padding: 6px 0; font-weight: 500; }
-        .footer-col a:hover { background: #0A0A0A; color: #F5F0E6; padding: 6px 12px; margin: 0 -12px; }
-        .footer-bottom { border-top: 4px solid #0A0A0A; padding-top: 32px; max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 13px; font-weight: 700; }
-        .footer-bottom .colors { display: flex; gap: 6px; }
-        .footer-bottom .colors span { width: 20px; height: 20px; border: 2px solid #0A0A0A; display: block; }
+        .comp-canvas {
+            display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(6, 80px);
+            gap: 0; border: 4px solid #0A0A0A; background: #0A0A0A;
+        }
+        .c-block { border: 3px solid #0A0A0A; position: relative; transition: all 0.2s; }
+        .c-block:hover { z-index: 5; box-shadow: 0 0 0 4px #E07A3A, 8px 8px 0 0 #0A0A0A; transform: translate(-2px, -2px); }
+        .c1  { background: #1E1E3A; grid-column: span 2; grid-row: span 3; }
+        .c2  { background: #0A1A3A; grid-column: span 2; grid-row: span 2; }
+        .c3  { background: #E07A3A; grid-column: span 2; grid-row: span 2; }
+        .c4  { background: #4A6A6A; grid-column: span 2; grid-row: span 2; }
+        .c5  { background: #2A2A2A; grid-column: span 1; grid-row: span 1; }
+        .c6  { background: #7FB7D7; grid-column: span 2; grid-row: span 3; }
+        .c7  { background: #9C6060; grid-column: span 1; grid-row: span 1; }
+        .c8  { background: #C0A080; grid-column: span 2; grid-row: span 2; }
+        .c9  { background: #2A4A6A; grid-column: span 2; grid-row: span 1; }
+        .c10 { background: #1E1E4A; grid-column: span 2; grid-row: span 2; }
+        .c11 { background: #A0C0E0; grid-column: span 1; grid-row: span 1; }
+        .c12 { background: #2A2A4A; grid-column: span 1; grid-row: span 1; }
+        .c-meta { background: #F4EEE2; grid-column: span 4; grid-row: span 3; display: flex; flex-direction: column; justify-content: center; padding: 28px; }
+        .c-meta .tag-sm { font-size: 11px; font-weight: 900; letter-spacing: 3px; color: #0A0A0A; margin-bottom: 12px; }
+        .c-meta h3 { font-size: 28px; font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 14px; }
+        .c-meta p { font-size: 14px; line-height: 1.6; color: #2A2A2A; }
 
-        /* RESPONSIVE */
+        /* ============ ROTATION SECTION ============ */
+        .rotation {
+            padding: 0; background: #0A0A0A; border-bottom: 4px solid #0A0A0A;
+            position: relative; height: 520px; overflow: hidden;
+        }
+        .rot-bg {
+            position: absolute; inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 30%, #E07A3A 0 8px, transparent 9px),
+                radial-gradient(circle at 75% 60%, #7FB7D7 0 12px, transparent 13px),
+                radial-gradient(circle at 50% 80%, #4A6A6A 0 6px, transparent 7px);
+        }
+        .rot-piece {
+            position: absolute; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #F4EEE2;
+        }
+        .rot-circle { position: absolute; border: 4px solid #0A0A0A; border-radius: 50%; box-shadow: 6px 6px 0 0 #F4EEE2; }
+        .rp-1 { background: #1E1E3A; width: 180px; height: 240px; top: 60px; left: 8%; transform: rotate(-12deg); }
+        .rp-2 { background: #0A1A3A; width: 220px; height: 160px; top: 100px; right: 12%; transform: rotate(8deg); }
+        .rp-3 { background: #7FB7D7; width: 140px; height: 140px; top: 320px; left: 18%; }
+        .rp-4 { background: #E07A3A; width: 200px; height: 200px; top: 280px; right: 8%; }
+        .rp-5 { background: #9C6060; width: 80px; height: 110px; top: 30px; left: 40%; transform: rotate(15deg); }
+        .rp-6 { background: #2A4A6A; width: 100px; height: 100px; bottom: 30px; right: 35%; }
+
+        .rot-overlay {
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+            background: #F4EEE2; border: 4px solid #0A0A0A; padding: 24px 40px;
+            box-shadow: 8px 8px 0 0 #E07A3A; text-align: center; z-index: 10;
+        }
+        .rot-overlay .sm { font-size: 11px; font-weight: 900; letter-spacing: 4px; margin-bottom: 8px; }
+        .rot-overlay .big { font-size: 32px; font-weight: 900; letter-spacing: -0.04em; }
+
+        /* ============ POSTER SECTION ============ */
+        .poster { padding: 100px 48px; background: #F4EEE2; border-bottom: 4px solid #0A0A0A; }
+        .poster-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; }
+        .poster-art {
+            aspect-ratio: 4/3; position: relative; border: 4px solid #0A0A0A;
+            box-shadow: 10px 10px 0 0 #0A0A0A; overflow: hidden; background: #0A0A0A;
+        }
+        .poster-art .pa-1 { position: absolute; background: #E07A3A; left: 8%; top: 12%; width: 36%; height: 30%; border: 4px solid #0A0A0A; transform: rotate(-6deg); }
+        .poster-art .pa-2 { position: absolute; background: #0A1A3A; right: 6%; top: 8%; width: 44%; height: 28%; border: 4px solid #0A0A0A; transform: rotate(4deg); }
+        .poster-art .pa-3 { position: absolute; background: #7FB7D7; left: 12%; bottom: 14%; width: 28%; height: 24%; border: 4px solid #0A0A0A; }
+        .poster-art .pa-4 { position: absolute; background: #4A6A6A; right: 8%; bottom: 10%; width: 40%; height: 30%; border: 4px solid #0A0A0A; }
+        .poster-art .pa-5 { position: absolute; background: #C0A080; left: 38%; top: 38%; width: 22%; height: 18%; border: 4px solid #0A0A0A; transform: rotate(10deg); }
+        .poster-art .pa-6 { position: absolute; background: #9C6060; right: 36%; top: 50%; width: 14%; height: 14%; border: 4px solid #0A0A0A; }
+        .poster-art .pa-7 { position: absolute; background: #1E1E3A; left: 20%; bottom: 8%; width: 16%; height: 14%; border: 4px solid #0A0A0A; }
+
+        .poster-text .n { font-size: 11px; font-weight: 900; letter-spacing: 4px; margin-bottom: 12px; }
+        .poster-text h2 { font-size: clamp(36px, 5vw, 56px); font-weight: 900; letter-spacing: -0.04em; line-height: 1; margin-bottom: 20px; }
+        .poster-text p { font-size: 16px; line-height: 1.7; margin-bottom: 16px; }
+        .poster-text .ctas { display: flex; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
+        .btn { display: inline-block; padding: 16px 28px; font-size: 13px; font-weight: 900; letter-spacing: 2px; text-decoration: none; border: 4px solid #0A0A0A; box-shadow: 5px 5px 0 0 #0A0A0A; transition: all 0.15s; }
+        .btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 #0A0A0A; }
+        .btn-dark { background: #0A0A0A; color: #F4EEE2; }
+        .btn-light { background: #F4EEE2; color: #0A0A0A; }
+        .btn-orange { background: #E07A3A; color: #0A0A0A; }
+
+        /* ============ COLOR STRIP ============ */
+        .strip { display: grid; grid-template-columns: repeat(12, 1fr); height: 60px; }
+        .strip span { display: block; }
+        .strip span:nth-child(1)  { background: #1E1E3A; }
+        .strip span:nth-child(2)  { background: #0A1A3A; }
+        .strip span:nth-child(3)  { background: #E07A3A; }
+        .strip span:nth-child(4)  { background: #4A6A6A; }
+        .strip span:nth-child(5)  { background: #2A2A2A; }
+        .strip span:nth-child(6)  { background: #7FB7D7; }
+        .strip span:nth-child(7)  { background: #9C6060; }
+        .strip span:nth-child(8)  { background: #C0A080; }
+        .strip span:nth-child(9)  { background: #2A4A6A; }
+        .strip span:nth-child(10) { background: #1E1E4A; }
+        .strip span:nth-child(11) { background: #A0C0E0; }
+        .strip span:nth-child(12) { background: #2A2A4A; }
+
+        /* ============ FOOTER ============ */
+        .footer { background: #F4EEE2; padding: 60px 48px 32px; }
+        .footer-inner { max-width: 1400px; margin: 0 auto; }
+        .footer-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; padding-bottom: 40px; border-bottom: 4px solid #0A0A0A; margin-bottom: 32px; }
+        .footer-logo { display: flex; gap: 4px; }
+        .footer-logo span { background: #0A0A0A; color: #F4EEE2; padding: 4px 10px; font-size: 28px; font-weight: 900; }
+        .footer-meta { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-align: right; }
+        .footer-meta a { color: #0A0A0A; text-decoration: none; padding: 4px 10px; border: 2px solid transparent; display: inline-block; }
+        .footer-meta a:hover { background: #0A0A0A; color: #F4EEE2; }
+        .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 11px; font-weight: 700; letter-spacing: 2px; }
+
+        /* ============ RESPONSIVE ============ */
         @media (max-width: 900px) {
-            .nav { padding: 12px 16px; }
-            .nav-menu { gap: 8px; font-size: 11px; }
-            .hero-title { font-size: 56px; }
-            .hero-subtitle { font-size: 16px; }
-            .hero-stats { gap: 16px; margin-top: 48px; }
-            .stat-item { padding: 16px 20px; min-width: 140px; }
-            .stat-num { font-size: 36px; }
-            .section { padding: 60px 20px; }
-            .section-title { font-size: 36px; }
-            .flow-grid, .domain-content, .principles-grid, .dir-grid, .footer-inner { grid-template-columns: 1fr; }
-            .domain-visual { height: 260px; }
-            .palette-title, .principles-title, .directions-title, .cta-title { font-size: 32px; }
-            .cta-section { padding: 60px 20px; }
-            .palette-banner { padding: 48px 20px; }
-            .domain-content { padding: 0 20px; }
+            .nav { padding: 12px 18px; }
+            .nav-links { display: none; }
+            .hero-content, .band, .composition, .poster { padding-left: 24px; padding-right: 24px; }
+            .poster-inner { grid-template-columns: 1fr; }
+            .comp-canvas { grid-template-rows: repeat(8, 60px); }
+            .c-meta { grid-column: span 8; grid-row: span 2; }
+            .swatch-grid { grid-template-columns: repeat(3, 1fr); }
+            .palette-head h2 { font-size: 32px; }
+            .stats { gap: 12px; }
+            .stat { min-width: 140px; padding: 16px 20px; }
+            .stat .n { font-size: 32px; }
+            .strip { height: 40px; }
+            .rotation { height: 360px; }
+            .rot-piece { transform: scale(0.7); }
         }
     </style>
 </head>
@@ -222,378 +321,210 @@
     <!-- NAV -->
     <nav class="nav">
         <div class="nav-logo"><span>S</span><span>P</span><span>L</span><span>L</span><span>M</span></div>
-        <div class="nav-menu">
-            <a href="#system">流程</a>
-            <a href="#domains">领域</a>
-            <a href="#principles">原则</a>
-            <a href="#directions">方向</a>
+        <div class="nav-links">
+            <a href="#palette">调色</a>
+            <a href="#composition">构图</a>
+            <a href="#poster">海报</a>
         </div>
     </nav>
 
     <!-- HERO -->
     <section class="hero">
-        <div class="hero-canvas">
-            <div class="color-rect bg-1"></div>
-            <div class="color-rect bg-2"></div>
-            <div class="color-circle bg-3"></div>
-            <div class="color-rect bg-4"></div>
-            <div class="color-rect bg-5"></div>
-            <div class="color-circle bg-6"></div>
-            <div class="color-rect bg-7"></div>
-            <div class="color-rect bg-8"></div>
-            <div class="color-rect bg-9"></div>
-            <div class="deco-line line-1"></div>
-            <div class="deco-line line-2"></div>
-            <div class="deco-dot dot-1"></div>
-            <div class="deco-dot dot-2"></div>
-            <div class="deco-dot dot-3"></div>
+        <div class="canvas">
+            <div class="shape s-1"></div>
+            <div class="shape s-2"></div>
+            <div class="circle s-3"></div>
+            <div class="shape s-4"></div>
+            <div class="shape s-5"></div>
+            <div class="circle s-6"></div>
+            <div class="shape s-7"></div>
+            <div class="shape s-8"></div>
+            <div class="shape s-9"></div>
+            <div class="shape s-10"></div>
+            <div class="circle s-11"></div>
+            <div class="shape s-12"></div>
+            <div class="deco-line line-a"></div>
+            <div class="deco-line line-b"></div>
+            <div class="deco-dot dot-a"></div>
+            <div class="deco-dot dot-b"></div>
+            <div class="deco-dot dot-c"></div>
         </div>
         <div class="hero-content">
-            <div class="hero-tag"><span class="tag-dot"></span>STRUCTURED · PACED · LIVING · MEMORY</div>
-            <h1 class="hero-title">
-                <span>让<span class="highlight">复杂</span></span><br>
-                <span>变得<span class="highlight-2">有序</span></span>
+            <div class="tag"><span class="tag-dot"></span>STRUCTURED · PACED · LIVING · MEMORY</div>
+            <h1>
+                <span>让<span class="hl1">复杂</span></span><br>
+                <span>变得<span class="hl2">有序</span></span>
             </h1>
-            <p class="hero-subtitle">
-                我们相信，真正的 <strong>知识工程</strong> 不是堆数据，而是从 <strong>捕获</strong>、<strong>结构化</strong>、<strong>提炼</strong> 到 <strong>落地</strong> 的完整体系——每一步都由人物的角色来定义。
-            </p>
-            <div class="hero-stats">
-                <div class="stat-item orange">
-                    <div class="stat-num">12</div>
-                    <div class="stat-label">核心角色</div>
-                </div>
-                <div class="stat-item navy">
-                    <div class="stat-num">04</div>
-                    <div class="stat-label">系统流程</div>
-                </div>
-                <div class="stat-item sky">
-                    <div class="stat-num">04</div>
-                    <div class="stat-label">核心领域</div>
-                </div>
-                <div class="stat-item green">
-                    <div class="stat-num">03</div>
-                    <div class="stat-label">活跃方向</div>
-                </div>
+            <p class="lead">我们相信，真正的 <b>知识工程</b> 不是堆数据，而是从 <b>捕获</b>、<b>结构化</b>、<b>提炼</b> 到 <b>落地</b> 的完整体系——每一步都可被定义、可被追溯、可被复用。</p>
+            <div class="stats">
+                <div class="stat c3"><div class="n">12</div><div class="l">主色</div></div>
+                <div class="stat c2"><div class="n">04</div><div class="l">流程</div></div>
+                <div class="stat c6"><div class="n">04</div><div class="l">领域</div></div>
+                <div class="stat c4"><div class="n">03</div><div class="l">方向</div></div>
             </div>
         </div>
-        <div class="scroll-down"><span class="arrow"></span><span>SCROLL DOWN</span></div>
+        <div class="scroll"><span class="ar"></span><span>SCROLL</span></div>
     </section>
 
-    <!-- PALETTE BANNER -->
-    <section class="palette-banner">
+    <!-- PALETTE GRID -->
+    <section class="palette" id="palette">
         <div class="palette-inner">
-            <div class="palette-sub">THE TWELVE · 十二主色</div>
-            <div class="palette-title">每个角色，都是一种颜色</div>
-            <div class="palette-grid">
-                <div class="palette-cell p1"><span class="pnum">01 · 冼音</span></div>
-                <div class="palette-cell p2"><span class="pnum">02 · 华锦程</span></div>
-                <div class="palette-cell p3"><span class="pnum">03 · 林振宇</span></div>
-                <div class="palette-cell p4"><span class="pnum">04 · 陈杏林</span></div>
-                <div class="palette-cell p5"><span class="pnum">05 · 苏墨</span></div>
-                <div class="palette-cell p6"><span class="pnum">06 · 许博行</span></div>
-                <div class="palette-cell p7"><span class="pnum">07 · 李济世</span></div>
-                <div class="palette-cell p8"><span class="pnum">08 · 陈育琳</span></div>
-                <div class="palette-cell p9"><span class="pnum">09 · 林语轩</span></div>
-                <div class="palette-cell p10"><span class="pnum">10 · 华鹏</span></div>
-                <div class="palette-cell p11"><span class="pnum">11 · 钟护生</span></div>
-                <div class="palette-cell p12"><span class="pnum">12 · 林鸮</span></div>
+            <div class="palette-head">
+                <div class="sub">PALETTE · 12</div>
+                <h2>一组颜色，<em>十二种情绪</em></h2>
+            </div>
+            <div class="swatch-grid">
+                <div class="swatch sw-1"><span class="label">深靛蓝</span><span class="hex">#1E1E3A</span><span class="num">01</span></div>
+                <div class="swatch sw-2"><span class="label">深海蓝</span><span class="hex">#0A1A3A</span><span class="num">02</span></div>
+                <div class="swatch sw-3"><span class="label">炽橙</span><span class="hex">#E07A3A</span><span class="num">03</span></div>
+                <div class="swatch sw-4"><span class="label">松绿</span><span class="hex">#4A6A6A</span><span class="num">04</span></div>
+                <div class="swatch sw-5"><span class="label">墨黑</span><span class="hex">#2A2A2A</span><span class="num">05</span></div>
+                <div class="swatch sw-6"><span class="label">霁青</span><span class="hex">#7FB7D7</span><span class="num">06</span></div>
+                <div class="swatch sw-7"><span class="label">暖褐</span><span class="hex">#9C6060</span><span class="num">07</span></div>
+                <div class="swatch sw-8"><span class="label">砂金</span><span class="hex">#C0A080</span><span class="num">08</span></div>
+                <div class="swatch sw-9"><span class="label">林蓝</span><span class="hex">#2A4A6A</span><span class="num">09</span></div>
+                <div class="swatch sw-10"><span class="label">夜蓝</span><span class="hex">#1E1E4A</span><span class="num">10</span></div>
+                <div class="swatch sw-11"><span class="label">浅霁</span><span class="hex">#A0C0E0</span><span class="num">11</span></div>
+                <div class="swatch sw-12"><span class="label">幽蓝</span><span class="hex">#2A2A4A</span><span class="num">12</span></div>
             </div>
         </div>
     </section>
 
-    <!-- SYSTEM FLOW -->
-    <section class="section" id="system">
-        <div class="section-inner">
-            <div class="section-label">01 · SYSTEM FLOW</div>
-            <h2 class="section-title">四位角色，<span class="accent">走完一套系统</span></h2>
-            <p class="section-desc">从信息进入的那一刻起，每一位角色都承担着不可替代的职责——由苏墨捕获，经许博行结构化，再由李济世提炼，最终由陈育琳落地。</p>
+    <!-- BAND 1: NAVY -->
+    <section class="band b-navy">
+        <div class="band-canvas">
+            <div class="shape" style="background:#E07A3A; width:160px; height:160px; top:30px; right:5%; transform:rotate(-8deg); box-shadow:6px 6px 0 0 #F4EEE2;"></div>
+            <div class="circle" style="background:#7FB7D7; width:120px; height:120px; bottom:40px; left:8%; box-shadow:5px 5px 0 0 #F4EEE2;"></div>
+            <div class="shape" style="background:#1E1E3A; width:100px; height:100px; top:50px; left:20%; transform:rotate(10deg);"></div>
+        </div>
+        <div class="band-inner">
+            <span class="band-label">01 · DEEP</span>
+            <h2>用 <span class="hl">深色</span> 作为<br>思考的底色</h2>
+            <p class="lead-b" style="margin-top:24px;">靛蓝与深海蓝构成沉稳的基础——像夜海一样承载所有可见与不可见的信息流动。</p>
+        </div>
+    </section>
 
-            <div class="flow-grid">
-                <div class="flow-card c1">
-                    <div class="flow-num">01</div>
-                    <div class="flow-chara">苏墨</div>
-                    <span class="flow-role">捕获 · CAPTURE</span>
-                    <div class="flow-text">以学者的严谨记录每一条信息——这是系统的第一道入口，也是所有结构化工作的原始素材。墨色之上，万物初始。</div>
-                </div>
-                <div class="flow-card c2">
-                    <div class="flow-num">02</div>
-                    <div class="flow-chara">许博行</div>
-                    <span class="flow-role">结构化 · STRUCTURE</span>
-                    <div class="flow-text">将无序的素材归位到正确的框架中——分类、标签、索引、关系。像航海图一样让每一条信息拥有坐标。</div>
-                </div>
-                <div class="flow-card c3">
-                    <div class="flow-num">03</div>
-                    <div class="flow-chara">李济世</div>
-                    <span class="flow-role">提炼 · DISTILL</span>
-                    <div class="flow-text">医者从海量症状中提取关键——同样地，从结构化数据中提炼出真正有价值的模式与洞见。</div>
-                </div>
-                <div class="flow-card c4">
-                    <div class="flow-num">04</div>
-                    <div class="flow-chara">陈育琳</div>
-                    <span class="flow-role">落地 · IMPLANT</span>
-                    <div class="flow-text">像植物在土壤中生根一样，将提炼出的知识部署到实际应用场景中——对话、搜索、决策，无一遗漏。</div>
+    <!-- COMPOSITION -->
+    <section class="composition" id="composition">
+        <div class="comp-inner">
+            <div class="comp-head">
+                <div class="num">02 · COMPOSITION</div>
+                <h2>把十二种颜色<br>放在一起</h2>
+            </div>
+            <div class="comp-canvas">
+                <div class="c-block c1"></div>
+                <div class="c-block c2"></div>
+                <div class="c-block c3"></div>
+                <div class="c-block c4"></div>
+                <div class="c-block c5"></div>
+                <div class="c-block c6"></div>
+                <div class="c-block c7"></div>
+                <div class="c-block c8"></div>
+                <div class="c-block c9"></div>
+                <div class="c-block c10"></div>
+                <div class="c-block c11"></div>
+                <div class="c-block c12"></div>
+                <div class="c-meta">
+                    <div class="tag-sm">▢ A SET OF 12</div>
+                    <h3>每种颜色都是一种选择</h3>
+                    <p>从冷调到暖调，从深到浅——这套配色没有主从关系，只有组合关系。如何摆放、如何配比，由场景决定。</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- DOMAINS -->
-    <section class="section" id="domains" style="padding-bottom: 0; border-bottom: none;">
-        <div class="section-inner">
-            <div class="section-label">02 · FOUR DOMAINS</div>
-            <h2 class="section-title">四大领域，<span class="accent">四种世界观</span></h2>
-            <p class="section-desc">每个领域由一位核心角色主导，拥有独立的方法论和应用场景。我们以角色的配色为每个领域绘制专属的视觉语言。</p>
+    <!-- BAND 2: ORANGE -->
+    <section class="band b-orange">
+        <div class="band-canvas">
+            <div class="shape" style="background:#0A1A3A; width:140px; height:180px; bottom:30px; left:6%; transform:rotate(5deg); box-shadow:6px 6px 0 0 #0A0A0A;"></div>
+            <div class="circle" style="background:#7FB7D7; width:130px; height:130px; top:50px; right:8%; box-shadow:5px 5px 0 0 #0A0A0A;"></div>
+            <div class="shape" style="background:#C0A080; width:90px; height:90px; top:30px; left:25%; transform:rotate(-8deg);"></div>
+        </div>
+        <div class="band-inner">
+            <span class="band-label">03 · WARM</span>
+            <h2>那一抹 <span class="hl">橙</span>，<br>是注意力的支点</h2>
+            <p class="lead-b" style="margin-top:24px;">当一切都在沉静中推进时，炽橙负责把视线拉回重要的事情——它不该被滥用，但也绝不能缺席。</p>
         </div>
     </section>
 
-    <!-- Domain A -->
-    <div class="domain-section" style="background: #F5F0E6;">
-        <div class="domain-content">
-            <div class="domain-visual">
-                <div class="visual-grid">
-                    <div class="visual-block" style="background: #2A4A6A; grid-column: span 2; grid-row: span 2;"><span class="num" style="color: #F5F0E6;">A1</span></div>
-                    <div class="visual-block" style="background: #1E1E3A; grid-column: span 1; grid-row: span 1;"><span class="num" style="color: #F5F0E6;">A2</span></div>
-                    <div class="visual-block" style="background: #7FB7D7; grid-column: span 1; grid-row: span 2;"><span class="num">A3</span></div>
-                    <div class="visual-block" style="background: #F5F0E6; grid-column: span 1; grid-row: span 1;"><span class="num">A4</span></div>
-                    <div class="visual-block" style="background: #2A2A4A; grid-column: span 2; grid-row: span 1;"><span class="num" style="color: #F5F0E6;">A5</span></div>
-                    <div class="visual-block" style="background: #90A0C0; grid-column: span 2; grid-row: span 2;"><span class="num">A6</span></div>
-                    <div class="visual-block" style="background: #0A1A3A; grid-column: span 1; grid-row: span 1;"><span class="num" style="color: #F5F0E6;">A7</span></div>
-                    <div class="visual-block" style="background: #1E1E4A; grid-column: span 1; grid-row: span 1;"><span class="num" style="color: #F5F0E6;">A8</span></div>
-                    <div class="visual-block" style="background: #E07A3A; grid-column: span 1; grid-row: span 1;"><span class="num">A9</span></div>
-                    <div class="visual-block" style="background: #2A4A6A; grid-column: span 1; grid-row: span 1;"><span class="num" style="color: #F5F0E6;">A10</span></div>
-                </div>
+    <!-- ROTATION -->
+    <section class="rotation">
+        <div class="rot-bg"></div>
+        <div class="rot-piece rp-1"></div>
+        <div class="rot-piece rp-2"></div>
+        <div class="rot-circle rp-3"></div>
+        <div class="rot-piece rp-4"></div>
+        <div class="rot-piece rp-5"></div>
+        <div class="rot-circle rp-6"></div>
+        <div class="rot-overlay">
+            <div class="sm">12 COLORS · IN MOTION</div>
+            <div class="big">在动与静之间</div>
+        </div>
+    </section>
+
+    <!-- BAND 3: STONE -->
+    <section class="band b-stone">
+        <div class="band-canvas">
+            <div class="shape" style="background:#C0A080; width:120px; height:80px; top:40px; left:10%; transform:rotate(-3deg); box-shadow:5px 5px 0 0 #F4EEE2;"></div>
+            <div class="circle" style="background:#E07A3A; width:90px; height:90px; bottom:50px; right:10%; box-shadow:5px 5px 0 0 #F4EEE2;"></div>
+        </div>
+        <div class="band-inner">
+            <span class="band-label">04 · BALANCE</span>
+            <h2>绿色与褐色，<br>是 <span class="hl">节奏</span> 的调节</h2>
+            <p class="lead-b" style="margin-top:24px;">松绿与暖褐，砂金与浅霁——这些中间色让画面呼吸。它们不抢戏，但少了它们，整个系统会显得过于尖锐。</p>
+        </div>
+    </section>
+
+    <!-- POSTER -->
+    <section class="poster" id="poster">
+        <div class="poster-inner">
+            <div class="poster-art">
+                <div class="pa-1"></div>
+                <div class="pa-2"></div>
+                <div class="pa-3"></div>
+                <div class="pa-4"></div>
+                <div class="pa-5"></div>
+                <div class="pa-6"></div>
+                <div class="pa-7"></div>
             </div>
-            <div class="domain-text">
-                <span class="domain-tag">DOMAIN A · 01</span>
-                <div class="chara-name">林语轩 · 知识工程的设计者</div>
-                <h3>AI 知识工程</h3>
-                <p>从向量数据库到语义图谱，从文档理解到上下文管理——构建让机器真正"懂"的知识基础设施。</p>
-                <p>这不是简单的数据存储，而是将人类知识重新组织为机器可推理的结构：实体、关系、属性、状态，每一个节点都可追溯，每一条路径都可解释。</p>
-                <div class="domain-traits">
-                    <span>向量数据库</span><span>语义图谱</span><span>实体识别</span><span>上下文管理</span><span>RAG</span>
+            <div class="poster-text">
+                <div class="n">05 · A POSTER</div>
+                <h2>12 色，<br>排成一张海报</h2>
+                <p>把整套配色放进一个画面里——可以是一张封面、一组 banner、一份周刊的头图。形式不重要，重要的是"完整"。</p>
+                <p>这页网站本身就是一张海报。每出现一个色块，都是这一套颜色在结构里的不同站位。</p>
+                <div class="ctas">
+                    <a href="#palette" class="btn btn-dark">查看调色</a>
+                    <a href="#composition" class="btn btn-orange">查看构图</a>
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- COLOR STRIP -->
+    <div class="strip">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
     </div>
-
-    <!-- Domain B -->
-    <div class="domain-section" style="background: #0A1A3A; color: #F5F0E6;">
-        <div class="domain-content">
-            <div class="domain-text">
-                <span class="domain-tag" style="background: #E07A3A; color: #0A0A0A;">DOMAIN B · 02</span>
-                <div class="chara-name">华鹏 · 跨越山海的教育者</div>
-                <h3>青年科教文旅</h3>
-                <p>让知识走出课堂，让教育成为旅程。融合科技教育、文化体验与旅行探索，打造面向新一代青年的沉浸式学习场景。</p>
-                <p>从古城的文化遗产，到实验室的前沿科技——每一次出发，都是将"学"与"游"的重新组合。</p>
-                <div class="domain-traits">
-                    <span style="background: #E07A3A; color: #0A0A0A;">STEAM教育</span><span style="background: #F5F0E6; color: #0A0A0A;">文化研学</span><span style="background: #7FB7D7; color: #0A0A0A;">旅行探索</span><span style="background: #E07A3A; color: #0A0A0A;">青年社区</span>
-                </div>
-            </div>
-            <div class="domain-visual">
-                <div class="visual-grid">
-                    <div class="visual-block" style="background: #E07A3A; grid-column: span 2; grid-row: span 3;"><span class="num" style="color: #0A0A0A;">B1</span></div>
-                    <div class="visual-block" style="background: #1E1E4A; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #F5F0E6;">B2</span></div>
-                    <div class="visual-block" style="background: #2A2A4A; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #F5F0E6;">B3</span></div>
-                    <div class="visual-block" style="background: #7FB7D7; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #0A0A0A;">B4</span></div>
-                    <div class="visual-block" style="background: #0A0A0A; grid-column: span 2; grid-row: span 1;"><span class="num" style="color: #F5F0E6;">B5</span></div>
-                    <div class="visual-block" style="background: #F5F0E6; grid-column: span 1; grid-row: span 1;"><span class="num">B6</span></div>
-                    <div class="visual-block" style="background: #E07A3A; grid-column: span 1; grid-row: span 1;"><span class="num" style="color: #0A0A0A;">B7</span></div>
-                    <div class="visual-block" style="background: #2A4A6A; grid-column: span 1; grid-row: span 1;"><span class="num" style="color: #F5F0E6;">B8</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Domain C -->
-    <div class="domain-section" style="background: #E8D5B7;">
-        <div class="domain-content">
-            <div class="domain-visual">
-                <div class="visual-grid">
-                    <div class="visual-block" style="background: #7FB7D7; grid-column: span 2; grid-row: span 2;"><span class="num" style="color: #0A0A0A;">C1</span></div>
-                    <div class="visual-block" style="background: #A0C0E0; grid-column: span 2; grid-row: span 1;"><span class="num" style="color: #0A0A0A;">C2</span></div>
-                    <div class="visual-block" style="background: #0A1A3A; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #F5F0E6;">C3</span></div>
-                    <div class="visual-block" style="background: #E07A3A; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #0A0A0A;">C4</span></div>
-                    <div class="visual-block" style="background: #F5F0E6; grid-column: span 2; grid-row: span 1;"><span class="num">C5</span></div>
-                    <div class="visual-block" style="background: #2A4A6A; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #F5F0E6;">C6</span></div>
-                    <div class="visual-block" style="background: #C0A080; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #0A0A0A;">C7</span></div>
-                    <div class="visual-block" style="background: #4A6A6A; grid-column: span 1; grid-row: span 1;"><span class="num" style="color: #F5F0E6;">C8</span></div>
-                </div>
-            </div>
-            <div class="domain-text">
-                <span class="domain-tag">DOMAIN C · 03</span>
-                <div class="chara-name">钟护生 · 守护知识的传播者</div>
-                <h3>公益科普</h3>
-                <p>知识不应是少数人的特权。将专业知识转化为普通人可理解、可应用的内容，让科学的光芒照亮更多角落。</p>
-                <p>面向社区、学校、公共空间的科普项目——从健康到环境，从技术到人文。守护，就是让更多人有机会理解世界。</p>
-                <div class="domain-traits">
-                    <span>公共讲座</span><span>内容创作</span><span>社区项目</span><span>健康科普</span><span>环境教育</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Domain D -->
-    <div class="domain-section" style="background: #1E1E3A; color: #F5F0E6; border-bottom: 4px solid #0A0A0A;">
-        <div class="domain-content">
-            <div class="domain-text">
-                <span class="domain-tag" style="background: #7FB7D7; color: #0A0A0A;">DOMAIN D · 04</span>
-                <div class="chara-name">林鸮 · 暗夜中的洞察者</div>
-                <h3>青年创业</h3>
-                <p>创业，是在不确定性中寻找机会的艺术。如同夜行的鸮，需要敏锐的观察、精准的判断，以及敢于在黑暗中出击的勇气。</p>
-                <p>为年轻创业者提供从项目孵化、资源对接到商业模式打磨的完整支持——让好的想法不被埋没，让有行动力的人不被局限。</p>
-                <div class="domain-traits">
-                    <span style="background: #7FB7D7; color: #0A0A0A;">项目孵化</span><span style="background: #E07A3A; color: #F5F0E6;">资源对接</span><span style="background: #F5F0E6; color: #0A0A0A;">商业模式</span><span style="background: #7FB7D7; color: #0A0A0A;">创业社区</span>
-                </div>
-            </div>
-            <div class="domain-visual">
-                <div class="visual-grid">
-                    <div class="visual-block" style="background: #2A2A4A; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #F5F0E6;">D1</span></div>
-                    <div class="visual-block" style="background: #2A4A6A; grid-column: span 2; grid-row: span 2;"><span class="num" style="color: #F5F0E6;">D2</span></div>
-                    <div class="visual-block" style="background: #1E1E3A; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #F5F0E6;">D3</span></div>
-                    <div class="visual-block" style="background: #7FB7D7; grid-column: span 1; grid-row: span 2;"><span class="num" style="color: #0A0A0A;">D4</span></div>
-                    <div class="visual-block" style="background: #E07A3A; grid-column: span 1; grid-row: span 1;"><span class="num" style="color: #0A0A0A;">D5</span></div>
-                    <div class="visual-block" style="background: #0A1A3A; grid-column: span 1; grid-row: span 1;"><span class="num" style="color: #F5F0E6;">D6</span></div>
-                    <div class="visual-block" style="background: #F5F0E6; grid-column: span 2; grid-row: span 1;"><span class="num">D7</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PRINCIPLES -->
-    <section class="principles-section" id="principles">
-        <div class="principles-inner">
-            <div class="principles-title"><small>FIVE PRINCIPLES · 五条原则</small>不变的是原则，变化的是方法</div>
-            <div class="principles-grid">
-                <div class="principle-cell">
-                    <div class="principle-num">01</div>
-                    <div class="principle-title">结构化思维</div>
-                    <div class="principle-text">所有复杂问题都可拆解为可管理的单元。先有结构，后有内容。</div>
-                </div>
-                <div class="principle-cell">
-                    <div class="principle-num">02</div>
-                    <div class="principle-title">面向角色设计</div>
-                    <div class="principle-text">每一条知识都是为某个具体角色的具体需求服务的——以人物定义功能。</div>
-                </div>
-                <div class="principle-cell">
-                    <div class="principle-num">03</div>
-                    <div class="principle-title">可追溯的来源</div>
-                    <div class="principle-text">每条结论都应能追溯到原始资料。透明，可信，可验证。</div>
-                </div>
-                <div class="principle-cell">
-                    <div class="principle-num">04</div>
-                    <div class="principle-title">节奏化产出</div>
-                    <div class="principle-text">不是洪水般的信息倾泻，而是有节奏、可预期的知识生产节奏。</div>
-                </div>
-                <div class="principle-cell">
-                    <div class="principle-num">05</div>
-                    <div class="principle-title">活的知识体系</div>
-                    <div class="principle-text">知识会生长、会迭代、会演进。永远在版本中，永远在改进中。</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- DIRECTIONS -->
-    <section class="directions-section" id="directions">
-        <div class="directions-inner">
-            <div class="directions-header">
-                <span class="directions-label">03 · ACTIVE DIRECTIONS</span>
-                <h2 class="directions-title">三个活跃方向</h2>
-            </div>
-            <p class="section-desc">以下是我们当前最有活力的实践方向，由不同角色的组合驱动，持续产生新的内容和项目。</p>
-
-            <div class="dir-grid">
-                <div class="dir-card d1">
-                    <div class="deco-circle"></div>
-                    <div class="deco-sq"></div>
-                    <span class="chara-tag">陈杏林 · 教育的耕耘者</span>
-                    <h3>教育城项目</h3>
-                    <p>围绕特定主题打造的深度知识体系，融合研究、写作、教学与实践输出。每个项目都是从模糊到清晰的完整旅程。</p>
-                    <p>以"杏林春暖"的精神，让每一株树苗在合适的土壤中找到生长的方向。</p>
-                </div>
-                <div class="dir-card d2">
-                    <div class="deco-circle"></div>
-                    <span class="chara-tag">林振宇 · 社群的联结者</span>
-                    <h3>青年共创</h3>
-                    <p>让年轻的想法被看见、被讨论、被实现。通过共创工作坊、线上协作和开放项目，探索群体智慧的边界。</p>
-                    <p>振宇之"振"——是振动，也是振奋；是让一个群体从各自为战到一起振翅高飞的力量。</p>
-                </div>
-                <div class="dir-card d3">
-                    <div class="deco-circle"></div>
-                    <div class="deco-sq"></div>
-                    <span class="chara-tag" style="background: #F5F0E6; color: #0A0A0A; border: 3px solid #0A0A0A;">钟护生 × 冼音 · 创新中的守护者</span>
-                    <h3>公益创新</h3>
-                    <p>用科技和设计的力量，重新思考社会议题。从科普内容到社区工具，让公共价值通过创新被放大。</p>
-                    <p>冼音的乐感与护生的守护——一个为心灵调音，一个为世界守护，二者结合产生独特的人文创新力。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="cta-section">
-        <div class="cta-shape s1"></div>
-        <div class="cta-shape s2"></div>
-        <div class="cta-shape s3"></div>
-        <div class="cta-shape s4"></div>
-        <div class="cta-inner">
-            <div class="section-label" style="color: #7FB7D7; background: transparent; padding: 0; margin-bottom: 24px; letter-spacing: 4px; font-size: 12px; font-weight: 900;">04 · JOIN THE SYSTEM</div>
-            <h2 class="cta-title">你是系统中<span class="accent">的一员</span></h2>
-            <p class="cta-desc">十二角色是我们的方法论骨架，但真正让系统运转的，是每一个具体的人。不论你是创作者、学习者、行动者还是梦想家——这里的结构为你而设。</p>
-            <div class="cta-btns">
-                <a href="#" class="cta-btn">开始探索</a>
-                <a href="#" class="cta-btn secondary">了解方法</a>
-            </div>
-        </div>
-    </section>
 
     <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-inner">
-            <div class="footer-col">
-                <div class="footer-logo"><span>S</span><span>P</span><span>L</span><span>L</span><span>M</span></div>
-                <p class="footer-desc">Structured · Paced · Living · Memory<br>以角色驱动的知识系统。每一条信息被捕获、被结构化、被提炼、被落地，最终成为活的知识体系。</p>
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <span>S</span><span>P</span><span>L</span><span>L</span><span>M</span>
+                </div>
+                <div class="footer-meta">
+                    <a href="#">STRUCTURED</a>
+                    <a href="#">PACED</a>
+                    <a href="#">LIVING</a>
+                    <a href="#">MEMORY</a>
+                </div>
             </div>
-            <div class="footer-col">
-                <h4>系统</h4>
-                <a href="#system">系统流程</a>
-                <a href="#domains">四大领域</a>
-                <a href="#principles">原则</a>
-                <a href="#directions">方向</a>
+            <div class="footer-bottom">
+                <div>2026 · SPLLM</div>
+                <div>12 COLORS · NEO-BRUTALISM</div>
             </div>
-            <div class="footer-col">
-                <h4>角色</h4>
-                <a href="#">冼音 · 华锦程</a>
-                <a href="#">林振宇 · 陈杏林</a>
-                <a href="#">苏墨 · 许博行</a>
-                <a href="#">李济世 · 陈育琳</a>
-                <a href="#">林语轩 · 华鹏</a>
-                <a href="#">钟护生 · 林鸮</a>
-            </div>
-            <div class="footer-col">
-                <h4>联系</h4>
-                <a href="#">合作咨询</a>
-                <a href="#">项目提案</a>
-                <a href="#">加入我们</a>
-                <a href="#">媒体报道</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="colors">
-                <span style="background: #1E1E3A;"></span>
-                <span style="background: #0A1A3A;"></span>
-                <span style="background: #E07A3A;"></span>
-                <span style="background: #4A6A6A;"></span>
-                <span style="background: #2A2A2A;"></span>
-                <span style="background: #7FB7D7;"></span>
-                <span style="background: #9C6060;"></span>
-                <span style="background: #C0A080;"></span>
-                <span style="background: #2A4A6A;"></span>
-                <span style="background: #1E1E4A;"></span>
-                <span style="background: #A0C0E0;"></span>
-                <span style="background: #2A2A4A;"></span>
-            </div>
-            <div>2026 SPLLM · Structured · Paced · Living · Memory</div>
         </div>
     </footer>
 </body>

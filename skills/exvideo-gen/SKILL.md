@@ -253,6 +253,10 @@ Read `references/examples-game-demos.md` for the game-demo examples. They demons
 - gameplay HUD and boss battle shots
 - cinematic combat key art
 
+Read `references/module-scene-consistency-control.md` when the user is trying to keep one scene stable across many shots, needs a lock-space-first workflow, wants panorama or orbit based angle extraction, or needs repair-shot reframing from an approved base image.
+Read `references/examples-scene-consistency-control.md` for preserved method cases and workflow examples covering topdown grids, full-reference clip control, panorama sourcing, orbit capture, and camera re-angle repair shots.
+Read `references/examples-sports-action-prompts.md` for preserved sports-action and motion-heavy prompt cases covering force-transfer writing, speed-state switching, airborne action phases, one-take follow shots, impact deformation, and recovery motion design.
+
 Use it as an example, not as a universal default.
 
 Read `references/module-character-identity-board.md` for a worked module focused on premium white-background identity boards. It demonstrates:

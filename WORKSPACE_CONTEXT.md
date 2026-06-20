@@ -1,7 +1,7 @@
 ---
 title: SPLLM Workspace Context
 created: 2026-06-04
-updated: 2026-06-15
+updated: 2026-06-16
 type: context
 status: active
 ---
@@ -105,6 +105,7 @@ At task completion, run this lightweight closing loop:
 - Quick comparisons: `quick-compare`.
 - Webpage to clean markdown: `webpage-to-markdown`.
 - Unified webpage and social-export conversion: `net-to-markdown`.
+- Unified image planning, method routing, generation, and editing: `image-gen`.
 - Hotspot/news collection: `hotspot-radar`.
 - End-of-session cleanup and doc sync: `neat-freak`.
 - Post-task wiki reflection: `thinking-extend`.

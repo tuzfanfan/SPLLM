@@ -143,3 +143,45 @@ Medium shot, centered composition, eye-level shot, slow push-in, 85mm portrait l
 ### Reuse Note
 
 Use the preserved wording for reference and teaching. Use `references/cinematic-shot-language.md` as the canonical production vocabulary and schema.
+
+## Example 02: Three-Point Dialogue Lighting Logic
+
+### Status
+
+- Type: source-method example
+- Purpose: preserve a practical lighting workflow that can be translated into production-safe shot language
+- Default inheritance: partial
+- Replace before reuse: exact lamp brand, classroom-demo framing, and any non-narrative teaching setup
+
+### What This Example Covers
+
+- key/fill/rim role separation
+- light ratio discipline
+- hard versus soft rim choice
+- side light and side-back light for character pressure
+- rembrandt-light as a narrative option
+- practical-light motivation in story shots
+
+### Reusable Mapping Into `exvideo-gen`
+
+| Source Lesson | Internal Use |
+|---|---|
+| key light defines main contrast | `lighting_setup` + `lighting_direction` |
+| fill must stay weaker than key | shot review check for contrast discipline |
+| rim separates subject from background | portrait, dialogue, and reveal-shot readability |
+| side key increases tension | confrontation coverage and villain-coded frames |
+| rembrandt-light adds structured drama | mature, reflective, and hard-edged portrait moments |
+| practical source should explain the light | `practical_light_motivation` field |
+
+### What To Preserve
+
+- lighting is a system, not a decoration tag list
+- fill should repair readability without creating competing shadows
+- rim may be hard or soft depending on hair, profile, and desired stylization
+- practical-light logic matters when the frame is supposed to feel story-real
+
+### What To Replace Before Reuse
+
+- classroom-demo staging
+- brand-specific equipment references
+- any assumption that one lamp position is universal

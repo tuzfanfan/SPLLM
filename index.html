@@ -1,531 +1,753 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPLLM</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700;900&family=Noto+Serif+SC:wght@400;700;900&family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { overflow-x: hidden; }
-        body {
-            font-family: "Noto Sans SC", "PingFang SC", sans-serif;
-            background: #F4EEE2;
-            color: #0A0A0A;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SPLLM 是一个持续演化的个人知识与项目操作系统：把意图变成结构，把结构变成资产，把资产变成可复用的能力。">
+  <meta name="theme-color" content="#10110f">
+  <title>SPLLM | 从意图到可复用的能力</title>
+  <style>
+    :root {
+      --ink: #e9e6dc;
+      --muted: #9c9a91;
+      --paper: #10110f;
+      --panel: #171815;
+      --line: rgba(233, 230, 220, 0.14);
+      --accent: #d9ff68;
+      --accent-soft: rgba(217, 255, 104, 0.11);
+      --warm: #ff8a5b;
+      --max: 1180px;
+    }
 
-        /* ============ NAV ============ */
-        .nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            background: #F4EEE2; border-bottom: 4px solid #0A0A0A;
-            padding: 16px 36px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .nav-logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; display: flex; gap: 4px; }
-        .nav-logo span { background: #0A0A0A; color: #F4EEE2; padding: 4px 10px; }
-        .nav-links { display: flex; gap: 24px; font-size: 13px; font-weight: 700; letter-spacing: 1px; }
-        .nav-links a { color: #0A0A0A; text-decoration: none; padding: 6px 10px; border: 3px solid transparent; transition: all 0.15s; }
-        .nav-links a:hover { background: #0A0A0A; color: #F4EEE2; }
+    * { box-sizing: border-box; }
 
-        /* ============ HERO ============ */
-        .hero {
-            min-height: 100vh;
-            padding: 80px 0 0;
-            position: relative;
-            background: #F4EEE2;
-            border-bottom: 4px solid #0A0A0A;
-            overflow: hidden;
-        }
-        .canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-        .shape { position: absolute; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
-        .circle { position: absolute; border: 4px solid #0A0A0A; border-radius: 50%; box-shadow: 5px 5px 0 0 #0A0A0A; }
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
 
-        .s-1  { background: #E07A3A; width: 260px; height: 340px; top: 50px; left: 4%; transform: rotate(-7deg); }
-        .s-2  { background: #0A1A3A; width: 300px; height: 220px; top: 200px; right: 6%; transform: rotate(5deg); box-shadow: 8px 8px 0 0 #0A0A0A; }
-        .s-3  { background: #7FB7D7; width: 150px; height: 150px; top: 480px; left: 22%; }
-        .s-4  { background: #4A6A6A; width: 200px; height: 200px; top: 460px; right: 28%; }
-        .s-5  { background: #9C6060; width: 110px; height: 140px; top: 620px; left: 8%; transform: rotate(12deg); box-shadow: 4px 4px 0 0 #0A0A0A; }
-        .s-6  { background: #1E1E3A; width: 130px; height: 130px; top: 100px; right: 36%; }
-        .s-7  { background: #C0A080; width: 160px; height: 80px; top: 380px; left: 44%; transform: rotate(-3deg); box-shadow: 4px 4px 0 0 #0A0A0A; }
-        .s-8  { background: #2A2A2A; width: 60px; height: 60px; top: 560px; right: 12%; box-shadow: 3px 3px 0 0 #0A0A0A; }
-        .s-9  { background: #2A4A6A; width: 90px; height: 200px; top: 680px; right: 8%; transform: rotate(3deg); box-shadow: 5px 5px 0 0 #0A0A0A; }
-        .s-10 { background: #1E1E4A; width: 80px; height: 80px; top: 720px; left: 38%; }
-        .s-11 { background: #A0C0E0; width: 70px; height: 70px; top: 260px; left: 16%; }
-        .s-12 { background: #2A2A4A; width: 50px; height: 50px; top: 350px; right: 18%; }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 88% 8%, rgba(217, 255, 104, 0.08), transparent 24rem),
+        radial-gradient(circle at 5% 42%, rgba(255, 138, 91, 0.06), transparent 26rem),
+        var(--paper);
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      line-height: 1.65;
+    }
 
-        .deco-line { position: absolute; background: #0A0A0A; height: 4px; }
-        .line-a { top: 330px; left: 0; width: 360px; }
-        .line-b { top: 540px; right: 0; width: 280px; }
-        .deco-dot { position: absolute; width: 22px; height: 22px; background: #0A0A0A; border-radius: 50%; }
-        .dot-a { top: 290px; left: 32%; }
-        .dot-b { top: 430px; right: 30%; background: #E07A3A; }
-        .dot-c { top: 660px; left: 50%; background: #7FB7D7; }
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      opacity: 0.18;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, black, transparent 76%);
+    }
 
-        .hero-content { position: relative; z-index: 5; padding: 60px 48px 100px; max-width: 1400px; margin: 0 auto; }
-        .tag {
-            display: inline-flex; align-items: center; gap: 12px;
-            background: #F4EEE2; border: 4px solid #0A0A0A; padding: 10px 20px;
-            font-size: 13px; font-weight: 900; letter-spacing: 4px;
-            box-shadow: 4px 4px 0 0 #0A0A0A; margin-bottom: 36px;
-        }
-        .tag-dot { width: 12px; height: 12px; background: #E07A3A; border: 3px solid #0A0A0A; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-        h1 {
-            font-size: clamp(56px, 11vw, 156px);
-            font-weight: 900; line-height: 0.92; letter-spacing: -0.05em;
-            margin-bottom: 36px;
-        }
-        h1 .hl1 { background: #E07A3A; padding: 0 22px; display: inline-block; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
-        h1 .hl2 { color: #F4EEE2; background: #0A1A3A; padding: 0 22px; display: inline-block; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
-        h1 .hl3 { background: #7FB7D7; padding: 0 22px; display: inline-block; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #0A0A0A; }
+    a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
 
-        .lead { font-size: 20px; font-weight: 500; max-width: 700px; line-height: 1.55; margin-bottom: 56px; }
-        .lead b { background: #0A0A0A; color: #F4EEE2; padding: 2px 8px; font-weight: 900; }
+    .shell {
+      width: min(calc(100% - 40px), var(--max));
+      margin: 0 auto;
+    }
 
-        .stats { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 60px; }
-        .stat { background: #F4EEE2; border: 4px solid #0A0A0A; padding: 22px 28px; box-shadow: 6px 6px 0 0 #0A0A0A; min-width: 170px; transition: all 0.15s; }
-        .stat:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 0 #0A0A0A; }
-        .stat .n { font-size: 44px; font-weight: 900; line-height: 1; letter-spacing: -0.04em; }
-        .stat .l { font-size: 12px; font-weight: 700; letter-spacing: 2px; margin-top: 8px; }
-        .stat.c3  { background: #E07A3A; }
-        .stat.c2  { background: #0A1A3A; color: #F4EEE2; }
-        .stat.c6  { background: #7FB7D7; }
-        .stat.c4  { background: #4A6A6A; color: #F4EEE2; }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 78px;
+      border-bottom: 1px solid var(--line);
+    }
 
-        .scroll { position: absolute; bottom: 40px; left: 48px; display: flex; align-items: center; gap: 14px; font-size: 11px; font-weight: 700; letter-spacing: 4px; z-index: 5; }
-        .scroll .ar { display: inline-block; width: 60px; height: 4px; background: #0A0A0A; position: relative; }
-        .scroll .ar::after { content: ""; position: absolute; right: -16px; top: 50%; width: 12px; height: 12px; border-right: 4px solid #0A0A0A; border-bottom: 4px solid #0A0A0A; transform: translateY(-50%) rotate(-45deg); }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
 
-        /* ============ PALETTE GRID (12 色) ============ */
-        .palette { background: #0A0A0A; padding: 90px 48px; border-bottom: 4px solid #0A0A0A; }
-        .palette-inner { max-width: 1400px; margin: 0 auto; }
-        .palette-head { color: #F4EEE2; margin-bottom: 36px; }
-        .palette-head .sub { font-size: 13px; font-weight: 700; letter-spacing: 4px; color: #909090; margin-bottom: 12px; }
-        .palette-head h2 { font-size: 48px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
-        .palette-head h2 em { color: #E07A3A; font-style: normal; }
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      color: #10110f;
+      background: var(--accent);
+      border-radius: 50%;
+      font-size: 12px;
+    }
 
-        .swatch-grid {
-            display: grid; grid-template-columns: repeat(6, 1fr); gap: 0;
-            border: 3px solid #0A0A0A; background: #0A0A0A;
-        }
-        .swatch { aspect-ratio: 1; position: relative; border: 3px solid #0A0A0A; transition: transform 0.15s; cursor: pointer; overflow: hidden; }
-        .swatch:hover { transform: translate(-3px, -3px); z-index: 5; box-shadow: 6px 6px 0 0 #E07A3A; }
-        .swatch::after {
-            content: ""; position: absolute; inset: 0;
-            background-image:
-                linear-gradient(45deg, rgba(0,0,0,0.08) 25%, transparent 25%),
-                linear-gradient(-45deg, rgba(0,0,0,0.08) 25%, transparent 25%);
-            background-size: 16px 16px;
-            background-position: 0 0, 8px 8px;
-        }
-        .swatch .label {
-            position: absolute; left: 14px; bottom: 12px; z-index: 2;
-            font-size: 11px; font-weight: 900; letter-spacing: 1px;
-            color: #F4EEE2; text-shadow: 0 1px 0 rgba(0,0,0,0.4);
-        }
-        .swatch .hex {
-            position: absolute; right: 14px; top: 12px; z-index: 2;
-            font-size: 10px; font-weight: 700; letter-spacing: 1px;
-            color: #F4EEE2; opacity: 0.85;
-            background: rgba(0,0,0,0.5); padding: 3px 6px; border: 1px solid rgba(255,255,255,0.2);
-        }
-        .swatch .num {
-            position: absolute; right: 14px; bottom: 12px; z-index: 2;
-            font-size: 22px; font-weight: 900; color: #F4EEE2; opacity: 0.7;
-        }
-        .sw-1  { background: #1E1E3A; }
-        .sw-2  { background: #0A1A3A; }
-        .sw-3  { background: #E07A3A; }
-        .sw-4  { background: #4A6A6A; }
-        .sw-5  { background: #2A2A2A; }
-        .sw-6  { background: #7FB7D7; }
-        .sw-7  { background: #9C6060; }
-        .sw-8  { background: #C0A080; }
-        .sw-9  { background: #2A4A6A; }
-        .sw-10 { background: #1E1E4A; }
-        .sw-11 { background: #A0C0E0; }
-        .sw-12 { background: #2A2A4A; }
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-        /* ============ BAND SECTION ============ */
-        .band {
-            position: relative; padding: 110px 48px;
-            border-bottom: 4px solid #0A0A0A; overflow: hidden;
-        }
-        .band.b-orange { background: #E07A3A; color: #0A0A0A; }
-        .band.b-navy   { background: #0A1A3A; color: #F4EEE2; }
-        .band.b-cream  { background: #F4EEE2; color: #0A0A0A; }
-        .band.b-stone  { background: #4A6A6A; color: #F4EEE2; }
+    .nav-links a:hover { color: var(--ink); }
 
-        .band-inner { max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; }
-        .band-label {
-            display: inline-block; background: #0A0A0A; color: #F4EEE2;
-            padding: 6px 14px; font-size: 11px; font-weight: 900; letter-spacing: 4px;
-            margin-bottom: 24px;
-        }
-        .band.b-navy .band-label, .band.b-stone .band-label { background: #F4EEE2; color: #0A0A0A; }
-        .band h2 {
-            font-size: clamp(40px, 6vw, 72px);
-            font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 20px;
-        }
-        .band h2 .hl { background: #0A0A0A; color: #F4EEE2; padding: 0 14px; display: inline-block; }
-        .band.b-cream h2 .hl { background: #E07A3A; }
-        .band p.lead-b { font-size: 18px; max-width: 720px; font-weight: 500; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: clamp(40px, 7vw, 100px);
+      align-items: end;
+      min-height: 680px;
+      padding: 96px 0 84px;
+    }
 
-        .band-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .hero > *,
+    .section-head > *,
+    .principles > *,
+    .closing > * {
+      min-width: 0;
+    }
 
-        /* ============ MOSAIC SECTION ============ */
-        .mosaic { padding: 0; background: #F4EEE2; border-bottom: 4px solid #0A0A0A; }
-        .mosaic-grid {
-            display: grid; grid-template-columns: repeat(12, 1fr);
-            grid-auto-rows: 90px;
-        }
-        .m { border: 4px solid #0A0A0A; box-shadow: inset 0 0 0 0 transparent; position: relative; transition: all 0.2s; cursor: pointer; }
-        .m:hover { box-shadow: 8px 8px 0 0 #0A0A0A; transform: translate(-2px, -2px); z-index: 5; }
+    .eyebrow,
+    .section-kicker {
+      color: var(--accent);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
 
-        /* ============ COMPOSITION GRID ============ */
-        .composition { padding: 100px 48px; background: #F4EEE2; border-bottom: 4px solid #0A0A0A; }
-        .comp-inner { max-width: 1400px; margin: 0 auto; }
-        .comp-head { margin-bottom: 48px; }
-        .comp-head .num { font-size: 11px; font-weight: 900; letter-spacing: 4px; color: #0A0A0A; margin-bottom: 12px; }
-        .comp-head h2 { font-size: clamp(40px, 6vw, 72px); font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+    h1 {
+      max-width: 820px;
+      margin: 22px 0 26px;
+      font-family: "Iowan Old Style", "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(52px, 7.8vw, 108px);
+      font-weight: 500;
+      letter-spacing: -0.065em;
+      line-height: 0.96;
+      overflow-wrap: anywhere;
+    }
 
-        .comp-canvas {
-            display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(6, 80px);
-            gap: 0; border: 4px solid #0A0A0A; background: #0A0A0A;
-        }
-        .c-block { border: 3px solid #0A0A0A; position: relative; transition: all 0.2s; }
-        .c-block:hover { z-index: 5; box-shadow: 0 0 0 4px #E07A3A, 8px 8px 0 0 #0A0A0A; transform: translate(-2px, -2px); }
-        .c1  { background: #1E1E3A; grid-column: span 2; grid-row: span 3; }
-        .c2  { background: #0A1A3A; grid-column: span 2; grid-row: span 2; }
-        .c3  { background: #E07A3A; grid-column: span 2; grid-row: span 2; }
-        .c4  { background: #4A6A6A; grid-column: span 2; grid-row: span 2; }
-        .c5  { background: #2A2A2A; grid-column: span 1; grid-row: span 1; }
-        .c6  { background: #7FB7D7; grid-column: span 2; grid-row: span 3; }
-        .c7  { background: #9C6060; grid-column: span 1; grid-row: span 1; }
-        .c8  { background: #C0A080; grid-column: span 2; grid-row: span 2; }
-        .c9  { background: #2A4A6A; grid-column: span 2; grid-row: span 1; }
-        .c10 { background: #1E1E4A; grid-column: span 2; grid-row: span 2; }
-        .c11 { background: #A0C0E0; grid-column: span 1; grid-row: span 1; }
-        .c12 { background: #2A2A4A; grid-column: span 1; grid-row: span 1; }
-        .c-meta { background: #F4EEE2; grid-column: span 4; grid-row: span 3; display: flex; flex-direction: column; justify-content: center; padding: 28px; }
-        .c-meta .tag-sm { font-size: 11px; font-weight: 900; letter-spacing: 3px; color: #0A0A0A; margin-bottom: 12px; }
-        .c-meta h3 { font-size: 28px; font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 14px; }
-        .c-meta p { font-size: 14px; line-height: 1.6; color: #2A2A2A; }
+    h1 span { display: block; }
 
-        /* ============ ROTATION SECTION ============ */
-        .rotation {
-            padding: 0; background: #0A0A0A; border-bottom: 4px solid #0A0A0A;
-            position: relative; height: 520px; overflow: hidden;
-        }
-        .rot-bg {
-            position: absolute; inset: 0;
-            background-image:
-                radial-gradient(circle at 20% 30%, #E07A3A 0 8px, transparent 9px),
-                radial-gradient(circle at 75% 60%, #7FB7D7 0 12px, transparent 13px),
-                radial-gradient(circle at 50% 80%, #4A6A6A 0 6px, transparent 7px);
-        }
-        .rot-piece {
-            position: absolute; border: 4px solid #0A0A0A; box-shadow: 6px 6px 0 0 #F4EEE2;
-        }
-        .rot-circle { position: absolute; border: 4px solid #0A0A0A; border-radius: 50%; box-shadow: 6px 6px 0 0 #F4EEE2; }
-        .rp-1 { background: #1E1E3A; width: 180px; height: 240px; top: 60px; left: 8%; transform: rotate(-12deg); }
-        .rp-2 { background: #0A1A3A; width: 220px; height: 160px; top: 100px; right: 12%; transform: rotate(8deg); }
-        .rp-3 { background: #7FB7D7; width: 140px; height: 140px; top: 320px; left: 18%; }
-        .rp-4 { background: #E07A3A; width: 200px; height: 200px; top: 280px; right: 8%; }
-        .rp-5 { background: #9C6060; width: 80px; height: 110px; top: 30px; left: 40%; transform: rotate(15deg); }
-        .rp-6 { background: #2A4A6A; width: 100px; height: 100px; bottom: 30px; right: 35%; }
+    .hero-copy {
+      max-width: 680px;
+      margin: 0;
+      color: #c7c4ba;
+      font-size: clamp(18px, 2vw, 22px);
+    }
 
-        .rot-overlay {
-            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-            background: #F4EEE2; border: 4px solid #0A0A0A; padding: 24px 40px;
-            box-shadow: 8px 8px 0 0 #E07A3A; text-align: center; z-index: 10;
-        }
-        .rot-overlay .sm { font-size: 11px; font-weight: 900; letter-spacing: 4px; margin-bottom: 8px; }
-        .rot-overlay .big { font-size: 32px; font-weight: 900; letter-spacing: -0.04em; }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 38px;
+    }
 
-        /* ============ POSTER SECTION ============ */
-        .poster { padding: 100px 48px; background: #F4EEE2; border-bottom: 4px solid #0A0A0A; }
-        .poster-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; }
-        .poster-art {
-            aspect-ratio: 4/3; position: relative; border: 4px solid #0A0A0A;
-            box-shadow: 10px 10px 0 0 #0A0A0A; overflow: hidden; background: #0A0A0A;
-        }
-        .poster-art .pa-1 { position: absolute; background: #E07A3A; left: 8%; top: 12%; width: 36%; height: 30%; border: 4px solid #0A0A0A; transform: rotate(-6deg); }
-        .poster-art .pa-2 { position: absolute; background: #0A1A3A; right: 6%; top: 8%; width: 44%; height: 28%; border: 4px solid #0A0A0A; transform: rotate(4deg); }
-        .poster-art .pa-3 { position: absolute; background: #7FB7D7; left: 12%; bottom: 14%; width: 28%; height: 24%; border: 4px solid #0A0A0A; }
-        .poster-art .pa-4 { position: absolute; background: #4A6A6A; right: 8%; bottom: 10%; width: 40%; height: 30%; border: 4px solid #0A0A0A; }
-        .poster-art .pa-5 { position: absolute; background: #C0A080; left: 38%; top: 38%; width: 22%; height: 18%; border: 4px solid #0A0A0A; transform: rotate(10deg); }
-        .poster-art .pa-6 { position: absolute; background: #9C6060; right: 36%; top: 50%; width: 14%; height: 14%; border: 4px solid #0A0A0A; }
-        .poster-art .pa-7 { position: absolute; background: #1E1E3A; left: 20%; bottom: 8%; width: 16%; height: 14%; border: 4px solid #0A0A0A; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      transition: transform 160ms ease, background 160ms ease;
+    }
 
-        .poster-text .n { font-size: 11px; font-weight: 900; letter-spacing: 4px; margin-bottom: 12px; }
-        .poster-text h2 { font-size: clamp(36px, 5vw, 56px); font-weight: 900; letter-spacing: -0.04em; line-height: 1; margin-bottom: 20px; }
-        .poster-text p { font-size: 16px; line-height: 1.7; margin-bottom: 16px; }
-        .poster-text .ctas { display: flex; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
-        .btn { display: inline-block; padding: 16px 28px; font-size: 13px; font-weight: 900; letter-spacing: 2px; text-decoration: none; border: 4px solid #0A0A0A; box-shadow: 5px 5px 0 0 #0A0A0A; transition: all 0.15s; }
-        .btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 #0A0A0A; }
-        .btn-dark { background: #0A0A0A; color: #F4EEE2; }
-        .btn-light { background: #F4EEE2; color: #0A0A0A; }
-        .btn-orange { background: #E07A3A; color: #0A0A0A; }
+    .button:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.04);
+    }
 
-        /* ============ COLOR STRIP ============ */
-        .strip { display: grid; grid-template-columns: repeat(12, 1fr); height: 60px; }
-        .strip span { display: block; }
-        .strip span:nth-child(1)  { background: #1E1E3A; }
-        .strip span:nth-child(2)  { background: #0A1A3A; }
-        .strip span:nth-child(3)  { background: #E07A3A; }
-        .strip span:nth-child(4)  { background: #4A6A6A; }
-        .strip span:nth-child(5)  { background: #2A2A2A; }
-        .strip span:nth-child(6)  { background: #7FB7D7; }
-        .strip span:nth-child(7)  { background: #9C6060; }
-        .strip span:nth-child(8)  { background: #C0A080; }
-        .strip span:nth-child(9)  { background: #2A4A6A; }
-        .strip span:nth-child(10) { background: #1E1E4A; }
-        .strip span:nth-child(11) { background: #A0C0E0; }
-        .strip span:nth-child(12) { background: #2A2A4A; }
+    .button.primary {
+      color: #10110f;
+      background: var(--accent);
+      border-color: var(--accent);
+      font-weight: 700;
+    }
 
-        /* ============ FOOTER ============ */
-        .footer { background: #F4EEE2; padding: 60px 48px 32px; }
-        .footer-inner { max-width: 1400px; margin: 0 auto; }
-        .footer-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; padding-bottom: 40px; border-bottom: 4px solid #0A0A0A; margin-bottom: 32px; }
-        .footer-logo { display: flex; gap: 4px; }
-        .footer-logo span { background: #0A0A0A; color: #F4EEE2; padding: 4px 10px; font-size: 28px; font-weight: 900; }
-        .footer-meta { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-align: right; }
-        .footer-meta a { color: #0A0A0A; text-decoration: none; padding: 4px 10px; border: 2px solid transparent; display: inline-block; }
-        .footer-meta a:hover { background: #0A0A0A; color: #F4EEE2; }
-        .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 11px; font-weight: 700; letter-spacing: 2px; }
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      padding: 30px;
+      background: rgba(23, 24, 21, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
 
-        /* ============ RESPONSIVE ============ */
-        @media (max-width: 900px) {
-            .nav { padding: 12px 18px; }
-            .nav-links { display: none; }
-            .hero-content, .band, .composition, .poster { padding-left: 24px; padding-right: 24px; }
-            .poster-inner { grid-template-columns: 1fr; }
-            .comp-canvas { grid-template-rows: repeat(8, 60px); }
-            .c-meta { grid-column: span 8; grid-row: span 2; }
-            .swatch-grid { grid-template-columns: repeat(3, 1fr); }
-            .palette-head h2 { font-size: 32px; }
-            .stats { gap: 12px; }
-            .stat { min-width: 140px; padding: 16px 20px; }
-            .stat .n { font-size: 32px; }
-            .strip { height: 40px; }
-            .rotation { height: 360px; }
-            .rot-piece { transform: scale(0.7); }
-        }
-    </style>
+    .hero-card::after {
+      position: absolute;
+      right: -52px;
+      bottom: -64px;
+      width: 190px;
+      height: 190px;
+      content: "";
+      border: 1px solid rgba(217, 255, 104, 0.35);
+      border-radius: 50%;
+      box-shadow: 0 0 0 26px rgba(217, 255, 104, 0.03), 0 0 0 52px rgba(217, 255, 104, 0.02);
+    }
+
+    .card-label {
+      color: var(--muted);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .manifesto {
+      position: relative;
+      z-index: 1;
+      margin: 56px 0 6px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(24px, 3vw, 38px);
+      line-height: 1.45;
+    }
+
+    .manifesto span { color: var(--accent); }
+
+    .signal-list {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 14px;
+      margin-top: 42px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .signal {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .signal::before {
+      width: 7px;
+      height: 7px;
+      content: "";
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 14px rgba(217, 255, 104, 0.7);
+    }
+
+    section {
+      padding: 108px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 0.65fr 1.35fr;
+      gap: 40px;
+      align-items: start;
+      margin-bottom: 56px;
+    }
+
+    h2 {
+      max-width: 760px;
+      margin: 0;
+      font-family: "Iowan Old Style", "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(36px, 5vw, 66px);
+      font-weight: 500;
+      letter-spacing: -0.045em;
+      line-height: 1.08;
+    }
+
+    .section-intro {
+      max-width: 650px;
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .step {
+      min-height: 270px;
+      padding: 28px 26px;
+      border-right: 1px solid var(--line);
+    }
+
+    .step:last-child { border-right: 0; }
+
+    .step-number {
+      color: var(--accent);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .step h3 {
+      margin: 58px 0 14px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .field {
+      min-height: 240px;
+      padding: 30px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      transition: border-color 180ms ease, transform 180ms ease;
+    }
+
+    .field:hover {
+      transform: translateY(-3px);
+      border-color: rgba(217, 255, 104, 0.42);
+    }
+
+    .field-index {
+      color: var(--warm);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .field h3 {
+      margin: 52px 0 12px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 27px;
+      font-weight: 500;
+    }
+
+    .field p {
+      max-width: 480px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .principle-quote {
+      position: sticky;
+      top: 48px;
+      margin: 0;
+      padding-left: 24px;
+      border-left: 3px solid var(--accent);
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.38;
+    }
+
+    .principle-list {
+      display: grid;
+      border-top: 1px solid var(--line);
+    }
+
+    .principle-item {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 18px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .principle-item strong {
+      color: var(--accent);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .principle-item span { color: #c7c4ba; }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .project {
+      display: flex;
+      min-height: 310px;
+      padding: 28px;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(145deg, rgba(217, 255, 104, 0.06), transparent 46%), var(--panel);
+      border: 1px solid var(--line);
+    }
+
+    .project-tag {
+      color: var(--accent);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .project h3 {
+      margin: 70px 0 12px;
+      font-family: "Noto Serif SC", "Songti SC", serif;
+      font-size: 25px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .project p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .project-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 34px;
+      padding-top: 18px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+    }
+
+    .closing {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 60px;
+      align-items: end;
+      padding-bottom: 70px;
+    }
+
+    .closing h2 { max-width: 780px; }
+
+    .closing-note {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 26px 0 38px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+    }
+
+    .reveal { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .button, .field { transition: none; }
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .section-head,
+      .principles,
+      .closing {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 72px;
+      }
+
+      .pipeline { grid-template-columns: repeat(2, 1fr); }
+      .step:nth-child(2) { border-right: 0; }
+      .step:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .projects { grid-template-columns: 1fr; }
+      .principle-quote { position: static; }
+    }
+
+    @media (max-width: 620px) {
+      .shell {
+        width: auto;
+        margin-right: 16px;
+        margin-left: 16px;
+      }
+      .nav-links { display: none; }
+      .hero { padding: 62px 0 68px; }
+      .eyebrow {
+        max-width: 100%;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        overflow-wrap: anywhere;
+        word-break: break-all;
+      }
+      h1 {
+        max-width: 100%;
+        font-size: 36px;
+        letter-spacing: -0.025em;
+        line-height: 1.08;
+        word-break: break-all;
+      }
+      .hero-copy {
+        max-width: 100%;
+        font-size: 16px;
+        overflow-wrap: anywhere;
+        word-break: break-all;
+      }
+      .hero-copy span { display: block; }
+      section { padding: 78px 0; }
+      .fields, .pipeline { grid-template-columns: 1fr; }
+      .step { border-right: 0; border-bottom: 1px solid var(--line); }
+      .step:last-child { border-bottom: 0; }
+      .field { min-height: 220px; }
+      footer { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
-    <!-- NAV -->
-    <nav class="nav">
-        <div class="nav-logo"><span>S</span><span>P</span><span>L</span><span>L</span><span>M</span></div>
-        <div class="nav-links">
-            <a href="#palette">调色</a>
-            <a href="#composition">构图</a>
-            <a href="#poster">海报</a>
-        </div>
+  <header class="shell">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="#top" aria-label="返回首页">
+        <span class="brand-mark">SP</span>
+        <span>SPLLM</span>
+      </a>
+      <div class="nav-links">
+        <a href="#system">系统</a>
+        <a href="#fields">方向</a>
+        <a href="#projects">项目</a>
+        <a href="https://github.com/tuzfanfan/SPLLM">GitHub ↗</a>
+      </div>
     </nav>
+  </header>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="canvas">
-            <div class="shape s-1"></div>
-            <div class="shape s-2"></div>
-            <div class="circle s-3"></div>
-            <div class="shape s-4"></div>
-            <div class="shape s-5"></div>
-            <div class="circle s-6"></div>
-            <div class="shape s-7"></div>
-            <div class="shape s-8"></div>
-            <div class="shape s-9"></div>
-            <div class="shape s-10"></div>
-            <div class="circle s-11"></div>
-            <div class="shape s-12"></div>
-            <div class="deco-line line-a"></div>
-            <div class="deco-line line-b"></div>
-            <div class="deco-dot dot-a"></div>
-            <div class="deco-dot dot-b"></div>
-            <div class="deco-dot dot-c"></div>
+  <main id="top">
+    <div class="shell hero">
+      <div class="reveal">
+        <div class="eyebrow">Structured Personal Learning &amp; LLM Management</div>
+        <h1>
+          <span>让知识不只被收藏，</span>
+          <span>而是继续发生。</span>
+        </h1>
+        <p class="hero-copy">
+          <span>SPLLM 是一个持续演化的个人知识与项目操作系统。</span>
+          <span>它把零散材料组织成知识，</span>
+          <span>把知识提炼成方法，</span>
+          <span>再把方法送进真实世界。</span>
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#system">查看系统如何运转</a>
+          <a class="button" href="https://github.com/tuzfanfan/SPLLM">浏览 GitHub 仓库</a>
         </div>
-        <div class="hero-content">
-            <div class="tag"><span class="tag-dot"></span>STRUCTURED · PACED · LIVING · MEMORY</div>
-            <h1>
-                <span>让<span class="hl1">复杂</span></span><br>
-                <span>变得<span class="hl2">有序</span></span>
-            </h1>
-            <p class="lead">我们相信，真正的 <b>知识工程</b> 不是堆数据，而是从 <b>捕获</b>、<b>结构化</b>、<b>提炼</b> 到 <b>落地</b> 的完整体系——每一步都可被定义、可被追溯、可被复用。</p>
-            <div class="stats">
-                <div class="stat c3"><div class="n">12</div><div class="l">主色</div></div>
-                <div class="stat c2"><div class="n">04</div><div class="l">流程</div></div>
-                <div class="stat c6"><div class="n">04</div><div class="l">领域</div></div>
-                <div class="stat c4"><div class="n">03</div><div class="l">方向</div></div>
-            </div>
-        </div>
-        <div class="scroll"><span class="ar"></span><span>SCROLL</span></div>
-    </section>
+      </div>
 
-    <!-- PALETTE GRID -->
-    <section class="palette" id="palette">
-        <div class="palette-inner">
-            <div class="palette-head">
-                <div class="sub">PALETTE · 12</div>
-                <h2>一组颜色，<em>十二种情绪</em></h2>
-            </div>
-            <div class="swatch-grid">
-                <div class="swatch sw-1"><span class="label">深靛蓝</span><span class="hex">#1E1E3A</span><span class="num">01</span></div>
-                <div class="swatch sw-2"><span class="label">深海蓝</span><span class="hex">#0A1A3A</span><span class="num">02</span></div>
-                <div class="swatch sw-3"><span class="label">炽橙</span><span class="hex">#E07A3A</span><span class="num">03</span></div>
-                <div class="swatch sw-4"><span class="label">松绿</span><span class="hex">#4A6A6A</span><span class="num">04</span></div>
-                <div class="swatch sw-5"><span class="label">墨黑</span><span class="hex">#2A2A2A</span><span class="num">05</span></div>
-                <div class="swatch sw-6"><span class="label">霁青</span><span class="hex">#7FB7D7</span><span class="num">06</span></div>
-                <div class="swatch sw-7"><span class="label">暖褐</span><span class="hex">#9C6060</span><span class="num">07</span></div>
-                <div class="swatch sw-8"><span class="label">砂金</span><span class="hex">#C0A080</span><span class="num">08</span></div>
-                <div class="swatch sw-9"><span class="label">林蓝</span><span class="hex">#2A4A6A</span><span class="num">09</span></div>
-                <div class="swatch sw-10"><span class="label">夜蓝</span><span class="hex">#1E1E4A</span><span class="num">10</span></div>
-                <div class="swatch sw-11"><span class="label">浅霁</span><span class="hex">#A0C0E0</span><span class="num">11</span></div>
-                <div class="swatch sw-12"><span class="label">幽蓝</span><span class="hex">#2A2A4A</span><span class="num">12</span></div>
-            </div>
+      <aside class="hero-card reveal" aria-label="SPLLM 核心主张">
+        <div class="card-label">Operating Principle / 001</div>
+        <p class="manifesto">
+          把<span>意图</span>变成结构，<br>
+          把结构变成资产，<br>
+          把资产变成持续复用的能力。
+        </p>
+        <div class="signal-list">
+          <div class="signal">知识不是终点，行动闭环才是</div>
+          <div class="signal">清楚胜过华丽，有用胜过讨好</div>
+          <div class="signal">每一次交付，都应该增加下一次的能力</div>
         </div>
-    </section>
-
-    <!-- BAND 1: NAVY -->
-    <section class="band b-navy">
-        <div class="band-canvas">
-            <div class="shape" style="background:#E07A3A; width:160px; height:160px; top:30px; right:5%; transform:rotate(-8deg); box-shadow:6px 6px 0 0 #F4EEE2;"></div>
-            <div class="circle" style="background:#7FB7D7; width:120px; height:120px; bottom:40px; left:8%; box-shadow:5px 5px 0 0 #F4EEE2;"></div>
-            <div class="shape" style="background:#1E1E3A; width:100px; height:100px; top:50px; left:20%; transform:rotate(10deg);"></div>
-        </div>
-        <div class="band-inner">
-            <span class="band-label">01 · DEEP</span>
-            <h2>用 <span class="hl">深色</span> 作为<br>思考的底色</h2>
-            <p class="lead-b" style="margin-top:24px;">靛蓝与深海蓝构成沉稳的基础——像夜海一样承载所有可见与不可见的信息流动。</p>
-        </div>
-    </section>
-
-    <!-- COMPOSITION -->
-    <section class="composition" id="composition">
-        <div class="comp-inner">
-            <div class="comp-head">
-                <div class="num">02 · COMPOSITION</div>
-                <h2>把十二种颜色<br>放在一起</h2>
-            </div>
-            <div class="comp-canvas">
-                <div class="c-block c1"></div>
-                <div class="c-block c2"></div>
-                <div class="c-block c3"></div>
-                <div class="c-block c4"></div>
-                <div class="c-block c5"></div>
-                <div class="c-block c6"></div>
-                <div class="c-block c7"></div>
-                <div class="c-block c8"></div>
-                <div class="c-block c9"></div>
-                <div class="c-block c10"></div>
-                <div class="c-block c11"></div>
-                <div class="c-block c12"></div>
-                <div class="c-meta">
-                    <div class="tag-sm">▢ A SET OF 12</div>
-                    <h3>每种颜色都是一种选择</h3>
-                    <p>从冷调到暖调，从深到浅——这套配色没有主从关系，只有组合关系。如何摆放、如何配比，由场景决定。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- BAND 2: ORANGE -->
-    <section class="band b-orange">
-        <div class="band-canvas">
-            <div class="shape" style="background:#0A1A3A; width:140px; height:180px; bottom:30px; left:6%; transform:rotate(5deg); box-shadow:6px 6px 0 0 #0A0A0A;"></div>
-            <div class="circle" style="background:#7FB7D7; width:130px; height:130px; top:50px; right:8%; box-shadow:5px 5px 0 0 #0A0A0A;"></div>
-            <div class="shape" style="background:#C0A080; width:90px; height:90px; top:30px; left:25%; transform:rotate(-8deg);"></div>
-        </div>
-        <div class="band-inner">
-            <span class="band-label">03 · WARM</span>
-            <h2>那一抹 <span class="hl">橙</span>，<br>是注意力的支点</h2>
-            <p class="lead-b" style="margin-top:24px;">当一切都在沉静中推进时，炽橙负责把视线拉回重要的事情——它不该被滥用，但也绝不能缺席。</p>
-        </div>
-    </section>
-
-    <!-- ROTATION -->
-    <section class="rotation">
-        <div class="rot-bg"></div>
-        <div class="rot-piece rp-1"></div>
-        <div class="rot-piece rp-2"></div>
-        <div class="rot-circle rp-3"></div>
-        <div class="rot-piece rp-4"></div>
-        <div class="rot-piece rp-5"></div>
-        <div class="rot-circle rp-6"></div>
-        <div class="rot-overlay">
-            <div class="sm">12 COLORS · IN MOTION</div>
-            <div class="big">在动与静之间</div>
-        </div>
-    </section>
-
-    <!-- BAND 3: STONE -->
-    <section class="band b-stone">
-        <div class="band-canvas">
-            <div class="shape" style="background:#C0A080; width:120px; height:80px; top:40px; left:10%; transform:rotate(-3deg); box-shadow:5px 5px 0 0 #F4EEE2;"></div>
-            <div class="circle" style="background:#E07A3A; width:90px; height:90px; bottom:50px; right:10%; box-shadow:5px 5px 0 0 #F4EEE2;"></div>
-        </div>
-        <div class="band-inner">
-            <span class="band-label">04 · BALANCE</span>
-            <h2>绿色与褐色，<br>是 <span class="hl">节奏</span> 的调节</h2>
-            <p class="lead-b" style="margin-top:24px;">松绿与暖褐，砂金与浅霁——这些中间色让画面呼吸。它们不抢戏，但少了它们，整个系统会显得过于尖锐。</p>
-        </div>
-    </section>
-
-    <!-- POSTER -->
-    <section class="poster" id="poster">
-        <div class="poster-inner">
-            <div class="poster-art">
-                <div class="pa-1"></div>
-                <div class="pa-2"></div>
-                <div class="pa-3"></div>
-                <div class="pa-4"></div>
-                <div class="pa-5"></div>
-                <div class="pa-6"></div>
-                <div class="pa-7"></div>
-            </div>
-            <div class="poster-text">
-                <div class="n">05 · A POSTER</div>
-                <h2>12 色，<br>排成一张海报</h2>
-                <p>把整套配色放进一个画面里——可以是一张封面、一组 banner、一份周刊的头图。形式不重要，重要的是"完整"。</p>
-                <p>这页网站本身就是一张海报。每出现一个色块，都是这一套颜色在结构里的不同站位。</p>
-                <div class="ctas">
-                    <a href="#palette" class="btn btn-dark">查看调色</a>
-                    <a href="#composition" class="btn btn-orange">查看构图</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- COLOR STRIP -->
-    <div class="strip">
-        <span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span>
+      </aside>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-top">
-                <div class="footer-logo">
-                    <span>S</span><span>P</span><span>L</span><span>L</span><span>M</span>
-                </div>
-                <div class="footer-meta">
-                    <a href="#">STRUCTURED</a>
-                    <a href="#">PACED</a>
-                    <a href="#">LIVING</a>
-                    <a href="#">MEMORY</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <div>2026 · SPLLM</div>
-                <div>12 COLORS · NEO-BRUTALISM</div>
-            </div>
+    <section id="system">
+      <div class="shell">
+        <div class="section-head reveal">
+          <div class="section-kicker">01 / The System</div>
+          <div>
+            <h2>一条从信息到行动的生产线</h2>
+            <p class="section-intro">
+              这里不追求把所有东西都塞进知识库，而是让每一层材料都有去处，
+              让洞察可以被检索、组合、验证，并最终成为项目与作品。
+            </p>
+          </div>
         </div>
-    </footer>
+
+        <div class="pipeline reveal">
+          <article class="step">
+            <div class="step-number">01</div>
+            <h3>捕获</h3>
+            <p>收集文章、书籍、对话、现场观察与热点信号，保留原始上下文和来源。</p>
+          </article>
+          <article class="step">
+            <div class="step-number">02</div>
+            <h3>结构化</h3>
+            <p>将材料拆成来源、实体、概念和事实，通过链接形成可导航的知识网络。</p>
+          </article>
+          <article class="step">
+            <div class="step-number">03</div>
+            <h3>提炼</h3>
+            <p>把反复出现的判断沉淀成框架、模板、脚本和可被 Agent 调用的技能。</p>
+          </article>
+          <article class="step">
+            <div class="step-number">04</div>
+            <h3>落地</h3>
+            <p>让知识进入报告、内容、产品、公益项目和真实合作，在反馈中继续进化。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="fields">
+      <div class="shell">
+        <div class="section-head reveal">
+          <div class="section-kicker">02 / Working Fields</div>
+          <div>
+            <h2>技术、知识与真实社会场景的交汇处</h2>
+            <p class="section-intro">
+              SPLLM 的价值不在于收集了多少页面，而在于它能否连接不同领域，
+              发现值得推进的问题，并形成可验证的最小行动。
+            </p>
+          </div>
+        </div>
+
+        <div class="fields">
+          <article class="field reveal">
+            <div class="field-index">FIELD / A</div>
+            <h3>AI 知识工程</h3>
+            <p>构建面向 LLM 的知识库、检索路径与技能系统，让信息处理逐步从手工劳动升级为可复用的工作流。</p>
+          </article>
+          <article class="field reveal">
+            <div class="field-index">FIELD / B</div>
+            <h3>青年科教文旅</h3>
+            <p>连接粤港澳高校、企业、场馆与城市公共空间，设计兼具学习价值、体验价值与商业可行性的项目。</p>
+          </article>
+          <article class="field reveal">
+            <div class="field-index">FIELD / C</div>
+            <h3>公益与科普创新</h3>
+            <p>把社会议题转化为可参与、可传播、可评估的公益方案，让专业知识真正抵达具体的人。</p>
+          </article>
+          <article class="field reveal">
+            <div class="field-index">FIELD / D</div>
+            <h3>青年创新创业</h3>
+            <p>围绕真实任务、现场训练与资源协同，帮助青年团队从想法走向产品、合作与持续行动。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell principles">
+        <blockquote class="principle-quote reveal">
+          不制造内容堆积，尽量制造有效推进。
+        </blockquote>
+        <div class="principle-list reveal">
+          <div class="principle-item">
+            <strong>01</strong>
+            <span>重视洞察，不堆砌废话。每一个结论都要说明它改变了什么。</span>
+          </div>
+          <div class="principle-item">
+            <strong>02</strong>
+            <span>重视结构，不迷失在碎片里。信息只有进入关系，才开始成为知识。</span>
+          </div>
+          <div class="principle-item">
+            <strong>03</strong>
+            <span>重视推进，不沉迷于看起来很忙。任务需要下一步，而不只是漂亮的总结。</span>
+          </div>
+          <div class="principle-item">
+            <strong>04</strong>
+            <span>重视积累，不只做一次性交付。重复出现的工作，应当沉淀成流程与能力。</span>
+          </div>
+          <div class="principle-item">
+            <strong>05</strong>
+            <span>重视真实，不迎合、不表演。允许不确定，但不把猜测包装成结论。</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="shell">
+        <div class="section-head reveal">
+          <div class="section-kicker">03 / Active Directions</div>
+          <div>
+            <h2>把已有资源组织成可以向前走的项目</h2>
+            <p class="section-intro">
+              当前关注的不是抽象宏大叙事，而是高校、城市空间、青年人才与社会需求之间，
+              那些能够被连接和验证的具体机会。
+            </p>
+          </div>
+        </div>
+
+        <div class="projects">
+          <article class="project reveal">
+            <div>
+              <div class="project-tag">Education × City</div>
+              <h3>广州大学城科教文旅协作网络</h3>
+              <p>围绕高校、企业、场馆和城市空间，设计研学、团建、赛事与主题体验的组合产品。</p>
+            </div>
+            <div class="project-foot"><span>场景驱动</span><span>持续验证</span></div>
+          </article>
+          <article class="project reveal">
+            <div>
+              <div class="project-tag">Youth × Practice</div>
+              <h3>青年真实项目共创与孵化</h3>
+              <p>通过真实任务、专项人才招募和现场训练，让青年在交付中建立能力与合作关系。</p>
+            </div>
+            <div class="project-foot"><span>人才网络</span><span>项目闭环</span></div>
+          </article>
+          <article class="project reveal">
+            <div>
+              <div class="project-tag">Public Good × Media</div>
+              <h3>公益项目与科普内容创新</h3>
+              <p>把专业议题转译成公众可理解、可参与的内容和行动，兼顾社会价值与长期运营。</p>
+            </div>
+            <div class="project-foot"><span>公共价值</span><span>传播转化</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell closing reveal">
+        <div>
+          <div class="section-kicker">Keep Building</div>
+          <h2>知识库不是仓库。它应该是一套会长出行动的基础设施。</h2>
+        </div>
+        <div class="closing-note">
+          <p>
+            SPLLM 仍在持续构建中。页面、工具和方法会改变，
+            但方向保持一致：减少混乱，增加连接，让每一次思考都更接近真实世界。
+          </p>
+          <a class="button" href="https://github.com/tuzfanfan/SPLLM">进入项目仓库 ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <span>© <span id="year"></span> SPLLM · Built from knowledge, tested in practice.</span>
+    <span>xfan.kdns.fr</span>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+  </script>
 </body>
 </html>

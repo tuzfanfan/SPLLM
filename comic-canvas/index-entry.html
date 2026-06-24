@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>漫剧画布 · 项目管理中心</title>
+<style>
+/* ============ Totality Festival Tokens ============ */
+:root{
+  --bg: #070711;
+  --surface: #111126;
+  --surface-warm: #1e1540;
+  --fg: #f8f7ff;
+  --fg-2: #d6ccff;
+  --muted: #9d8ad4;
+  --meta: #c084fc;
+  --border: #34265e;
+  --border-soft: #241c42;
+  --accent: #c084fc;
+  --accent-on: #13051f;
+  --accent-hover: color-mix(in oklab, var(--accent), black 8%);
+  --accent-active: color-mix(in oklab, var(--accent), black 14%);
+  --success: #39ff88;
+  --warn: #fff34d;
+  --danger: #ff4d8d;
+  --c-char: #c084fc;
+  --c-shot: #818cf8;
+  --c-line: #fb923c;
+  --c-scene: #34d399;
+  --c-branch: #fbbf24;
+  --c-end: #ff6b9d;
+  --accent-glow: color-mix(in oklab, var(--accent) 18%, transparent);
+  --surface-elev: #1a1a3e;
+  --surface-active: #252552;
+  --font-display: Inter, system-ui, sans-serif;
+  --font-body: Inter, system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, Menlo, monospace;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 24px;
+  --text-2xl: 36px;
+  --text-3xl: 54px;
+  --leading-body: 1.52;
+  --leading-tight: 1.06;
+  --tracking-display: -0.025em;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-12: 48px;
+  --radius-sm: 10px; --radius-md: 16px; --radius-lg: 24px; --radius-pill: 9999px;
+  --elev-ring: 0 0 0 1px var(--border);
+  --elev-raised: 0 24px 80px rgba(192, 132, 252, 0.22);
+  --focus-ring: 0 0 0 4px rgba(192, 132, 252, 0.32);
+  --motion-fast: 150ms;
+  --motion-base: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+*{box-sizing:border-box; margin:0; padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--fg);
+  font:var(--text-base)/var(--leading-body) var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+
+/* ============ 背景 ============ */
+.bg-layer{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(192,132,252,.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 30% 70%, rgba(129,140,248,.04) 0%, transparent 60%),
+    var(--bg);
+}
+
+/* ============ 布局 ============ */
+.app{position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column}
+
+/* ============ 顶栏 ============ */
+.topbar{
+  height:56px; display:flex; align-items:center; gap:12px;
+  padding:0 var(--space-6);
+  background:rgba(17,17,38,.85);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  position:sticky; top:0; z-index:50;
+  flex-shrink:0;
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:var(--text-lg); letter-spacing:var(--tracking-display); color:var(--fg); white-space:nowrap}
+.brand .logo{font-size:var(--text-xl); filter:drop-shadow(0 0 8px rgba(192,132,252,.4))}
+.brand small{color:var(--muted); font-weight:400; font-size:var(--text-xs); margin-left:4px}
+.topbar-spacer{flex:1}
+
+/* 搜索框 */
+.search-box{
+  position:relative; display:flex; align-items:center;
+}
+.search-box input{
+  width:260px; height:34px; padding:0 12px 0 34px;
+  border-radius:var(--radius-pill); border:1px solid var(--border);
+  background:var(--surface); color:var(--fg); font-size:var(--text-sm);
+  outline:none; transition:all var(--motion-base) var(--ease-standard);
+  font-family:var(--font-body);
+}
+.search-box input::placeholder{color:var(--muted)}
+.search-box input:focus{border-color:var(--accent); box-shadow:var(--focus-ring)}
+.search-box .search-icon{
+  position:absolute; left:10px; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-size:14px; pointer-events:none;
+}
+
+/* 新建按钮 */
+.btn-primary{
+  height:34px; padding:0 18px; border-radius:var(--radius-sm); border:none;
+  background:var(--accent); color:var(--accent-on); font-size:var(--text-sm);
+  font-weight:600; display:inline-flex; align-items:center; gap:6px;
+  transition:all var(--motion-fast) var(--ease-standard);
+  font-family:var(--font-body); cursor:pointer; white-space:nowrap;
+}
+.btn-primary:hover{background:var(--accent-hover); transform:translateY(-1px)}
+.btn-primary:active{background:var(--accent-active); transform:translateY(0)}
+
+/* ============ 主内容区 ============ */
+.main{
+  flex:1; padding:var(--space-8) var(--space-6);
+  max-width:1200px; width:100%; margin:0 auto;
+}
+
+/* 标题区 */
+.header{
+  margin-bottom:var(--space-8);
+}
+.header h1{
+  font-size:var(--text-2xl); font-weight:800; letter-spacing:var(--tracking-display);
+  line-height:var(--leading-tight); color:var(--fg);
+  margin-bottom:var(--space-2);
+}
+.header p{color:var(--muted); font-size:var(--text-sm)}
+
+/* 排序/视图控制 */
+.toolbar-row{
+  display:flex; align-items:center; gap:12px; margin-bottom:var(--space-6);
+  flex-wrap:wrap;
+}
+.sort-group{display:flex; align-items:center; gap:6px}
+.sort-group label{color:var(--muted); font-size:var(--text-xs); white-space:nowrap}
+.sort-group select{
+  height:30px; padding:0 8px; border-radius:var(--radius-sm); border:1px solid var(--border);
+  background:var(--surface); color:var(--fg-2); font-size:var(--text-xs);
+  font-family:var(--font-body); outline:none; cursor:pointer;
+}
+.sort-group select:focus{border-color:var(--accent)}
+.stat-text{color:var(--muted); font-size:var(--text-xs); margin-left:auto}
+
+/* ============ 项目网格 ============ */
+.project-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:var(--space-5);
+}
+
+/* 项目卡片 */
+.project-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  transition:all var(--motion-base) var(--ease-standard);
+  cursor:pointer;
+  position:relative;
+}
+.project-card:hover{
+  border-color:var(--accent);
+  transform:translateY(-3px);
+  box-shadow:var(--elev-raised);
+}
+.project-card:active{transform:translateY(-1px)}
+
+/* 卡片封面 */
+.card-cover{
+  height:140px; position:relative; overflow:hidden;
+  background:linear-gradient(135deg, var(--surface-warm) 0%, var(--surface) 100%);
+  display:flex; align-items:center; justify-content:center;
+}
+.card-cover canvas{
+  position:absolute; inset:0; width:100%; height:100%;
+}
+.card-cover .cover-overlay{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 50%, rgba(7,7,17,.6) 100%);
+  z-index:1;
+}
+.card-cover .node-count-badge{
+  position:absolute; top:10px; right:10px; z-index:2;
+  background:rgba(17,17,38,.8); border:1px solid var(--border);
+  border-radius:var(--radius-pill); padding:2px 10px;
+  font-size:var(--text-xs); color:var(--fg-2); backdrop-filter:blur(8px);
+}
+.card-cover .empty-cover{
+  color:var(--muted); font-size:var(--text-sm); z-index:1;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.card-cover .empty-cover .empty-icon{font-size:32px; opacity:0.5}
+
+/* 卡片信息 */
+.card-body{padding:var(--space-4)}
+.card-title{
+  font-size:var(--text-base); font-weight:600; color:var(--fg);
+  margin-bottom:var(--space-1);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.card-meta{
+  display:flex; align-items:center; gap:var(--space-3);
+  font-size:var(--text-xs); color:var(--muted);
+}
+.card-meta span{display:flex; align-items:center; gap:4px}
+
+/* 卡片操作按钮 */
+.card-actions{
+  position:absolute; top:8px; left:8px; z-index:3;
+  display:flex; gap:4px;
+  opacity:0; transition:opacity var(--motion-fast);
+}
+.project-card:hover .card-actions{opacity:1}
+.card-action-btn{
+  width:28px; height:28px; border-radius:var(--radius-sm);
+  border:1px solid var(--border); background:rgba(17,17,38,.85);
+  color:var(--fg-2); font-size:13px; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; backdrop-filter:blur(8px);
+  transition:all var(--motion-fast);
+}
+.card-action-btn:hover{background:var(--accent); color:var(--accent-on); border-color:var(--accent)}
+.card-action-btn.danger:hover{background:var(--danger); color:#fff; border-color:var(--danger)}
+
+/* ============ 新建项目卡片 ============ */
+.new-project-card{
+  background:transparent;
+  border:2px dashed var(--border);
+  border-radius:var(--radius-md);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:12px; min-height:220px;
+  cursor:pointer;
+  transition:all var(--motion-base) var(--ease-standard);
+  color:var(--muted);
+}
+.new-project-card:hover{
+  border-color:var(--accent); color:var(--accent);
+  background:rgba(192,132,252,.04);
+}
+.new-project-card .plus-icon{
+  width:48px; height:48px; border-radius:50%;
+  border:2px solid currentColor; display:flex; align-items:center; justify-content:center;
+  font-size:24px; font-weight:300;
+}
+.new-project-card span{font-size:var(--text-sm); font-weight:500}
+
+/* ============ 空状态 ============ */
+.empty-state{
+  text-align:center; padding:var(--space-12) var(--space-4);
+  color:var(--muted);
+}
+.empty-state .empty-icon{font-size:48px; margin-bottom:var(--space-4); opacity:0.5}
+.empty-state h3{font-size:var(--text-lg); color:var(--fg-2); margin-bottom:var(--space-2)}
+.empty-state p{font-size:var(--text-sm); max-width:360px; margin:0 auto}
+
+/* ============ 对话框 ============ */
+.modal-overlay{
+  position:fixed; inset:0; z-index:100;
+  background:rgba(7,7,17,.7); backdrop-filter:blur(8px);
+  display:none; align-items:center; justify-content:center;
+  padding:var(--space-4);
+}
+.modal-overlay.active{display:flex}
+.modal{
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:var(--space-6);
+  width:100%; max-width:420px;
+  box-shadow:var(--elev-raised);
+}
+.modal h2{
+  font-size:var(--text-lg); font-weight:700; margin-bottom:var(--space-4);
+  color:var(--fg);
+}
+.modal label{
+  display:block; font-size:var(--text-sm); color:var(--muted);
+  margin-bottom:var(--space-2);
+}
+.modal input[type="text"]{
+  width:100%; height:40px; padding:0 12px;
+  border-radius:var(--radius-sm); border:1px solid var(--border);
+  background:var(--bg); color:var(--fg); font-size:var(--text-sm);
+  outline:none; font-family:var(--font-body);
+  transition:border-color var(--motion-fast);
+}
+.modal input[type="text"]:focus{border-color:var(--accent); box-shadow:var(--focus-ring)}
+.modal-actions{
+  display:flex; gap:var(--space-3); justify-content:flex-end;
+  margin-top:var(--space-5);
+}
+.btn-ghost{
+  height:34px; padding:0 16px; border-radius:var(--radius-sm);
+  border:1px solid var(--border); background:transparent;
+  color:var(--fg-2); font-size:var(--text-sm); font-family:var(--font-body);
+  cursor:pointer; transition:all var(--motion-fast);
+}
+.btn-ghost:hover{background:var(--surface-elev); border-color:var(--muted)}
+.btn-danger{
+  height:34px; padding:0 16px; border-radius:var(--radius-sm);
+  border:none; background:var(--danger); color:#fff;
+  font-size:var(--text-sm); font-weight:600; font-family:var(--font-body);
+  cursor:pointer; transition:all var(--motion-fast);
+}
+.btn-danger:hover{filter:brightness(1.1)}
+
+/* ============ 右键菜单 ============ */
+.ctx-menu{
+  position:fixed; z-index:200;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-sm); padding:var(--space-1) 0;
+  min-width:160px; box-shadow:var(--elev-raised);
+  display:none;
+}
+.ctx-menu.active{display:block}
+.ctx-item{
+  padding:var(--space-2) var(--space-4);
+  font-size:var(--text-sm); color:var(--fg-2);
+  cursor:pointer; display:flex; align-items:center; gap:8px;
+  transition:background var(--motion-fast);
+}
+.ctx-item:hover{background:var(--surface-elev); color:var(--fg)}
+.ctx-item.danger{color:var(--danger)}
+.ctx-item.danger:hover{background:rgba(255,77,141,.1)}
+.ctx-sep{height:1px; background:var(--border); margin:var(--space-1) 0}
+
+/* ============ 响应式 ============ */
+@media(max-width:640px){
+  .topbar{padding:0 var(--space-3); gap:8px}
+  .brand small{display:none}
+  .search-box input{width:160px}
+  .main{padding:var(--space-4) var(--space-3)}
+  .header h1{font-size:var(--text-xl)}
+  .project-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="app">
+  <!-- 顶栏 -->
+  <div class="topbar">
+    <div class="brand">
+      <span class="logo">🎨</span>
+      漫剧画布
+      <small>项目管理中心</small>
+    </div>
+    <div class="topbar-spacer"></div>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="搜索项目…" autocomplete="off" />
+    </div>
+    <button class="btn-ghost" id="btnImport" style="height:34px;padding:0 14px;font-size:var(--text-sm)">📤 导入</button>
+    <button class="btn-primary" id="btnNew">
+      <span>＋</span> 新建项目
+    </button>
+    <input type="file" id="fileImport" accept=".json" style="display:none" />
+  </div>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <div class="header">
+      <h1>我的项目</h1>
+      <p>管理你的所有漫剧创作项目</p>
+    </div>
+
+    <div class="toolbar-row">
+      <div class="sort-group">
+        <label>排序</label>
+        <select id="sortSelect">
+          <option value="updatedAt">最近修改</option>
+          <option value="createdAt">创建时间</option>
+          <option value="name">名称</option>
+          <option value="nodeCount">节点数量</option>
+        </select>
+      </div>
+      <div class="sort-group">
+        <label>顺序</label>
+        <select id="orderSelect">
+          <option value="desc">降序</option>
+          <option value="asc">升序</option>
+        </select>
+      </div>
+      <span class="stat-text" id="statText"></span>
+    </div>
+
+    <div class="project-grid" id="projectGrid"></div>
+  </div>
+</div>
+
+<!-- 新建/重命名对话框 -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitle">新建项目</h2>
+    <label id="modalLabel">项目名称</label>
+    <input type="text" id="modalInput" placeholder="输入项目名称…" maxlength="60" />
+    <div class="modal-actions">
+      <button class="btn-ghost" id="modalCancel">取消</button>
+      <button class="btn-danger" id="modalConfirmDanger" style="display:none">确认删除</button>
+      <button class="btn-primary" id="modalConfirm">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 右键菜单 -->
+<div class="ctx-menu" id="ctxMenu">
+  <div class="ctx-item" data-action="open">📂 打开项目</div>
+  <div class="ctx-item" data-action="rename">✏️ 重命名</div>
+  <div class="ctx-item" data-action="duplicate">📋 复制项目</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" data-action="export">📤 导出 JSON</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" data-action="delete">🗑️ 删除项目</div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ============================================================
+   常量 & 工具
+============================================================ */
+const PROJECT_REG_KEY = 'comic-canvas:projects';
+const DEFAULT_LS_KEY = 'comic-canvas:v1';
+const TYPE_COLORS = {
+  char:'#c084fc', shot:'#818cf8', line:'#fb923c',
+  scene:'#34d399', branch:'#fbbf24', end:'#ff6b9d'
+};
+const TYPE_LABELS = {
+  char:'角色', shot:'分镜', line:'台词',
+  scene:'场景', branch:'分支', end:'结局'
+};
+
+function genId(){ return 'p_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,8); }
+
+function getReg(){
+  try{ return JSON.parse(localStorage.getItem(PROJECT_REG_KEY) || '[]'); }
+  catch(_){ return []; }
+}
+function setReg(arr){ localStorage.setItem(PROJECT_REG_KEY, JSON.stringify(arr)); }
+
+function getProjectData(id){
+  const key = id ? ('comic-canvas:proj:' + id) : DEFAULT_LS_KEY;
+  try{ return JSON.parse(localStorage.getItem(key) || 'null'); }
+  catch(_){ return null; }
+}
+function setProjectData(id, data){
+  const key = id ? ('comic-canvas:proj:' + id) : DEFAULT_LS_KEY;
+  localStorage.setItem(key, JSON.stringify(data));
+}
+function removeProjectData(id){
+  const key = id ? ('comic-canvas:proj:' + id) : DEFAULT_LS_KEY;
+  localStorage.removeItem(key);
+}
+
+function formatDate(iso){
+  if(!iso) return '未知';
+  const d = new Date(iso);
+  const now = new Date();
+  const diff = now - d;
+  if(diff < 60000) return '刚刚';
+  if(diff < 3600000) return Math.floor(diff/60000) + ' 分钟前';
+  if(diff < 86400000) return Math.floor(diff/3600000) + ' 小时前';
+  if(diff < 604800000) return Math.floor(diff/86400000) + ' 天前';
+  return d.getFullYear() + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + String(d.getDate()).padStart(2,'0');
+}
+
+/* ============================================================
+   确保默认项目被纳入注册表
+============================================================ */
+function ensureDefaultProject(){
+  const raw = localStorage.getItem(DEFAULT_LS_KEY);
+  if(!raw) return;
+  try{
+    const data = JSON.parse(raw);
+    if(!data || !data.nodes || !Object.keys(data.nodes).length) return;
+    const reg = getReg();
+    // 检查是否已有默认项目条目
+    const hasDefault = reg.some(p => p.id === '__default__');
+    if(!hasDefault){
+      // 统计节点类型
+      const typeCounts = {};
+      Object.values(data.nodes).forEach(n => {
+        typeCounts[n.type] = (typeCounts[n.type]||0) + 1;
+      });
+      reg.push({
+        id: '__default__',
+        name: '默认项目',
+        createdAt: data.exportedAt || new Date().toISOString(),
+        updatedAt: data.exportedAt || new Date().toISOString(),
+        nodeCount: Object.keys(data.nodes).length,
+        typeCounts: typeCounts,
+      });
+      setReg(reg);
+    }
+  }catch(_){}
+}
+
+/* ============================================================
+   封面生成
+============================================================ */
+function generateCover(canvas, project){
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width = canvas.offsetWidth * 2;
+  const h = canvas.height = canvas.offsetHeight * 2;
+  ctx.scale(2, 2);
+  const rw = canvas.offsetWidth;
+  const rh = canvas.offsetHeight;
+
+  // 背景渐变
+  const grad = ctx.createLinearGradient(0, 0, rw, rh);
+  grad.addColorStop(0, '#1e1540');
+  grad.addColorStop(1, '#111126');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, rw, rh);
+
+  const tc = project.typeCounts || {};
+  const total = project.nodeCount || 0;
+  if(total === 0) return;
+
+  // 绘制抽象节点表示
+  const seed = project.id.split('').reduce((a,c) => a + c.charCodeAt(0), 0);
+  let rng = seed;
+  function rand(){ rng = (rng * 16807 + 11) % 2147483647; return (rng & 0x7fffffff) / 0x7fffffff; }
+
+  // 绘制连线
+  const nodes = [];
+  const types = Object.entries(tc);
+  let idx = 0;
+  types.forEach(([type, count]) => {
+    for(let i = 0; i < count && idx < 40; i++, idx++){
+      nodes.push({
+        x: 20 + rand() * (rw - 40),
+        y: 15 + rand() * (rh - 30),
+        type: type,
+        r: 4 + rand() * 6
+      });
+    }
+  });
+
+  // 连线
+  ctx.strokeStyle = 'rgba(192,132,252,0.15)';
+  ctx.lineWidth = 1;
+  for(let i = 0; i < nodes.length; i++){
+    const connections = 1 + Math.floor(rand() * 2);
+    for(let c = 0; c < connections; c++){
+      const j = Math.floor(rand() * nodes.length);
+      if(j !== i){
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        // 贝塞尔曲线
+        const cx1 = nodes[i].x + (rand()-0.5)*60;
+        const cy1 = nodes[i].y + (rand()-0.5)*40;
+        const cx2 = nodes[j].x + (rand()-0.5)*60;
+        const cy2 = nodes[j].y + (rand()-0.5)*40;
+        ctx.bezierCurveTo(cx1,cy1, cx2,cy2, nodes[j].x, nodes[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  // 节点圆点
+  nodes.forEach(n => {
+    const color = TYPE_COLORS[n.type] || '#c084fc';
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 0.7;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    // 光晕
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r + 3, 0, Math.PI*2);
+    ctx.fillStyle = color.replace(')', ',0.15)').replace('rgb', 'rgba');
+    ctx.fill();
+  });
+}
+
+/* ============================================================
+   渲染
+============================================================ */
+const grid = document.getElementById('projectGrid');
+const searchInput = document.getElementById('searchInput');
+const sortSelect = document.getElementById('sortSelect');
+const orderSelect = document.getElementById('orderSelect');
+const statText = document.getElementById('statText');
+
+let allProjects = [];
+let ctxTargetId = null;
+
+function loadProjects(){
+  ensureDefaultProject();
+  const reg = getReg();
+  // 同步每个项目的最新数据
+  allProjects = reg.map(p => {
+    const data = getProjectData(p.id === '__default__' ? null : p.id);
+    const nodeCount = data && data.nodes ? Object.keys(data.nodes).length : 0;
+    const typeCounts = {};
+    if(data && data.nodes){
+      Object.values(data.nodes).forEach(n => {
+        typeCounts[n.type] = (typeCounts[n.type]||0) + 1;
+      });
+    }
+    return {
+      ...p,
+      nodeCount,
+      typeCounts,
+      updatedAt: p.updatedAt || (data && data.exportedAt) || null,
+    };
+  });
+}
+
+function getFilteredSorted(){
+  let list = [...allProjects];
+  // 搜索过滤
+  const q = searchInput.value.trim().toLowerCase();
+  if(q){
+    list = list.filter(p => (p.name||'').toLowerCase().includes(q) || (p.id||'').toLowerCase().includes(q));
+  }
+  // 排序
+  const sortBy = sortSelect.value;
+  const order = orderSelect.value;
+  list.sort((a, b) => {
+    let va, vb;
+    if(sortBy === 'name'){
+      va = (a.name||'').toLowerCase();
+      vb = (b.name||'').toLowerCase();
+      return order === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va);
+    } else if(sortBy === 'nodeCount'){
+      va = a.nodeCount || 0;
+      vb = b.nodeCount || 0;
+    } else {
+      va = a[sortBy] || '';
+      vb = b[sortBy] || '';
+      if(va < vb) return order === 'asc' ? -1 : 1;
+      if(va > vb) return order === 'asc' ? 1 : -1;
+    }
+    return order === 'asc' ? va - vb : vb - va;
+  });
+  return list;
+}
+
+function render(){
+  loadProjects();
+  const list = getFilteredSorted();
+  grid.innerHTML = '';
+
+  // 统计
+  const totalNodes = allProjects.reduce((s,p) => s + (p.nodeCount||0), 0);
+  statText.textContent = `共 ${allProjects.length} 个项目 · ${totalNodes} 个节点`;
+
+  if(allProjects.length === 0 && !searchInput.value.trim()){
+    // 空状态
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">🎬</div>
+        <h3>还没有任何项目</h3>
+        <p>点击「新建项目」开始你的漫剧创作之旅吧！</p>
+      </div>
+    `;
+    // 仍然显示新建卡片
+    const newCard = createNewCard();
+    grid.appendChild(newCard);
+    return;
+  }
+
+  if(list.length === 0){
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">🔍</div>
+        <h3>没有找到匹配的项目</h3>
+        <p>试试其他关键词吧</p>
+      </div>
+    `;
+    const newCard = createNewCard();
+    grid.appendChild(newCard);
+    return;
+  }
+
+  // 渲染项目卡片
+  list.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.dataset.id = p.id;
+
+    // 操作按钮
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+    actions.innerHTML = `
+      <button class="card-action-btn" data-act="rename" title="重命名">✏️</button>
+      <button class="card-action-btn" data-act="duplicate" title="复制">📋</button>
+      <button class="card-action-btn danger" data-act="delete" title="删除">🗑️</button>
+    `;
+    card.appendChild(actions);
+
+    // 封面
+    const cover = document.createElement('div');
+    cover.className = 'card-cover';
+    if(p.nodeCount > 0){
+      const cvs = document.createElement('canvas');
+      cover.appendChild(cvs);
+      const overlay = document.createElement('div');
+      overlay.className = 'cover-overlay';
+      cover.appendChild(overlay);
+      const badge = document.createElement('div');
+      badge.className = 'node-count-badge';
+      badge.textContent = p.nodeCount + ' 节点';
+      cover.appendChild(badge);
+      // 延迟渲染 canvas
+      requestAnimationFrame(() => generateCover(cvs, p));
+    } else {
+      cover.innerHTML = `<div class="empty-cover"><span class="empty-icon">📄</span><span>空项目</span></div>`;
+    }
+    card.appendChild(cover);
+
+    // 信息
+    const body = document.createElement('div');
+    body.className = 'card-body';
+    body.innerHTML = `
+      <div class="card-title" title="${escHtml(p.name)}">${escHtml(p.name)}</div>
+      <div class="card-meta">
+        <span>🕐 ${formatDate(p.updatedAt)}</span>
+        ${renderTypeBadges(p.typeCounts)}
+      </div>
+    `;
+    card.appendChild(body);
+
+    // 点击打开
+    card.addEventListener('click', (e) => {
+      const act = e.target.closest('[data-act]');
+      if(act){
+        e.stopPropagation();
+        handleAction(act.dataset.act, p.id);
+        return;
+      }
+      openProject(p.id);
+    });
+
+    // 右键菜单
+    card.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      showCtxMenu(e.clientX, e.clientY, p.id);
+    });
+
+    grid.appendChild(card);
+  });
+
+  // 新建卡片
+  grid.appendChild(createNewCard());
+}
+
+function renderTypeBadges(typeCounts){
+  if(!typeCounts || !Object.keys(typeCounts).length) return '';
+  return Object.entries(typeCounts)
+    .sort((a,b) => b[1]-a[1])
+    .slice(0, 3)
+    .map(([t,c]) => `<span style="color:${TYPE_COLORS[t]||'#ccc'}">${TYPE_LABELS[t]||t} ${c}</span>`)
+    .join('');
+}
+
+function escHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+function createNewCard(){
+  const card = document.createElement('div');
+  card.className = 'new-project-card';
+  card.innerHTML = `<div class="plus-icon">＋</div><span>新建项目</span>`;
+  card.addEventListener('click', () => showCreateModal());
+  return card;
+}
+
+/* ============================================================
+   操作
+============================================================ */
+function openProject(id){
+  if(id === '__default__'){
+    location.href = 'index.html';
+  } else {
+    location.href = 'index.html?project=' + encodeURIComponent(id);
+  }
+}
+
+function handleAction(action, id){
+  switch(action){
+    case 'rename': showRenameModal(id); break;
+    case 'delete': showDeleteConfirm(id); break;
+    case 'duplicate': duplicateProject(id); break;
+    case 'export': exportProject(id); break;
+  }
+}
+
+function showCreateModal(){
+  const overlay = document.getElementById('modalOverlay');
+  const title = document.getElementById('modalTitle');
+  const label = document.getElementById('modalLabel');
+  const input = document.getElementById('modalInput');
+  const confirmBtn = document.getElementById('modalConfirm');
+  const dangerBtn = document.getElementById('modalConfirmDanger');
+
+  title.textContent = '新建项目';
+  label.textContent = '项目名称';
+  input.value = '';
+  input.placeholder = '输入项目名称…';
+  confirmBtn.textContent = '创建';
+  dangerBtn.style.display = 'none';
+  overlay.classList.add('active');
+  overlay.dataset.mode = 'create';
+  setTimeout(() => input.focus(), 100);
+}
+
+function showRenameModal(id){
+  const reg = getReg();
+  const p = reg.find(x => x.id === id);
+  if(!p) return;
+
+  const overlay = document.getElementById('modalOverlay');
+  const title = document.getElementById('modalTitle');
+  const label = document.getElementById('modalLabel');
+  const input = document.getElementById('modalInput');
+  const confirmBtn = document.getElementById('modalConfirm');
+  const dangerBtn = document.getElementById('modalConfirmDanger');
+
+  title.textContent = '重命名项目';
+  label.textContent = '新名称';
+  input.value = p.name || '';
+  input.placeholder = '输入新名称…';
+  confirmBtn.textContent = '确定';
+  dangerBtn.style.display = 'none';
+  overlay.classList.add('active');
+  overlay.dataset.mode = 'rename';
+  overlay.dataset.targetId = id;
+  setTimeout(() => { input.focus(); input.select(); }, 100);
+}
+
+function showDeleteConfirm(id){
+  const reg = getReg();
+  const p = reg.find(x => x.id === id);
+  if(!p) return;
+
+  const overlay = document.getElementById('modalOverlay');
+  const title = document.getElementById('modalTitle');
+  const label = document.getElementById('modalLabel');
+  const input = document.getElementById('modalInput');
+  const confirmBtn = document.getElementById('modalConfirm');
+  const dangerBtn = document.getElementById('modalConfirmDanger');
+
+  title.textContent = '删除项目';
+  label.textContent = `确定要删除「${p.name}」吗？此操作不可撤销。`;
+  input.style.display = 'none';
+  label.style.display = 'block';
+  confirmBtn.style.display = 'none';
+  dangerBtn.style.display = 'inline-flex';
+  dangerBtn.textContent = '确认删除';
+  overlay.classList.add('active');
+  overlay.dataset.mode = 'delete';
+  overlay.dataset.targetId = id;
+}
+
+function closeModal(){
+  const overlay = document.getElementById('modalOverlay');
+  overlay.classList.remove('active');
+  const input = document.getElementById('modalInput');
+  const confirmBtn = document.getElementById('modalConfirm');
+  const dangerBtn = document.getElementById('modalConfirmDanger');
+  const label = document.getElementById('modalLabel');
+  input.style.display = '';
+  label.style.display = '';
+  confirmBtn.style.display = '';
+}
+
+function duplicateProject(id){
+  const reg = getReg();
+  const src = reg.find(x => x.id === id);
+  if(!src) return;
+  const data = getProjectData(id === '__default__' ? null : id);
+  if(!data) return;
+
+  const newId = genId();
+  const newName = (src.name || '未命名') + ' (副本)';
+
+  // 复制数据
+  setProjectData(newId, JSON.parse(JSON.stringify(data)));
+
+  // 统计节点类型
+  const typeCounts = {};
+  if(data.nodes){
+    Object.values(data.nodes).forEach(n => {
+      typeCounts[n.type] = (typeCounts[n.type]||0) + 1;
+    });
+  }
+
+  // 注册
+  reg.push({
+    id: newId,
+    name: newName,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    nodeCount: data.nodes ? Object.keys(data.nodes).length : 0,
+    typeCounts: typeCounts,
+  });
+  setReg(reg);
+  render();
+}
+
+function exportProject(id){
+  const reg = getReg();
+  const src = reg.find(x => x.id === id);
+  if(!src) return;
+  const data = getProjectData(id === '__default__' ? null : id);
+  if(!data){ alert('项目数据为空'); return; }
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (src.name || 'project') + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ============================================================
+   右键菜单
+============================================================ */
+const ctxMenu = document.getElementById('ctxMenu');
+
+function showCtxMenu(x, y, id){
+  ctxTargetId = id;
+  ctxMenu.style.left = x + 'px';
+  ctxMenu.style.top = y + 'px';
+  ctxMenu.classList.add('active');
+  // 边界检测
+  requestAnimationFrame(() => {
+    const rect = ctxMenu.getBoundingClientRect();
+    if(rect.right > window.innerWidth) ctxMenu.style.left = (x - rect.width) + 'px';
+    if(rect.bottom > window.innerHeight) ctxMenu.style.top = (y - rect.height) + 'px';
+  });
+}
+
+function hideCtxMenu(){
+  ctxMenu.classList.remove('active');
+  ctxTargetId = null;
+}
+
+document.addEventListener('click', hideCtxMenu);
+document.addEventListener('contextmenu', (e) => {
+  if(!e.target.closest('.project-card')) hideCtxMenu();
+});
+
+ctxMenu.addEventListener('click', (e) => {
+  const item = e.target.closest('[data-action]');
+  if(!item || !ctxTargetId) return;
+  handleAction(item.dataset.action, ctxTargetId);
+  hideCtxMenu();
+});
+
+/* ============================================================
+   事件绑定
+============================================================ */
+document.getElementById('btnNew').addEventListener('click', showCreateModal);
+
+// 导入项目
+document.getElementById('btnImport').addEventListener('click', () => {
+  document.getElementById('fileImport').click();
+});
+document.getElementById('fileImport').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  e.target.value = '';
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try{
+      const data = JSON.parse(ev.target.result);
+      if(!data || data.app !== 'comic-canvas'){
+        alert('不是有效的漫剧画布项目文件'); return;
+      }
+      const id = genId();
+      const name = file.name.replace(/\.json$/i, '');
+      const now = new Date().toISOString();
+      const typeCounts = {};
+      if(data.nodes){
+        Object.values(data.nodes).forEach(n => { typeCounts[n.type] = (typeCounts[n.type]||0)+1; });
+      }
+      const reg = getReg();
+      reg.push({
+        id, name,
+        createdAt: data.exportedAt || now,
+        updatedAt: now,
+        nodeCount: data.nodes ? Object.keys(data.nodes).length : 0,
+        typeCounts,
+      });
+      setReg(reg);
+      setProjectData(id, data);
+      render();
+    }catch(err){
+      alert('导入失败：' + err.message);
+    }
+  };
+  reader.readAsText(file);
+});
+
+document.getElementById('modalCancel').addEventListener('click', closeModal);
+
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if(e.target === e.currentTarget) closeModal();
+});
+
+document.getElementById('modalConfirm').addEventListener('click', () => {
+  const overlay = document.getElementById('modalOverlay');
+  const input = document.getElementById('modalInput');
+  const name = input.value.trim();
+  if(!name){ input.focus(); return; }
+
+  if(overlay.dataset.mode === 'create'){
+    const id = genId();
+    const reg = getReg();
+    const now = new Date().toISOString();
+    reg.push({
+      id, name,
+      createdAt: now,
+      updatedAt: now,
+      nodeCount: 0,
+      typeCounts: {},
+    });
+    setReg(reg);
+    // 初始化空数据
+    setProjectData(id, { version:1, app:'comic-canvas', exportedAt:now, nodes:{}, positions:{}, edges:{} });
+    closeModal();
+    render();
+    // 直接打开新项目
+    openProject(id);
+  } else if(overlay.dataset.mode === 'rename'){
+    const id = overlay.dataset.targetId;
+    const reg = getReg();
+    const p = reg.find(x => x.id === id);
+    if(p){
+      p.name = name;
+      p.updatedAt = new Date().toISOString();
+      setReg(reg);
+    }
+    closeModal();
+    render();
+  }
+});
+
+document.getElementById('modalConfirmDanger').addEventListener('click', () => {
+  const overlay = document.getElementById('modalOverlay');
+  if(overlay.dataset.mode === 'delete'){
+    const id = overlay.dataset.targetId;
+    const reg = getReg();
+    const idx = reg.findIndex(x => x.id === id);
+    if(idx >= 0){
+      const name = reg[idx].name;
+      reg.splice(idx, 1);
+      setReg(reg);
+      removeProjectData(id === '__default__' ? null : id);
+    }
+    closeModal();
+    render();
+  }
+});
+
+// Enter 键确认
+document.getElementById('modalInput').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') document.getElementById('modalConfirm').click();
+  if(e.key === 'Escape') closeModal();
+});
+
+// 搜索 & 排序
+searchInput.addEventListener('input', render);
+sortSelect.addEventListener('change', render);
+orderSelect.addEventListener('change', render);
+
+// 快捷键
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape'){
+    closeModal();
+    hideCtxMenu();
+  }
+  // Ctrl/Cmd + N 新建
+  if((e.ctrlKey || e.metaKey) && e.key === 'n'){
+    e.preventDefault();
+    showCreateModal();
+  }
+  // Ctrl/Cmd + F 聚焦搜索
+  if((e.ctrlKey || e.metaKey) && e.key === 'f'){
+    // 只在非编辑器页面生效
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+});
+
+/* ============================================================
+   初始化
+============================================================ */
+render();
+
+})();
+</script>
+</body>
+</html>

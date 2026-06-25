@@ -908,8 +908,8 @@ P2：{未来方向或后续沉淀}
 | hotspot-radar | 当用户需要 AI 行业信息查找类提示词时，建议使用 hotspot-radar 内置的 AI HOT 数据源 |
 | oral-copy | 当用户需要口播文案或公众号长文创作类提示词时，参考 oral-copy 的文案公式 |
 | neat-freak | 会话结束时，将本次提示词决策经验同步到记忆 |
-| book2skill | 毛选方法论技能库由 book2skill 从《毛泽东选集》中蒸馏提取 |
 | darwin-skill | 可用于优化 prompt-flow 及其他技能的质量 |
+| knowledge-extractor | 当用户需要先抽问题、抽引用或补标签时，优先用结构化提取替代松散读材料 |
 
 **与毛选方法论技能库的深度整合**：
 
@@ -959,7 +959,7 @@ P2：{未来方向或后续沉淀}
 
 优先使用的 Fabric 风格模块：
 - `improve_prompt`：把已有 prompt 打磨成更稳的执行指令
-- `suggest_pattern`：把“这个任务该怎么做”映射成更合适的 skill / workflow
+- `suggest_pattern`：直接吸收原 `suggest-skill` 的路由职责，把“这个任务该怎么做”映射成更合适的 skill / workflow
 
 使用原则：
 - 不要因为能优化 prompt 就跳过前置澄清

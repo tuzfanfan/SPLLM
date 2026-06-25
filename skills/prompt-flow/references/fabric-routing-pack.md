@@ -32,7 +32,7 @@
 
 对 `E:\SPLLM\skills` 的优先映射：
 - 研究型：`hv-analysis`
-- 书籍蒸馏：`book2skill`
+- 结构化提取：`knowledge-extractor`
 - 文案与长文：`oral-copy`
 - 热点采集：`hotspot-radar`
 - 近 30 天社会回声研究：`last30days`

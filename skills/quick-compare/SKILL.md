@@ -57,7 +57,7 @@ description: Quickly compare two or more products, concepts, tools, companies, o
 ## 邻近 skill 边界
 
 - 与 `hv-analysis`：本 skill 做轻量比对，后者做正式深研
-- 与 `suggest-skill`：如果用户不知道该不该比，就先 route，再决定是否进 quick compare
+- 与 `prompt-flow`：如果用户还处在“这事该怎么走”的阶段，先让前置路由判断是否该进入 quick compare
 
 ## 规则
 

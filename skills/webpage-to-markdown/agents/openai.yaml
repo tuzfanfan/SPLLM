@@ -1,4 +1,4 @@
 interface:
   display_name: "Webpage To Markdown"
-  short_description: "Convert a webpage URL into clean, LLM-ready Markdown."
-  default_prompt: "Convert this webpage into clean Markdown and save the result if needed."
+  short_description: "Compatibility wrapper; prefer net-to-markdown for new webpage conversion work."
+  default_prompt: "Use the canonical $net-to-markdown router for this webpage, keeping webpage-to-markdown only as a compatibility path."

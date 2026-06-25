@@ -1,0 +1,4 @@
+interface:
+  display_name: "Net To Markdown"
+  short_description: "Canonical routing entry for webpage and social-source Markdown conversion."
+  default_prompt: "Use $net-to-markdown as the canonical router to convert this URL or social export into clean, traceable Markdown."

@@ -596,13 +596,13 @@ Check 类任务也统一采用“材料 - 指令 - 输出 - schema”四段结�
 
 **参考技能**：类型D长文写作时，可参考 **khazix-writer** 技能（`e:\SPLLM\skills\khazix-writer/`）的完整风格示例库和内容方法论
 
-### 3.9 Book2Skill（书籍蒸馏）【按需触发】
+### 3.9 Knowledge Extractor（知识提取）【按需触发】
 
-**触发规则**：当用户说"拆书"、"蒸馏一本书"、"把XX书做成skill"、"turn a book into skills"时触发
+**触发规则**：当用户说“提取问题”“抽引用”“补标签”“整理检索标签”“看看这篇提到了哪些人/书/论文”时触发
 
-**技能**：使用 **book2skill** 技能（`e:\SPLLM\skills\book2skill/SKILL.md`）
+**技能**：使用 **knowledge-extractor** 技能（`e:\SPLLM\skills\knowledge-extractor/SKILL.md`）
 
-**来源**：基于 RIA-TV++ 方法论，将书籍中的方法论/框架/原则蒸馏为原子化、可被 agent 调用的 skills
+**来源**：由原 `question-extractor`、`reference-extractor`、`tag-generator` 收缩合并而成，负责前置结构化提取
 
 **核心流程**：
 ```

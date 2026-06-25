@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "帮我从这份访谈 transcript 里把用户真正的问题抽出来，顺便归并成几类高频问题。",
+    "expected": "触发 knowledge-extractor 的 questions 模式，输出原始问题、归并主题、高频问题和待回答问题。"
+  },
+  {
+    "id": 2,
+    "prompt": "看看这篇研究笔记里提到了哪些书、论文、人物和案例，顺便标出值得建页的候选。",
+    "expected": "触发 knowledge-extractor 的 references 模式，并按对象类型归类。"
+  },
+  {
+    "id": 3,
+    "prompt": "给这篇 wiki 页面补一组检索标签，不要营销词，最好能和现有知识结构对齐。",
+    "expected": "触发 knowledge-extractor 的 tags 模式，输出主标签、补充标签和不建议采用的标签。"
+  }
+]

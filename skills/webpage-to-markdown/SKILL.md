@@ -1,23 +1,27 @@
 ---
 name: webpage-to-markdown
-description: Convert a webpage URL into clean, LLM-ready Markdown using either direct fetch or a real browser session. Use when the user wants to turn an article, blog post, documentation page, reference URL, WeChat article, logged-in page, or client-rendered page into Markdown for notes, Obsidian, wiki ingestion, RAG, prompt input, or structured reading. Trigger on requests such as "convert this webpage to markdown", "extract the main body from this page", "clean this page for LLMs", "save this URL as markdown", "make this page suitable for Obsidian", or "open this page in the browser and turn it into markdown".
+description: Compatibility wrapper for webpage-only Markdown conversion. Prefer `net-to-markdown` for all new work. This skill now forwards to `net-to-markdown/backends/webpage/` so existing prompts and scripts keep working while the canonical architecture moves under `net-to-markdown`.
 ---
 
 # Webpage To Markdown
 
-Convert a webpage into usable Markdown with either a direct-fetch script, a headless-browser script, a one-command auto-router, or a real-browser-session script. Prefer this skill when the main job is extraction and cleanup, not broad multi-page crawling.
+This skill is now a compatibility shell. The canonical architecture is `net-to-markdown`, and the actual webpage backend lives under `net-to-markdown/backends/webpage/`.
+
+Use this skill only when you need backward compatibility with older prompts, docs, or scripts. For all new webpage, WeChat, browser-session, or future web-source work, enter through `net-to-markdown`.
 
 Read [workflow.md](E:\SPLLM\skills\webpage-to-markdown\references\workflow.md) only when you need the fit/limits summary. The core workflow is below.
 
 ## Quick Start
 
-Run the direct-fetch converter script:
+Run the canonical router instead:
 
 ```powershell
-python E:\SPLLM\skills\webpage-to-markdown\scripts\convert_webpage.py "https://example.com/article" -o "E:\SPLLM\outputs\article.md"
+python E:\SPLLM\skills\net-to-markdown\scripts\net_to_markdown.py "https://example.com/article" -o "E:\SPLLM\outputs\article.md"
 ```
 
-Run the one-command auto-router:
+If you must keep an old command shape, the wrapper scripts below still forward to the net backend.
+
+Run the webpage auto wrapper:
 
 ```powershell
 python E:\SPLLM\skills\webpage-to-markdown\scripts\convert_auto.py "https://example.com/article" -o "E:\SPLLM\outputs\article.md"
@@ -148,4 +152,4 @@ Proceed only when `running` is true and `extension_connected` is true.
 
 ## Important Note
 
-This skill is stored in `E:\SPLLM\skills\`, which matches the project's own skill convention. It is not one of Codex's default global auto-discovery roots, so future automatic triggering depends on project-level instructions or copying the skill into a global Codex skill directory later.
+This skill remains only as a compatibility alias. Future webpage-related backends should be added under `E:\SPLLM\skills\net-to-markdown\backends\`.

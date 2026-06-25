@@ -64,7 +64,7 @@
 
 ```
 e:\SPLLM/
-├── book/                 # Layer 1：精品书籍素材（配合 book2skill 技能）
+├── book/                 # Layer 1：精品书籍素材（供后续方法论提炼与知识沉淀使用）
 ├── raw/                  # Layer 1：原始材料（只读，不修改）
 ├── skills/               # 技能插件目录
 │   ├── hv-analysis/      # 横纵分析法深度研究技能（v2.0，含商业化分析）
@@ -555,46 +555,15 @@ skills/khazix-writer/
 - 绝对禁区（禁用词/标点禁令/结构性套话）
 - 四层自检体系（L1硬性规则→L2风格一致性→L3内容质量→L4活人感终审）
 
-#### book2skill（书籍蒸馏）
+#### knowledge-extractor（知识提取）
 
 | 属性 | 值 |
 |------|-----|
-| 名称 | book2skill |
-| 来源 | [github.com/kangarooking/cangjie-skill](https://github.com/kangarooking/cangjie-skill) |
-| 用途 | 将一本书的方法论/框架/原则蒸馏为原子化、可被 agent 调用的 skills（RIA-TV++ 流水线） |
-| 位置 | `e:\SPLLM\skills\book2skill/` |
-| 触发规则 | 按需触发（用户说"拆书"/"蒸馏一本书"/"把XX书做成skill"时） |
-
-**文件结构**：
-```
-skills/book2skill/
-├── SKILL.md                      # 技能定义（RIA-TV++ 六阶段流水线 + 质量红线）
-├── methodology/                  # 方法论文档（6个阶段的详细说明）
-│   ├── 00-overview.md
-│   ├── 01-stage0-adler.md
-│   ├── 02-stage1-parallel-extract.md
-│   ├── 03-stage1.5-triple-verify.md
-│   ├── 04-stage2-ria-plus.md
-│   ├── 05-stage3-zettelkasten.md
-│   └── 06-stage4-pressure-test.md
-├── extractors/                   # 5个并行提取器 prompt
-│   ├── framework-extractor.md
-│   ├── principle-extractor.md
-│   ├── case-extractor.md
-│   ├── counter-example-extractor.md
-│   └── glossary-extractor.md
-└── templates/                    # 输出模板
-    ├── BOOK_OVERVIEW.md.template
-    ├── INDEX.md.template
-    ├── SKILL.md.template
-    └── test-prompts.json.template
-```
-
-**核心方法论**：
-- RIA-TV++ 六阶段流水线（Adler理解→并行提取→三重验证→RIA++构造→Zettelkasten链接→压力测试）
-- 三重验证（跨域佐证/预测力/独特性），通过率通常 25-50%
-- RIA++ 结构（Reading/Interpretation/A1书中案例/A2未来触发/E可执行步骤/B边界盲点）
-- 生态定位：nuwa-skill（蒸馏人）+ book2skill（蒸馏书）+ darwin-skill（进化skill）
+| 名称 | knowledge-extractor |
+| 来源 | 项目内生技能（由 `question-extractor`、`reference-extractor`、`tag-generator` 收缩合并） |
+| 用途 | 从 transcript、文章、研究笔记、wiki 页面里抽取问题、引用对象与检索标签 |
+| 位置 | `e:\SPLLM\skills\knowledge-extractor/` |
+| 触发规则 | 按需触发（用户说“提取问题”“抽引用”“补标签”“整理检索标签”时） |
 
 #### darwin-skill（技能优化器）
 
@@ -636,10 +605,10 @@ Phase 2.5: 探索性重写 → 突破局部最优（需用户同意）
 Phase 3: 汇总报告 → 生成分数变化表和成果卡片
 ```
 
-**与 book2skill 的关系**：
-- book2skill：从书籍中提取新skill
+**与其他技能的关系**：
+- knowledge-extractor：负责前置结构化提取
 - darwin-skill：优化已有skill的质量
-- 生态定位：nuwa-skill（蒸馏人）+ book2skill（蒸馏书）+ darwin-skill（进化skill）
+- 生态定位：先抽结构，再写作、研究或固化
 
 ### 5.3 技能使用约定
 

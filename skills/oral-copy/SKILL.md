@@ -579,8 +579,8 @@ AI：按四层自检体系检查 → 输出修改建议
 
 优先使用的 Fabric 模块：
 - `humanize`：给成稿去 AI 味，增强自然表达
-- `create_newsletter_entry`：把长文扩展成 newsletter 条目
-- `create_tags`：为文章、周报、wiki 页面补标签
+- `create_newsletter_entry`：直接吸收原 `newsletter-entry` 的分发职责，把长文压成 newsletter / 周报条目
+- `create_tags`：直接吸收原 `tag-generator` 的补标签职责，为文章、周报、wiki 页面补标签
 
 使用原则：
 - `humanize` 只做润色，不改正文真实信息和判断方向

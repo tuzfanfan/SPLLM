@@ -1,0 +1,3 @@
+interface:
+  display_name: "Knowledge Extractor"
+  short_description: "Extract questions, references, and tags from source text"

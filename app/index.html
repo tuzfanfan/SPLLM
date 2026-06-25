@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <title>窗口文本朗读器 - 设置</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>⚙ 窗口文本朗读器</h1>
+    <p class="subtitle">后台自动监控窗口文本并朗读</p>
+
+    <!-- 状态指示 -->
+    <div id="statusBar" class="status-bar">
+      <span id="statusDot" class="status-dot"></span>
+      <span id="statusText">未启动</span>
+    </div>
+
+    <!-- TTS 朗读控制 -->
+    <div id="ttsControls" class="tts-controls">
+      <span class="tts-label">朗读控制:</span>
+      <button id="pauseTtsBtn" class="btn-tts" title="暂停朗读">⏸ 暂停</button>
+      <button id="resumeTtsBtn" class="btn-tts" title="继续朗读">▶ 继续</button>
+      <button id="stopTtsBtn" class="btn-tts btn-tts-stop" title="停止朗读">⏹ 停止</button>
+    </div>
+
+    <!-- 设置表单 -->
+    <form id="settingsForm">
+      <fieldset>
+        <legend>监控设置</legend>
+        <div class="field">
+          <label for="pollingInterval">轮询间隔 (ms)</label>
+          <input type="range" id="pollingInterval" min="200" max="2000" step="100" value="500">
+          <span id="pollingIntervalVal">500ms</span>
+        </div>
+        <div class="field">
+          <label for="debounceDelay">防抖延迟 (ms)</label>
+          <input type="range" id="debounceDelay" min="1000" max="10000" step="500" value="3000">
+          <span id="debounceDelayVal">3000ms</span>
+        </div>
+        <div class="field">
+          <label for="minTextLength">最短文本长度 (字符)</label>
+          <input type="number" id="minTextLength" min="1" max="50" value="10">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>忽略列表</legend>
+        <p class="hint">输入窗口标题的正则表达式，每行一个。匹配的窗口将被跳过。</p>
+        <textarea id="ignorePatterns" rows="5" placeholder="^Calculator$&#10;^Task Switching$"></textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend>启动选项</legend>
+        <div class="checkbox-field">
+          <input type="checkbox" id="autoStart">
+          <label for="autoStart">开机自动启动</label>
+        </div>
+        <div class="checkbox-field">
+          <input type="checkbox" id="enabled" checked>
+          <label for="enabled">启用监控</label>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">保存设置</button>
+        <button type="button" id="resetBtn" class="btn btn-secondary">恢复默认</button>
+      </div>
+    </form>
+
+    <div class="footer">
+      <p>窗口文本朗读器 v1.0.0</p>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

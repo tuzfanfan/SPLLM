@@ -7,6 +7,7 @@
 <style>
 /* ============ Totality Festival Tokens ============ */
 :root{
+  /* ---- 色彩 ---- */
   --bg: #070711;
   --surface: #111126;
   --surface-warm: #1e1540;
@@ -54,6 +55,41 @@
   --motion-fast: 150ms;
   --motion-base: 240ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --glass-bg: rgba(17,17,38,.85);
+  --overlay-bg: rgba(7,7,17,.7);
+}
+
+/* ---- 浅色主题 ---- */
+[data-theme="light"]{
+  --bg: #f5f3f0;
+  --surface: #ffffff;
+  --surface-warm: #faf8f5;
+  --fg: #1a1720;
+  --fg-2: #3d3550;
+  --muted: #8a8098;
+  --meta: #7c5cbf;
+  --border: #ddd8e0;
+  --border-soft: #ece8ef;
+  --accent: #8b5cf6;
+  --accent-on: #f5f3ff;
+  --accent-hover: color-mix(in oklab, var(--accent), black 6%);
+  --accent-active: color-mix(in oklab, var(--accent), black 12%);
+  --success: #22c55e;
+  --warn: #eab308;
+  --danger: #ef4444;
+  --c-char: #8b5cf6;
+  --c-shot: #6366f1;
+  --c-line: #f59e0b;
+  --c-scene: #10b981;
+  --c-branch: #f59e0b;
+  --c-end: #ec4899;
+  --accent-glow: color-mix(in oklab, var(--accent) 10%, transparent);
+  --surface-elev: #f0edf5;
+  --surface-active: #e8e4f0;
+  --elev-raised: 0 24px 80px rgba(139, 92, 246, 0.10);
+  --focus-ring: 0 0 0 4px rgba(139, 92, 246, 0.20);
+  --glass-bg: rgba(255,255,255,.88);
+  --overlay-bg: rgba(26,23,32,.35);
 }
 *{box-sizing:border-box; margin:0; padding:0}
 html,body{height:100%}
@@ -63,15 +99,17 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
+  transition: background var(--motion-base) var(--ease-standard), color var(--motion-base) var(--ease-standard);
 }
 
 /* ============ 背景 ============ */
 .bg-layer{
   position:fixed; inset:0; z-index:0; pointer-events:none;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(192,132,252,.06) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 50% at 30% 70%, rgba(129,140,248,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 50% 40%, var(--accent-glow) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 30% 70%, color-mix(in oklab, var(--accent) 4%, transparent) 0%, transparent 60%),
     var(--bg);
+  transition: background var(--motion-base) var(--ease-standard);
 }
 
 /* ============ 布局 ============ */
@@ -81,11 +119,12 @@ body{
 .topbar{
   height:56px; display:flex; align-items:center; gap:12px;
   padding:0 var(--space-6);
-  background:rgba(17,17,38,.85);
+  background:var(--glass-bg);
   border-bottom:1px solid var(--border);
   backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
   position:sticky; top:0; z-index:50;
   flex-shrink:0;
+  transition: background var(--motion-base) var(--ease-standard), border-color var(--motion-base) var(--ease-standard);
 }
 .brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:var(--text-lg); letter-spacing:var(--tracking-display); color:var(--fg); white-space:nowrap}
 .brand .logo{font-size:var(--text-xl); filter:drop-shadow(0 0 8px rgba(192,132,252,.4))}
@@ -120,6 +159,35 @@ body{
 }
 .btn-primary:hover{background:var(--accent-hover); transform:translateY(-1px)}
 .btn-primary:active{background:var(--accent-active); transform:translateY(0)}
+
+/* 主题切换按钮 */
+.theme-toggle-entry{
+  width:34px; height:34px; border-radius:var(--radius-sm);
+  border:1px solid var(--border); background:var(--surface);
+  color:var(--fg-2); font-size:15px;
+  display:inline-flex; align-items:center; justify-content:center;
+  transition: all var(--motion-fast) var(--ease-standard);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-body);
+}
+.theme-toggle-entry:hover{
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+.theme-toggle-entry:active{background:var(--surface-active)}
+.theme-toggle-entry .icon-dark,
+.theme-toggle-entry .icon-light{
+  position: absolute;
+  transition: all var(--motion-base) var(--ease-standard);
+}
+[data-theme="dark"] .theme-toggle-entry .icon-dark{ opacity:1; transform:scale(1); }
+[data-theme="dark"] .theme-toggle-entry .icon-light{ opacity:0; transform:scale(0.5); }
+[data-theme="light"] .theme-toggle-entry .icon-dark{ opacity:0; transform:scale(0.5); }
+[data-theme="light"] .theme-toggle-entry .icon-light{ opacity:1; transform:scale(1); }
 
 /* ============ 主内容区 ============ */
 .main{
@@ -182,6 +250,7 @@ body{
   height:140px; position:relative; overflow:hidden;
   background:linear-gradient(135deg, var(--surface-warm) 0%, var(--surface) 100%);
   display:flex; align-items:center; justify-content:center;
+  transition: background var(--motion-base) var(--ease-standard);
 }
 .card-cover canvas{
   position:absolute; inset:0; width:100%; height:100%;
@@ -190,6 +259,10 @@ body{
   position:absolute; inset:0;
   background:linear-gradient(180deg, transparent 50%, rgba(7,7,17,.6) 100%);
   z-index:1;
+  transition: background var(--motion-base) var(--ease-standard);
+}
+[data-theme="light"] .card-cover .cover-overlay{
+  background:linear-gradient(180deg, transparent 50%, rgba(26,23,32,.1) 100%);
 }
 .card-cover .node-count-badge{
   position:absolute; top:10px; right:10px; z-index:2;
@@ -267,9 +340,10 @@ body{
 /* ============ 对话框 ============ */
 .modal-overlay{
   position:fixed; inset:0; z-index:100;
-  background:rgba(7,7,17,.7); backdrop-filter:blur(8px);
+  background:var(--overlay-bg); backdrop-filter:blur(8px);
   display:none; align-items:center; justify-content:center;
   padding:var(--space-4);
+  transition: background var(--motion-base) var(--ease-standard);
 }
 .modal-overlay.active{display:flex}
 .modal{
@@ -360,6 +434,10 @@ body{
       <input type="text" id="searchInput" placeholder="搜索项目…" autocomplete="off" />
     </div>
     <button class="btn-ghost" id="btnImport" style="height:34px;padding:0 14px;font-size:var(--text-sm)">📤 导入</button>
+    <button class="theme-toggle-entry" id="btn-theme-entry" title="切换深色/浅色主题" aria-label="切换主题">
+      <span class="icon-dark">🌙</span>
+      <span class="icon-light">☀️</span>
+    </button>
     <button class="btn-primary" id="btnNew">
       <span>＋</span> 新建项目
     </button>
@@ -425,6 +503,22 @@ body{
 <script>
 (function(){
 'use strict';
+
+/* ============================================================
+   主题管理（与 index.html 共享）
+============================================================ */
+const THEME_LS_KEY = 'comic-canvas:theme';
+let currentTheme = 'dark';
+try { currentTheme = localStorage.getItem(THEME_LS_KEY) || 'dark'; } catch(_) {}
+if(currentTheme === 'light'){
+  document.documentElement.setAttribute('data-theme', 'light');
+}
+
+function toggleEntryTheme(){
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  try { localStorage.setItem(THEME_LS_KEY, currentTheme); } catch(_) {}
+}
 
 /* ============================================================
    常量 & 工具
@@ -516,10 +610,15 @@ function generateCover(canvas, project){
   const rw = canvas.offsetWidth;
   const rh = canvas.offsetHeight;
 
-  // 背景渐变
+  // 背景渐变（深色用紫调，浅色用灰白过渡）
   const grad = ctx.createLinearGradient(0, 0, rw, rh);
-  grad.addColorStop(0, '#1e1540');
-  grad.addColorStop(1, '#111126');
+  if(currentTheme === 'dark'){
+    grad.addColorStop(0, '#1e1540');
+    grad.addColorStop(1, '#111126');
+  } else {
+    grad.addColorStop(0, '#f0edf5');
+    grad.addColorStop(1, '#e8e4f0');
+  }
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, rw, rh);
 
@@ -548,7 +647,8 @@ function generateCover(canvas, project){
   });
 
   // 连线
-  ctx.strokeStyle = 'rgba(192,132,252,0.15)';
+  const connColor = currentTheme === 'dark' ? 'rgba(192,132,252,0.15)' : 'rgba(139,92,246,0.12)';
+  ctx.strokeStyle = connColor;
   ctx.lineWidth = 1;
   for(let i = 0; i < nodes.length; i++){
     const connections = 1 + Math.floor(rand() * 2);
@@ -1105,6 +1205,13 @@ document.addEventListener('keydown', (e) => {
 /* ============================================================
    初始化
 ============================================================ */
+
+// 主题切换按钮
+const themeBtnEntry = document.getElementById('btn-theme-entry');
+if(themeBtnEntry){
+  themeBtnEntry.addEventListener('click', toggleEntryTheme);
+}
+
 render();
 
 })();

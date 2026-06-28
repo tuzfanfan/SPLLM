@@ -28,8 +28,10 @@
   --c-shot: #818cf8;
   --c-line: #fb923c;
   --c-scene: #34d399;
-  --c-branch: #fbbf24;
   --c-end: #ff6b9d;
+  --c-visual: #22d3ee;
+  --c-asset: #a3e635;
+  --c-page: #f472b6;
   --accent-glow: color-mix(in oklab, var(--accent) 18%, transparent);
   --surface-elev: #1a1a3e;
   --surface-active: #252552;
@@ -81,8 +83,10 @@
   --c-shot: #6366f1;
   --c-line: #f59e0b;
   --c-scene: #10b981;
-  --c-branch: #f59e0b;
   --c-end: #ec4899;
+  --c-visual: #0891b2;
+  --c-asset: #65a30d;
+  --c-page: #db2777;
   --accent-glow: color-mix(in oklab, var(--accent) 10%, transparent);
   --surface-elev: #f0edf5;
   --surface-active: #e8e4f0;
@@ -527,11 +531,13 @@ const PROJECT_REG_KEY = 'comic-canvas:projects';
 const DEFAULT_LS_KEY = 'comic-canvas:v1';
 const TYPE_COLORS = {
   char:'#c084fc', shot:'#818cf8', line:'#fb923c',
-  scene:'#34d399', branch:'#fbbf24', end:'#ff6b9d'
+  scene:'#34d399', end:'#ff6b9d',
+  visual:'#22d3ee', asset:'#a3e635', page:'#f472b6'
 };
 const TYPE_LABELS = {
   char:'角色', shot:'分镜', line:'台词',
-  scene:'场景', branch:'分支', end:'结局'
+  scene:'场景', end:'结局',
+  visual:'视觉', asset:'资产', page:'页面帧'
 };
 
 function genId(){ return 'p_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,8); }

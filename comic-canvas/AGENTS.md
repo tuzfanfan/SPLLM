@@ -1,4 +1,4 @@
-# CLAUDE.md — 漫剧画布 (comic-canvas) 项目指南
+# AGENTS.md — 漫剧画布 (comic-canvas) 项目指南
 
 > 本文件为 AI 编程助手提供项目上下文。修改代码前请务必通读。
 
@@ -131,7 +131,7 @@ node --check /tmp/check.js
 ### 7. AI 设置
 
 - 存储在 `localStorage` key `comic-canvas:ai-settings`
-- 格式：`{endpoint, apiKey, model}`，兼容 OpenAI / DeepSeek / Qwen / Claude 等
+- 格式：`{endpoint, apiKey, model}`，兼容 OpenAI / DeepSeek / Qwen / Codex 等
 - 预览弹窗需要 `flexbox column` 布局，防止长内容把按钮挤出视口
 
 ### 8. 设计系统

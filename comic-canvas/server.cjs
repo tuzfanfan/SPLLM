@@ -59,6 +59,15 @@ function scanPlugins(dir, base) {
 function handleProxy(req, res, targetUrl) {
   const parsed = new URL(targetUrl);
   const lib = parsed.protocol === 'https:' ? https : httpLib;
+  let responded = false;
+
+  const sendProxyError = (err) => {
+    if (responded || res.writableEnded || res.destroyed) return;
+    responded = true;
+    console.error('[proxy]', err.message);
+    res.writeHead(502, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Proxy Error: ' + err.message);
+  };
 
   // 转发请求头（排除 host，使用目标域名）
   const fwdHeaders = { ...req.headers };
@@ -79,6 +88,10 @@ function handleProxy(req, res, targetUrl) {
   };
 
   const proxy = lib.request(opts, (upstream) => {
+    if (responded || res.writableEnded || res.destroyed) {
+      upstream.resume();
+      return;
+    }
     // 设置 CORS 响应头
     res.setHeader('Access-Control-Allow-Origin',  '*');
     res.setHeader('Access-Control-Allow-Methods', '*');
@@ -90,15 +103,15 @@ function handleProxy(req, res, targetUrl) {
     for (const [k, v] of Object.entries(upstream.headers)) {
       if (!skip.has(k.toLowerCase())) res.setHeader(k, v);
     }
+    responded = true;
     res.writeHead(upstream.statusCode);
     upstream.pipe(res, { end: true });
+    upstream.on('error', sendProxyError);
   });
 
-  proxy.on('error', (err) => {
-    console.error('[proxy]', err.message);
-    res.writeHead(502, { 'Content-Type': 'text/plain' });
-    res.end('Proxy Error: ' + err.message);
-  });
+  proxy.on('error', sendProxyError);
+  proxy.setTimeout(20000, () => proxy.destroy(new Error('Proxy Timeout')));
+  req.on('aborted', () => proxy.destroy(new Error('Client Aborted')));
 
   // 转发请求体（POST / PUT 等）
   req.pipe(proxy, { end: true });

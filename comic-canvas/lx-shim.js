@@ -220,11 +220,23 @@
 
   /* ==================== 插件加载器 ==================== */
   const _pluginsLoaded = [];
+  let _pluginsLoadedOnce = false;
+  let _loadPromise = null;
 
-  async function loadPlugins() {
+  async function loadPlugins(force = false) {
+    if (_loadPromise && !force) return _loadPromise;
+    if (_pluginsLoadedOnce && !force) return Promise.resolve();
+    if (force) {
+      _pluginsLoaded.length = 0;
+      _pluginInits.length = 0;
+      if (_listeners[EVENT_NAMES.request]) _listeners[EVENT_NAMES.request] = [];
+      _pluginsLoadedOnce = false;
+    }
+    _loadPromise = (async () => {
     try {
       const resp = await fetch('/api/plugins');
       const plugins = await resp.json();
+      _pluginsLoadedOnce = true;
       if (!plugins.length) {
         console.log('[LX shim] 未发现音源插件');
         return;
@@ -243,10 +255,9 @@
           currentScriptInfo.rawScript = srcText;
           currentScriptInfo.info = { name: plugin.name };
 
-          // 动态执行插件
-          const scriptEl = document.createElement('script');
-          scriptEl.textContent = srcText;
-          document.head.appendChild(scriptEl);
+          // 以独立作用域执行每个插件，避免不同插件之间的顶层 const/let 互相冲突
+          const runner = new Function(srcText);
+          runner();
 
           _pluginsLoaded.push(plugin.name);
           console.log(`[LX shim] ✓ 已加载: ${plugin.name}`);
@@ -262,15 +273,55 @@
     } catch (err) {
       console.error('[LX shim] 加载插件列表失败:', err);
     }
+    })().catch(err => {
+      console.error('[LX shim] 插件加载过程失败:', err);
+    }).finally(() => {
+      _loadPromise = null;
+    });
+    return _loadPromise;
   }
 
   /* ==================== 统一对外接口 ==================== */
+  function getSourceCandidates(source) {
+    const primary = String(source || 'wy').trim() || 'wy';
+    const aliases = {
+      wy: ['wy', 'qsvip'],
+      qsvip: ['qsvip', 'wy'],
+      tx: ['tx'],
+      kw: ['kw'],
+      kg: ['kg'],
+      mg: ['mg'],
+      local: ['local'],
+    };
+    return aliases[primary] ? [...aliases[primary]] : [primary];
+  }
+
+  function getCandidateHandlers(source) {
+    const handlers = _listeners[EVENT_NAMES.request] || [];
+    if (!handlers.length) return [];
+
+    const accepted = new Set(getSourceCandidates(source));
+    const matched = handlers.filter((handler, index) => {
+      const init = _pluginInits[index];
+      const supported = init && init.sources ? Object.keys(init.sources) : [];
+      return !supported.length || supported.some(key => accepted.has(key));
+    });
+
+    return matched.length ? matched : handlers;
+  }
+
   window.LXPlugins = {
     /** 获取已加载的插件名称列表 */
     get loaded() { return [..._pluginsLoaded]; },
 
     /** 获取各插件的 init 数据（包含支持的音源信息） */
     get inits() { return [..._pluginInits]; },
+
+    /** 等待当前插件加载流程结束 */
+    ready() { return _loadPromise || (_pluginsLoadedOnce ? Promise.resolve() : loadPlugins()); },
+
+    /** 手动重载插件，适合服务重启后页面未刷新的情况 */
+    reload() { return loadPlugins(true); },
 
     /**
      * 请求播放链接
@@ -280,7 +331,8 @@
      * @returns {Promise<string>} 播放 URL
      */
     async requestUrl(source, musicInfo, quality = '128k') {
-      const handlers = _listeners[EVENT_NAMES.request] || [];
+      await loadPlugins().catch(() => {});
+      const handlers = getCandidateHandlers(source);
       if (!handlers.length) throw new Error('无可用插件处理器');
 
       const info = { musicInfo, type: quality };
@@ -309,7 +361,8 @@
      * @returns {Promise<{list: Array, total: number, isEnd: boolean}>}
      */
     async search(keyword, source = 'qsvip', page = 1) {
-      const handlers = _listeners[EVENT_NAMES.request] || [];
+      await loadPlugins().catch(() => {});
+      const handlers = getCandidateHandlers(source);
       if (!handlers.length) throw new Error('无可用插件处理器');
 
       const info = { keyword, page, pagesize: 30 };
@@ -341,7 +394,7 @@
       id: String(s.id ?? s.songmid ?? s.hash ?? s.songId ?? ''),
       name: s.name ?? s.title ?? '',
       artist: s.singer ?? s.artist ?? s.authors?.map(a => a.name).join(', ') ?? '',
-      album: s.album ?? s.albumName ?? '',
+      album: s.albumName ?? s.album?.name ?? s.album ?? '',
       pic: s.pic ?? s.picUrl ?? s.coverUrl ?? '',
       source: s.source ?? '',
       songmid: s.songmid ?? s.mid ?? '',
@@ -358,5 +411,7 @@
   } else {
     loadPlugins();
   }
+
+  window.reloadMusicPlugins = () => loadPlugins(true);
 
 })();

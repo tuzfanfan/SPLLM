@@ -525,6 +525,96 @@
 }
 
 /* ==================== 播放列表面板 ==================== */
+#music-player .mp-backend-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 8, 20, 0.66);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: calc(var(--mp-z) + 20);
+}
+
+#music-player .mp-backend-dialog {
+  width: min(720px, calc(100vw - 32px));
+  max-height: min(78vh, 720px);
+  display: flex;
+  flex-direction: column;
+  background: var(--mp-bg2);
+  border: 1px solid var(--mp-border);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.42);
+  overflow: hidden;
+}
+
+#music-player .mp-backend-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--mp-border);
+  color: var(--mp-fg);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#music-player .mp-backend-body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+}
+
+#music-player .mp-backend-tip {
+  color: var(--mp-fg2);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#music-player .mp-backend-textarea {
+  width: 100%;
+  min-height: 340px;
+  resize: vertical;
+  border: 1px solid var(--mp-border);
+  border-radius: 12px;
+  background: var(--mp-hover);
+  color: var(--mp-fg);
+  font: 12px/1.5 Consolas, Monaco, monospace;
+  padding: 12px;
+  outline: none;
+}
+
+#music-player .mp-backend-textarea:focus {
+  border-color: var(--mp-accent);
+  box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.15);
+}
+
+#music-player .mp-backend-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px 16px;
+  border-top: 1px solid var(--mp-border);
+}
+
+#music-player .mp-backend-reset {
+  color: var(--mp-fg2);
+}
+
+#music-player .mp-backend-save {
+  background: var(--mp-accent);
+  color: #fff;
+  border-color: var(--mp-accent);
+}
+
+#music-player .mp-backend-save:hover {
+  filter: brightness(1.08);
+}
+
 #music-player .mp-playlist-panel {
   position: fixed;
   bottom: calc(var(--mp-bar-h) + 8px);

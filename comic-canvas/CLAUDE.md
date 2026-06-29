@@ -1,218 +1,244 @@
-# CLAUDE.md — 漫剧画布 (comic-canvas) 项目指南
+# CLAUDE.md - comic-canvas project handoff guide
 
-> 本文件为 AI 编程助手提供项目上下文。修改代码前请务必通读。
+This file is the project-level rulebook for any AI agent working in `E:\apps\comic-canvas`.
 
-## 项目概述
+Read this file before changing code.
+Read [log.md](/E:/apps/comic-canvas/log.md) before changing code.
 
-漫剧画布是一个基于浏览器的漫画/分镜创作工具，使用可视化节点画布组织角色、分镜、台词、场景等创作元素。
+## Non-negotiable rule
 
-- **位置**: `E:\apps\comic-canvas`
-- **技术栈**: 单文件 vanilla HTML/JS，无构建工具，无框架
-- **核心依赖**: Drawflow 0.0.60（内联在 index.html 中）、Three.js v0.160.0（CDN）
+No matter which agent takes over this project, every code or rule change must be recorded in `log.md` with a timestamp.
 
----
+Minimum requirement for every log entry:
 
-## 启动方式（重要！）
+- timestamp
+- agent name or source
+- files changed
+- what changed
+- why it changed
+- compatibility notes or follow-up risk
+
+If you modify code and do not update `log.md`, the work is incomplete.
+
+## Project purpose
+
+`comic-canvas` is a browser-based storyboarding and comic/video planning tool built around a visual node canvas.
+
+It started as a lightweight comic node editor and is now being pushed toward a more film-ready, AI-video-friendly workflow tool. The current direction is:
+
+- use nodes as structured production specs
+- capture cinematic shot language earlier
+- preserve scene and character continuity
+- support page/keyframe planning
+- make downstream AI generation faster and more consistent
+
+## Run and verify
+
+Always run the project with:
 
 ```bash
 cd E:\apps\comic-canvas
 node server.cjs
 ```
 
-**必须使用 `node server.cjs` 启动**，端口 8080。
+Do not use `python -m http.server`.
 
-绝对不能用 `python -m http.server`，因为 Python 服务器不提供以下关键接口：
-- `GET /api/plugins` — 扫描 `music/` 目录返回音源插件列表
-- `GET /api/proxy?url=<encoded>` — CORS 代理，音乐播放器搜索和播放歌曲的唯一通道
+Reason:
 
-没有这两个接口，音乐功能完全失效。
+- `server.cjs` provides `GET /api/plugins`
+- `server.cjs` provides `GET /api/proxy?url=<encoded>`
+- music search and playback depend on those endpoints
 
-入口页面：
-- 项目管理器: `http://localhost:8080/index-entry.html`
-- 编辑器: `http://localhost:8080/index.html` 或 `http://localhost:8080/index.html?project=xxx`
+Primary URLs:
 
----
+- project manager: `http://localhost:8080/index-entry.html`
+- editor: `http://localhost:8080/index.html`
+- project-scoped editor: `http://localhost:8080/index.html?project=<id>`
 
-## 文件结构
+## Current file map
 
-```
-index.html              主编辑器，约 6700 行，单文件包含全部应用逻辑
-index-entry.html        项目管理入口页（约 1221 行）
-server.cjs              Node.js 开发服务器（静态文件 + CORS 代理 + 插件 API）
-music-player.js         内嵌音乐播放器（搜索、播放列表、网易云 API + 洛雪插件）
-music-player.css        播放器样式
-lx-shim.js              洛雪音乐插件浏览器兼容层（模拟 lx 运行时）
-sphere3d.js             Three.js 3D 球体组件（角色头像展示）
-music/                  洛雪音源插件目录（6 个音源）
-pics/                   图标资源
-```
+- [index.html](/E:/apps/comic-canvas/index.html): main editor, single-file app, most business logic lives here
+- [index-entry.html](/E:/apps/comic-canvas/index-entry.html): project manager and multi-project launcher
+- [server.cjs](/E:/apps/comic-canvas/server.cjs): static server, proxy endpoint, plugin discovery
+- [music-player.js](/E:/apps/comic-canvas/music-player.js): embedded player, search, roaming mode
+- [music-player.css](/E:/apps/comic-canvas/music-player.css): music UI styles
+- [lx-shim.js](/E:/apps/comic-canvas/lx-shim.js): browser shim for LX music plugins
+- [sphere3d.js](/E:/apps/comic-canvas/sphere3d.js): Three.js sphere widget for character visuals
+- [log.md](/E:/apps/comic-canvas/log.md): required change log for all agents
 
-没有 `package.json`，唯一的 npm 包是 `node_modules/ws`。
+## Architecture overview
 
----
+The main app is a single IIFE inside [index.html](/E:/apps/comic-canvas/index.html). The important flow is:
 
-## index.html 架构（核心文件）
+1. `TYPE_META` and `SCHEMA` define the node system.
+2. `store` holds editor state, node data, edge data, history, theme, and UI state.
+3. `initDrawflow()` boots Drawflow and attaches event bridges into `store`.
+4. `buildNodeHtml()` renders node shells for each node type.
+5. `renderInspector()` exposes schema-driven editing in the right panel.
+6. `serialize()`, `loadFrom()`, `doExportMd()`, and AI import/export keep project data portable.
+7. `boot()` wires up the whole app.
 
-整个应用在一个 HTML 文件中，结构如下：
+The code is intentionally sectioned with large comment banners. Preserve that structure when editing.
 
-| 行号范围 | 内容 |
-|---------|------|
-| 1-184 | 设计系统 CSS 变量（Totality Festival 紫色主题，dark/light） |
-| 185-1449 | 应用 CSS（工具栏、节点、连线、容器、响应式等） |
-| 1456-1520 | SVG 滤镜定义（三层分形噪声水波纹 + 色相旋转） |
-| 1522-1661 | HTML 主体（顶栏、三栏布局：调色板/画布/检查器） |
-| 1792-1794 | Drawflow 0.0.60 库（内联压缩版） |
-| **2044-6544** | **主应用 IIFE — 所有业务逻辑都在这里** |
-| 6546-6547 | lx-shim.js 和 music-player.js 脚本引用 |
+## Current node model
 
-### IIFE 内部关键模块
+As of `2026-06-29`, the active node types are:
 
-- **TYPE_META / SCHEMA**（~line 1877-1930）：7 种节点类型定义（char/shot/line/scene/branch/end/container）
-- **store**（~line 1945-1970）：全局状态中心，包含 editor、data、undo/redo 历史等
-- **initDrawflow()**（~line 2676）：Drawflow 实例化和事件绑定
-- **容器节点系统**（~line 3059-3105）：`assignNodeToContainer` / `findContainerUnderNode`，父子关系管理、拖拽放入
-- **容器自由缩放**（~line 3265-3460, `initContainerResize` IIFE）：8 方向拖拽缩放（4 角 + 4 边），`setProperty(value, 'important')` 写入尺寸
-- **拖拽增强**（~line 3111-3260, `enhanceDragging` IIFE）：节点拖拽 + 容器子节点同帧同步移动 + 容器重叠检测
-- **连线吸附**（~line 2920-3055）：三种模式（网格/节点/端口），端口吸附用 IIFE 实现
-- **AI 集成**（~line 4700-5000）：OpenAI 兼容 API，Markdown 导入导出
-- **boot()**（~line 6300-6370）：启动序列，初始化所有子系统
+- `char`
+- `shot`
+- `line`
+- `scene`
+- `end`
+- `container`
+- `visual`
+- `asset`
+- `page`
 
----
+Important change:
 
-## 关键注意事项（必读）
+- `branch` is no longer an active node type.
+- Old saved data may still contain `branch`.
+- Compatibility is handled by `normalizeNodeType()` in [index.html](/E:/apps/comic-canvas/index.html), which maps legacy `branch` nodes into `page`.
 
-### 1. IIFE 作用域隔离
+Do not reintroduce `branch` unless the user explicitly requests that design reversal and the downstream migration impact is documented in `log.md`.
 
-所有应用逻辑在 IIFE 内部，变量无法从全局 `window` 访问。如果需要通过浏览器控制台或 WebBridge 调试，必须通过 `store` 对象（挂载在 IIFE 内部的闭包中）或 DOM 事件间接操作。
+## Product direction
 
-### 2. IIFE 内 strict mode 的声明冲突
+The editor is no longer just a loose comic outline board. It is moving toward a structured production-planning tool for cinematic video creation.
 
-IIFE 内部使用 `'use strict'`。**绝对不能重复声明变量**——之前出过 `escapeHtml` 同时被 `const` 和 `function` 声明导致 `SyntaxError`，整个 `boot()` 未执行，所有按钮失效。
+That means agents should prefer changes that strengthen:
 
-**排查方法**：从 index.html 提取 IIFE 部分（当前约第 2044-6544 行），去掉 `<script>` 标签后用 `node --check` 验证语法：
-```bash
-sed -n '2044,6544p' index.html | grep -v '<script' | grep -v '</script' > /tmp/check.js
-node --check /tmp/check.js
-```
+- shot intention
+- continuity tracking
+- character identity lock
+- scene topology lock
+- page/keyframe planning
+- inheritance from project defaults
+- AI generation readiness
 
-### 3. Drawflow 库的坑
+Avoid changes that push the tool back toward vague note-taking.
 
-- **`removeNodeId()`** 要求完整 `"node-XX"` 格式，内部做 `e.slice(5)` 提取数字 ID。传 `"XX"` 会出错。
-- **`zoom_enter`** 默认需要 Ctrl+滚轮，项目已 override 为无需 Ctrl。
-- **`addNode()` 第 9 个参数必须传 `false`**，否则进入 Vue 渲染路径导致错误。
-- **函数作用域在 IIFE 内非全局**，Drawflow 回调中的 `this` 指向需注意。
-- **DOM 与 store 数据可能不同步**：`boot()` 异常时 Drawflow DOM 已创建节点但 store 数据为空。修复方法：用 `editor.export()` 获取 DOM 节点 ID，再调用 `removeNodeId()` 清理。
-- **`position()` 方法依赖 `offsetLeft/offsetTop`**：Drawflow 的拖拽定位使用 `ele_selected.offsetLeft - i` 计算新位置。`offsetLeft` 是相对于 `offsetParent` 的值，因此**不能将节点 DOM reparent 到容器内**（否则 offsetLeft 变成相对容器的值，位置计算完全错误）。子节点与容器必须保持平级 DOM 结构，位置同步通过 JS 手动计算 delta 实现。
+## Schema editing rules
 
-### 4. 两个连线吸附实现共存
+When changing `SCHEMA` or node behavior:
 
-- `initConnectionSnap()`（节点级，~line 2284 附近）：自动创建连接
-- `enhanceConnectionSnap` IIFE（端口级，~line 1688 附近）：视觉引导，高亮最近端口
+1. Update `TYPE_META` and `SCHEMA` together.
+2. Check whether `TITLE_FIELD`, `DESC_FIELD`, `FIELD_SECTIONS`, and AI preview ordering also need updates.
+3. Check whether Markdown export and AI import/export mappings also need updates.
+4. Check whether project manager color/label summaries in [index-entry.html](/E:/apps/comic-canvas/index-entry.html) also need updates.
+5. If removing a node type, keep or deliberately remove backward compatibility and document that choice in `log.md`.
 
-两者互补不冲突，修改时注意不要破坏另一套逻辑。
+## Drawflow constraints
 
-### 5. 容器节点（container）数据模型
+These are easy to break and must be respected:
 
-- 容器持有 `_children[]` 数组（子节点 ID 列表）
-- 子节点持有 `_parentId` 指向父容器
-- 容器支持自由拖拽缩放（8 方向手柄），尺寸存储在 `_width`/`_height` 字段
-- **子节点跟随移动**：`enhanceDragging` 的 `mousemove` 中，`editor.position(e)` 之后立即计算容器 delta 并同步更新子节点位置（DOM + Drawflow 内部 + store 三处），同帧完成无分离感。`nodeMoved` 处理器中也有跟随逻辑作为 programmatic move 的兜底
-- **子节点层级**：放入容器时 `zIndex = '5'`（高于容器的默认 `z-index: 2`），移出/删除时重置为 `''`。加载项目时在 `nodeCreated` 中通过 `_parentId` 恢复
-- **拖拽基准初始化**：容器创建时在 `nodeCreated` 中设置 `dataset._lastX/_lastY = offsetLeft/offsetTop`，防止首次拖拽时 `parseFloat(undefined) → NaN` 导致子节点不跟随
-- 删除容器会释放子节点（重置 `_parentId` 和 `zIndex`）；删除子节点会从父容器的 `_children` 中移除
-- CSS 中容器默认尺寸 `280x200px` 不带 `!important`，运行时通过 `setProperty(value, 'important')` 覆盖（缩放时防止 Drawflow CSS 干扰）
+- `removeNodeId()` expects the full `node-XX` format.
+- `addNode()` must pass `false` as the ninth argument.
+- the app overrides Drawflow zoom behavior to allow wheel zoom without Ctrl.
+- do not reparent node DOM into container DOM
 
-### 6. Markdown 导出/导入
+That last point is critical:
 
-- 导出时在 Markdown 中嵌入完整 JSON 快照（`<details>` 块内的 code fence）
-- 导入时优先提取快照精确还原，无快照才走 AI 分析
-- AI 分析需要配置有效的 OpenAI 兼容 API
+- Drawflow positioning depends on `offsetLeft` and `offsetTop`
+- child nodes inside container DOM will break drag math
+- container membership must remain data-driven, not DOM-nesting-driven
 
-### 7. AI 设置
+## Container system rules
 
-- 存储在 `localStorage` key `comic-canvas:ai-settings`
-- 格式：`{endpoint, apiKey, model}`，兼容 OpenAI / DeepSeek / Qwen / Claude 等
-- 预览弹窗需要 `flexbox column` 布局，防止长内容把按钮挤出视口
+Container nodes use:
 
-### 8. 设计系统
+- `_children`
+- `_parentId`
+- `_width`
+- `_height`
 
-- 主题名 "Totality Festival"，紫色调
-- CSS 变量定义在 `:root`（dark）和 `[data-theme="light"]`
-- 节点类型各有专属颜色（定义在 `--type-*` 变量）
-- 右侧属性面板已隐藏（`.inspector { display: none }`），实际为两栏布局
-- 玻璃拟态效果（`backdrop-filter: blur`）
-- 节点样式：`border-radius: var(--radius-md)`（卡片风格），不要用 `50%`（会导致球形裁剪）
-- 节点容器：`overflow: visible`（不要用 hidden，否则 Drawflow 的删除按钮会被裁剪）
-- **角色节点 (CometCard)**：节点尺寸 160×245px（`!important`），无玻璃背景/边框/阴影（`background:transparent`、`border:none`、`box-shadow:none`）。卡片 `position:absolute; inset:0` 填满节点，`display:flex; flex-direction:column`，`border-radius:16px`。body 用 `flex:1` 填充图片区域（≈3:4 比例），图片 `filter:saturate(0) contrast(.75)`。底栏白色等宽字体（"Comet Invitation" + "#ID"）。3D 倾斜交互由 `initCometCardTilt` IIFE 实现（rotateX/Y ±17.5deg + translateX/Y ±20px + scale 1.05 + 眩光层），拖拽时自动禁用。pointer-events 需在 `.drawflow_content_node *` 通配符之后单独覆盖为 `auto`
+Behavior expectations:
 
-### 9. DOM 元素安全绑定（重要！）
+- children stay as sibling DOM nodes
+- moving a container moves its children in the same frame
+- deleting a container releases children
+- loading a project must restore container relationships
 
-`$` 选择器函数只接受一个参数：`const $ = sel => document.querySelector(sel);`。传入第二个参数（如 `$('#ctx-delete', ctxMenu)`）会被忽略。
+If you change container behavior, verify both drag and load paths.
 
-**部分 HTML 元素已从旧版 topbar 移除但 JS 仍引用其 ID**（如 `btn-export`, `btn-undo`, `btn-grid` 等）。`initToolbar()` 中使用 `bind()` 辅助函数做安全绑定：
+## AI import/export rules
+
+The Markdown and AI pipeline is now part of the core product, not an accessory.
+
+When changing node schemas or names:
+
+- update Markdown export grouping
+- update AI preview grouping
+- update AI system prompt field descriptions
+- update fallback and migration behavior for older project snapshots
+
+Do not let AI keep generating removed node types.
+
+## UI binding rules
+
+Use safe binding patterns when touching toolbar or optional DOM elements.
+
+Existing helper pattern:
 
 ```js
-const bind = (sel, evt, fn) => { const el = $(sel); if(el) el[evt] = fn; };
+const bind = (sel, evt, fn) => { const el = $(sel); if (el) el[evt] = fn; };
 ```
 
-新增事件绑定时也应使用此模式，或在赋值前做 null 检查，防止 `Cannot set properties of null` 导致 `boot()` 崩溃。
+Some historical buttons no longer exist in the DOM, so direct blind binding can crash `boot()`.
 
-同理，`#save-text` 元素不存在于 HTML 中，所有引用处已加 null 保护。
+## Verification checklist after edits
 
-### 10. localStorage 数据键
+Minimum checks:
 
-| Key | 用途 |
-|-----|------|
-| `comic-canvas:projects` | 项目注册表 `[{id, name, createdAt, updatedAt, nodeCount}]` |
-| `comic-canvas:proj:{id}` | 单个项目数据（nodes/positions/edges） |
-| `comic-canvas:v1` | 默认项目数据（无 `?project=` 参数时） |
-| `comic-canvas:theme` | 主题偏好（dark/light） |
-| `comic-canvas:ai-settings` | AI 配置 |
-| `comic-canvas:playlist` | 音乐播放列表 |
+1. syntax-check the main IIFE with `node --check`
+2. syntax-check any edited standalone JS file
+3. start with `node server.cjs`
+4. verify `index.html` loads
+5. verify `index-entry.html` loads
+6. if schema changed:
+   confirm node creation still works
+   confirm inspector still renders
+   confirm Markdown export still works
+   confirm AI preview still works
+7. append the change to `log.md`
 
-### 11. 性能优化模式
+## Agent workflow rules
 
-- `rAF.schedule()` 自定义工具：将 minimap、groups、conn-labels、markDirty 等重操作合并到同一帧
-- `nodeCache` / `connCache`：缓存 DOM 引用，避免拖拽时重复 `querySelector`
-- 边元数据预播种：导入时先写 `store.data.edges[eid]` 再调 `addConnection()`，`connectionCreated` 回调检测到已有元数据会直接复用
+Before editing:
 
----
+- read this file
+- read `log.md`
+- inspect the relevant code area
 
-## 修改代码后的检查清单
+After editing:
 
-1. **语法验证**：用 `node --check` 检查 IIFE 部分无语法错误
-2. **启动服务器**：`node server.cjs`，确认控制台输出插件列表
-3. **功能验证**：打开浏览器访问 `http://localhost:8080/index.html`，测试：
-   - 节点拖拽创建是否正常
-   - 连线吸附是否正常
-   - 容器节点放入/移出是否正常
-   - 音乐搜索和播放是否正常
-   - AI 导入/导出是否正常
-4. **strict mode 检查**：确保没有变量重复声明
+- verify the affected flow
+- update `log.md`
 
----
+If you are uncertain whether something counts as a change worth logging, log it.
 
-## 外部依赖 CDN
+## Log format
 
-- Three.js: `https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js`
-- Background Removal: `https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/+esm`
+Use this format in [log.md](/E:/apps/comic-canvas/log.md):
 
----
+```md
+## 2026-06-29 02:32:17 +08:00
 
-## 音乐系统架构简述
+- Agent: Codex / <agent-name>
+- Files: `index.html`, `CLAUDE.md`, `log.md`
+- Summary: one concise description
+- Details: key architectural or product changes
+- Compatibility: legacy behavior kept / broken / migrated
+- Follow-up: optional next steps or risks
+```
 
-- `MusicAPI`（IIFE）：搜索 + URL 解析，主通道为网易云 API（经 CORS 代理），备用通道为洛雪插件
-- `FlowController`：背景动画驱动，黄金比例多正弦波漂移 + 音频能量响应
-- `AudioReactor`：Web Audio API 频谱分析，提取低/中/高频能量推送给 FlowController
-- `MusicPlayer`：播放器主类（music-player.js），搜索面板（5 个音源）、播放列表、播放控制、MediaSession API、**漫游模式**
-- `lx-shim.js`：模拟洛雪桌面插件运行时（`globalThis.lx`），动态加载 `music/` 下的插件
+## Current known state summary
 
-### 漫游模式（Roaming）
+Recent important changes already reflected in code:
 
-类似网易云「私人 FM」，点击播放栏右侧指南针按钮开启。开启后系统自动从关键词池（轻音乐/古风/电子/氛围等 30+ 关键词）中随机选取搜索，将结果添加到播放列表并自动播放。核心机制：
+- schema expanded toward cinematic/video planning
+- added `visual`, `asset`, and `page` nodes
+- removed active `branch` node usage
+- legacy `branch` data now migrates to `page`
 
-- **自动续播**：`_onEnded()` 中检测播放列表剩余不足 2 首时提前触发 `_roamingDiscover()`
-- **避免重复**：`_roamingHistory` 记录已播放歌曲 ID，搜索结果过滤掉已播放的
-- **喜好学习**：`roamingLike()` 将当前歌曲名/歌手中的关键词加回池中增加权重；`roamingSkip()` 移除相关关键词
-- **防并发**：`_roamingLoading` 标志防止多次搜索同时发起
-- **UI 反馈**：漫游按钮 `active` 类触发脉冲动画 + 发光效果；Toast 提示开关状态
+Any future agent should assume the project is in transition from comic editor to structured video-preproduction tool, and should make changes in that direction unless the user says otherwise.

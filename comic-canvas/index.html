@@ -95,7 +95,7 @@
 
   /* ---- 布局常量 ---- */
   --topbar-h: 48px;
-  --palette-w: 240px;
+  --palette-w: 272px;
   --inspector-w: 300px;
   --container-max: 1180px;
 
@@ -771,48 +771,99 @@ button{font-family:inherit;cursor:pointer}
 
 /* —— 左：资产区 —— */
 .palette{
-  background:var(--glass-bg); border-right:1px solid var(--border);
-  overflow-y:auto; padding:var(--space-4) var(--space-3);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  transition: background var(--motion-base) var(--ease-standard), border-color var(--motion-base) var(--ease-standard);
+  width:calc(100% - 32px);
+  height:calc(100% - 64px);
+  margin:32px 0 32px 32px;
+  box-sizing:border-box;
+  background:#211f1f;
+  color:#f5f5f5;
+  border-right:none;
+  border-radius:16px;
+  overflow-y:auto;
+  padding:8px;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  transition: background var(--motion-base) var(--ease-standard), border-color var(--motion-base) var(--ease-standard), box-shadow var(--motion-base) var(--ease-standard);
+  box-shadow:none;
+  font-family:"Fira Sans", var(--font-body);
 }
 .sec-title{
-  font-size:var(--text-xs); letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
-  margin:var(--space-4) var(--space-1) var(--space-3); display:flex; align-items:center; gap:6px;
-  font-weight:600; font-family:var(--font-display);
+  font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:rgba(245,245,245,.6);
+  margin:24px 8px 12px; display:flex; align-items:center; gap:6px;
+  font-weight:600; font-family:"Fira Sans", var(--font-display);
 }
 .asset-card{
-  display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) var(--space-4); margin-bottom:var(--space-2);
-  background:var(--glass-bg); border:var(--elev-ring); border-radius:var(--radius-md);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
+  width:100%;
+  display:flex; align-items:center; gap:12px; min-height:44px;
+  padding:8px 12px; margin-bottom:8px;
+  background:transparent; border:none; border-radius:8px;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
   cursor:grab; transition: all var(--motion-base) var(--ease-standard); position:relative; overflow:hidden;
+  color:#f5f5f5;
 }
-.asset-card:hover{border-color:var(--accent); transform:translateY(-2px); box-shadow:0 8px 24px rgba(59,109,214,.12)}
+.asset-card:hover{background:rgba(255,255,255,.06); transform:none; box-shadow:none}
 .asset-card:active{cursor:grabbing; transform:translateY(0)}
 .asset-card .ic{
-  width:36px; height:36px; border-radius:var(--radius-sm); display:grid; place-items:center;
+  width:24px; height:24px; border-radius:6px; display:grid; place-items:center;
   flex-shrink:0; color:var(--accent-on);
-  box-shadow:0 2px 8px rgba(59,109,214,.2);
+  box-shadow:none;
+  background:transparent;
   transition: transform var(--motion-fast) var(--ease-standard);
 }
 .asset-card .ic svg{width:100%;height:100%;display:block}
 .asset-card .ic.ic-3d{
   overflow: hidden;
   padding: 0;
-  background: linear-gradient(135deg, var(--c-end), color-mix(in oklab, var(--c-end) 70%, white));
-  box-shadow: 0 2px 8px rgba(255,107,157,.25);
+  background: transparent;
+  box-shadow: none;
 }
 /* 各图标动画 */
 @keyframes icon-spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 .asset-card:hover .ic{animation-duration:1s;animation-iteration-count:infinite;animation-timing-function:var(--ease-standard);animation-name:icon-spin}
 .asset-card .meta{flex:1; min-width:0}
-.asset-card .meta .t{font-weight:600; font-size:var(--text-sm); color:var(--fg)}
-.asset-card .meta .d{font-size:var(--text-xs); color:var(--muted); font-family:var(--font-body)}
-.asset-card .grip{color:var(--muted); font-size:var(--text-sm); opacity:.6}
-.palette .hint{font-size:var(--text-xs); color:var(--muted); line-height:1.7; padding:var(--space-3) var(--space-4); border-top:1px dashed var(--border); margin-top:var(--space-4); background:var(--glass-bg); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-radius:var(--radius-sm)}
+.asset-card .meta .t{font-weight:500; font-size:14px; color:#f5f5f5}
+.asset-card .meta .d{font-size:12px; color:rgba(245,245,245,.66); font-family:"Fira Sans", var(--font-body)}
+.asset-card .grip{color:rgba(245,245,245,.4); font-size:12px; opacity:.7}
+.palette .hint{
+  font-size:12px; color:rgba(245,245,245,.68); line-height:1.7;
+  padding:12px 8px 0; border-top:1px solid rgba(255,255,255,.08);
+  margin-top:16px; background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none; border-radius:0
+}
 .palette .hint b{color:var(--fg-2)}
+
+[data-theme="light"] .palette{
+  background: rgba(255, 255, 255, 0.44);
+  color: var(--fg);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow:
+    0 10px 30px rgba(59, 109, 214, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.48);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+[data-theme="light"] .palette .sec-title{
+  color: rgba(26, 23, 32, 0.62);
+}
+[data-theme="light"] .palette .asset-card{
+  color: var(--fg);
+}
+[data-theme="light"] .palette .asset-card .meta .t{
+  color: var(--fg);
+}
+[data-theme="light"] .palette .asset-card .meta .d{
+  color: var(--muted);
+}
+[data-theme="light"] .palette .asset-card .grip{
+  color: rgba(26, 23, 32, 0.42);
+}
+[data-theme="light"] .palette .hint{
+  color: rgba(26, 23, 32, 0.72);
+  border-top-color: rgba(26, 23, 32, 0.08);
+}
+[data-theme="light"] .palette .hint b{
+  color: var(--fg-2);
+}
 
 /* —— 中：画布 —— */
 .canvas-wrap{position:relative; background:transparent; overflow:hidden}
@@ -996,6 +1047,13 @@ button{font-family:inherit;cursor:pointer}
   position:absolute;
   pointer-events:auto;
   z-index:3;
+}
+.drawflow .drawflow-node .output.output_proxy_1,
+.drawflow .drawflow-node .output.output_proxy_2,
+.drawflow .drawflow-node .input.input_proxy_1,
+.drawflow .drawflow-node .input.input_proxy_2{
+  opacity:0 !important;
+  pointer-events:none !important;
 }
 /* ---- 四个端口：JS 像素定位，hover/snap 仅 scale ---- */
 /* 悬停 */
@@ -2155,6 +2213,25 @@ body{transition:.25s}
 'use strict';
 
 /* ============================================================
+   Architecture note for future agents
+
+   The editor now behaves like a structured preproduction tool,
+   not just a loose comic outline board.
+
+   Core flow:
+   1. TYPE_META + SCHEMA define the production node model.
+   2. store mirrors Drawflow state plus project metadata.
+   3. buildNodeHtml renders node shells by type.
+   4. renderInspector exposes schema-driven editing.
+   5. serialize/loadFrom/doExportMd/analyzeWithAi keep the node
+      graph portable across local save, markdown export, and AI.
+
+   Compatibility rule:
+   - legacy "branch" nodes are no longer active
+   - normalizeNodeType() migrates old branch data to page nodes
+============================================================ */
+
+/* ============================================================
    config —— 节点 schema 定义、配色、图标
 ============================================================ */
 const TYPE_META = {
@@ -2839,6 +2916,58 @@ function findAvailableOutputPort(sourceNodeId, targetNodeId, targetInput){
   return outputs.length > 0 ? outputs[0].className.split(' ').find(c => c.startsWith('output_')) : 'output_1';
 }
 
+/**
+ * 直接把命中的端口映射到可接收的输入端口。
+ * 规则：input_x / input_proxy_x 保持原位，output_x 落到同序号的 input_proxy_x。
+ * 这样连接不会再偷偷跳到别的输入位。
+ */
+function resolveDirectInputPort(portName){
+  const m = /^((?:input)|(?:output)|(?:output_proxy)|(?:input_proxy))_(\d+)$/.exec(portName || '');
+  if(!m) return null;
+  if(m[1] === 'input' || m[1] === 'input_proxy') return portName;
+  return 'input_proxy_' + m[2];
+}
+
+function proxyInputPortAsOutput(portEl){
+  if(!portEl) return null;
+  const inputPortName = portEl.className.split(' ').find(c => c.startsWith('input_'));
+  if(!inputPortName) return null;
+  return inputPortName.replace('input_', 'output_proxy_');
+}
+
+function ensureInputProxyOutputs(id){
+  const el = document.getElementById('node-' + id);
+  const node = store.data.nodes[id];
+  const drawNode = store.editor && store.editor.drawflow
+    ? store.editor.drawflow.drawflow[store.editor.module].data[id]
+    : null;
+  if(!el || !node || !node.data || !drawNode || !drawNode.outputs) return;
+  const proxyPairs = [
+    ['input_1', 'output_proxy_1', 'input_proxy_1'],
+    ['input_2', 'output_proxy_2', 'input_proxy_2'],
+  ];
+  proxyPairs.forEach(([inputCls, outputCls, inputProxyCls])=>{
+    if(!drawNode.outputs[outputCls]){
+      drawNode.outputs[outputCls] = { connections: [] };
+    }
+    if(!drawNode.inputs[inputProxyCls]){
+      drawNode.inputs[inputProxyCls] = { connections: [] };
+    }
+    const outputsWrap = el.querySelector('.outputs');
+    if(outputsWrap && !el.querySelector('.' + outputCls)){
+      const proxyPort = document.createElement('div');
+      proxyPort.className = 'output ' + outputCls;
+      outputsWrap.appendChild(proxyPort);
+    }
+    const inputsWrap = el.querySelector('.inputs');
+    if(inputsWrap && !el.querySelector('.' + inputProxyCls)){
+      const proxyPort = document.createElement('div');
+      proxyPort.className = 'input ' + inputProxyCls;
+      inputsWrap.appendChild(proxyPort);
+    }
+  });
+}
+
 // 更新连线标签显示
 function updateConnLabel(edgeId){
   const em = store.data.edges[edgeId];
@@ -3122,12 +3251,20 @@ function positionPorts(id){
   const w = el.offsetWidth, h = el.offsetHeight, portSize = 14;
   const i1 = el.querySelector('.input.input_1');
   const i2 = el.querySelector('.input.input_2');
+  const ip1 = el.querySelector('.input.input_proxy_1');
+  const ip2 = el.querySelector('.input.input_proxy_2');
   const o1 = el.querySelector('.output.output_1');
   const o2 = el.querySelector('.output.output_2');
+  const p1 = el.querySelector('.output.output_proxy_1');
+  const p2 = el.querySelector('.output.output_proxy_2');
   if(i1){ i1.style.left = (-portSize/2) + 'px'; i1.style.top = (h/2 - portSize/2) + 'px'; i1.style.right = 'auto'; i1.style.bottom = 'auto'; }
   if(i2){ i2.style.left = (w/2 - portSize/2) + 'px'; i2.style.top = (-portSize/2) + 'px'; i2.style.right = 'auto'; i2.style.bottom = 'auto'; }
   if(o1){ o1.style.right = (-portSize/2) + 'px'; o1.style.top = (h/2 - portSize/2) + 'px'; o1.style.left = 'auto'; o1.style.bottom = 'auto'; }
   if(o2){ o2.style.left = (w/2 - portSize/2) + 'px'; o2.style.bottom = (-portSize/2) + 'px'; o2.style.right = 'auto'; o2.style.top = 'auto'; }
+  if(p1){ p1.style.left = (-portSize/2) + 'px'; p1.style.top = (h/2 - portSize/2) + 'px'; p1.style.right = 'auto'; p1.style.bottom = 'auto'; }
+  if(p2){ p2.style.left = (w/2 - portSize/2) + 'px'; p2.style.top = (-portSize/2) + 'px'; p2.style.right = 'auto'; p2.style.bottom = 'auto'; }
+  if(ip1){ ip1.style.right = (-portSize/2) + 'px'; ip1.style.top = (h/2 - portSize/2) + 'px'; ip1.style.left = 'auto'; ip1.style.bottom = 'auto'; }
+  if(ip2){ ip2.style.left = (w/2 - portSize/2) + 'px'; ip2.style.bottom = (-portSize/2) + 'px'; ip2.style.right = 'auto'; ip2.style.top = 'auto'; }
 }
 
 function schemaDefaultValue(field){
@@ -3234,6 +3371,7 @@ function initDrawflow(){
       if(pending.data && pending.data._thumb){
         setTimeout(()=> setNodeThumb(id, pending.data._thumb), 0);
       }
+      ensureInputProxyOutputs(id);
       if(pending.select){
         store.selectedId = String(id);
         store.selectedIds = [String(id)];
@@ -4448,6 +4586,7 @@ let snapState = {
   sourceNodeId: null,
   sourceOutput: null,
   targetNodeId: null,
+  targetPortName: null,
   snapThresholdX: 100,  // 水平吸附距离（px）- 连线指向节点时更容易吸附
   snapThresholdY: 50,   // 垂直吸附距离（px）
 };
@@ -4467,6 +4606,7 @@ function initConnectionSnap(){
     snapState.sourceNodeId = nodeEl.id.slice(5);
     snapState.sourceOutput = outputEl.className.split(' ').find(c => c.startsWith('output_'));
     snapState.targetNodeId = null;
+    snapState.targetPortName = null;
   }, true);
 
   // 监听鼠标移动，检测吸附目标
@@ -4475,6 +4615,8 @@ function initConnectionSnap(){
     
     const mouseX = e.clientX;
     const mouseY = e.clientY;
+    snapState.lastX = mouseX;
+    snapState.lastY = mouseY;
     
     // 清除之前的高亮
     clearSnapHighlight();
@@ -4483,44 +4625,58 @@ function initConnectionSnap(){
     const target = findSnapTarget(mouseX, mouseY);
     if(target){
       snapState.targetNodeId = target.nodeId;
+      snapState.targetPortName = target.portEl.className.split(' ').find(c => c.startsWith('input_') || c.startsWith('output_'));
       const targetEl = document.getElementById('node-' + target.nodeId);
       if(targetEl) targetEl.classList.add('snap-target');
     } else {
       snapState.targetNodeId = null;
+      snapState.targetPortName = null;
     }
   }, true);
 
   // 监听鼠标释放，完成自动连接
-  document.addEventListener('mouseup', ()=>{
+  document.addEventListener('mouseup', me=>{
     if(!snapState.active) return;
+    if(me && me.stopImmediatePropagation){
+      me.stopImmediatePropagation();
+      me.stopPropagation();
+    }
     
-    const targetNodeId = snapState.targetNodeId;
+    const releaseX = me && typeof me.clientX === 'number' ? me.clientX : snapState.lastX;
+    const releaseY = me && typeof me.clientY === 'number' ? me.clientY : snapState.lastY;
+    const releasedTarget = findSnapTarget(releaseX, releaseY, snapState.sourceNodeId) || (snapState.targetNodeId ? {
+      nodeId: snapState.targetNodeId,
+      portEl: document.querySelector('#node-' + snapState.targetNodeId + ' .input.snap-target, #node-' + snapState.targetNodeId + ' .output.snap-target')
+    } : null);
+    const targetNodeId = releasedTarget && releasedTarget.nodeId;
     const sourceNodeId = snapState.sourceNodeId;
     const sourceOutput = snapState.sourceOutput;
+    const targetPortName = releasedTarget && releasedTarget.portEl
+      ? releasedTarget.portEl.className.split(' ').find(c => c.startsWith('input_') || c.startsWith('output_'))
+      : snapState.targetPortName;
     
     clearSnapHighlight();
     snapState.active = false;
     snapState.sourceNodeId = null;
     snapState.sourceOutput = null;
     snapState.targetNodeId = null;
+    snapState.targetPortName = null;
+    snapState.lastX = null;
+    snapState.lastY = null;
     
     // 如果有吸附目标，延迟检查并自动创建连接（避免和 Drawflow 自带的连接重复）
     if(targetNodeId && sourceNodeId && sourceOutput){
-      const beforeCount = Object.keys(store.data.edges).length;
-      setTimeout(()=>{
-        const afterCount = Object.keys(store.data.edges).length;
-        // 如果 Drawflow 没有自动创建连接，我们手动创建
-        if(afterCount === beforeCount){
-          const targetPort = findAvailableInputPort(targetNodeId, sourceNodeId, sourceOutput);
-          const exists = findEdgeByPorts(sourceNodeId, targetNodeId, sourceOutput, targetPort);
-          if(!exists){
-            try{
-              store.editor.addConnection(sourceNodeId, targetNodeId, sourceOutput, targetPort);
-              haptic('light');
-            }catch(_){}
-          }
+      const targetPort = resolveDirectInputPort(targetPortName);
+      const exists = targetPort ? findEdgeByPorts(sourceNodeId, targetNodeId, sourceOutput, targetPort) : null;
+      if(!targetPort) return;
+      if(!exists){
+        try{
+          store.editor.addConnection(sourceNodeId, targetNodeId, sourceOutput, targetPort);
+          haptic('light');
+        }catch(err){
+          console.warn('[BidirectionalPorts] addConnection error:', err);
         }
-      }, 50);
+      }
     }
   }, true);
 
@@ -4537,6 +4693,7 @@ function initConnectionSnap(){
     snapState.sourceNodeId = nodeEl.id.slice(5);
     snapState.sourceOutput = outputEl.className.split(' ').find(c => c.startsWith('output_'));
     snapState.targetNodeId = null;
+    snapState.targetPortName = null;
   }, { passive: true, capture: true });
 
   document.addEventListener('touchmove', e=>{
@@ -4544,47 +4701,65 @@ function initConnectionSnap(){
     const touch = e.touches[0];
     const mouseX = touch.clientX;
     const mouseY = touch.clientY;
+    snapState.lastX = mouseX;
+    snapState.lastY = mouseY;
     
     clearSnapHighlight();
     
     const target = findSnapTarget(mouseX, mouseY);
     if(target){
       snapState.targetNodeId = target.nodeId;
+      snapState.targetPortName = target.portEl.className.split(' ').find(c => c.startsWith('input_') || c.startsWith('output_'));
       const targetEl = document.getElementById('node-' + target.nodeId);
       if(targetEl) targetEl.classList.add('snap-target');
     } else {
       snapState.targetNodeId = null;
+      snapState.targetPortName = null;
     }
   }, { passive: true, capture: true });
 
-  document.addEventListener('touchend', ()=>{
+  document.addEventListener('touchend', me=>{
     if(!snapState.active) return;
+    if(me && me.stopImmediatePropagation){
+      me.stopImmediatePropagation();
+      me.stopPropagation();
+    }
     
-    const targetNodeId = snapState.targetNodeId;
+    const changed = me && me.changedTouches && me.changedTouches[0] ? me.changedTouches[0] : null;
+    const releaseX = changed ? changed.clientX : snapState.lastX;
+    const releaseY = changed ? changed.clientY : snapState.lastY;
+    const releasedTarget = findSnapTarget(releaseX, releaseY, snapState.sourceNodeId) || (snapState.targetNodeId ? {
+      nodeId: snapState.targetNodeId,
+      portEl: document.querySelector('#node-' + snapState.targetNodeId + ' .input.snap-target, #node-' + snapState.targetNodeId + ' .output.snap-target')
+    } : null);
+    const targetNodeId = releasedTarget && releasedTarget.nodeId;
     const sourceNodeId = snapState.sourceNodeId;
     const sourceOutput = snapState.sourceOutput;
+    const targetPortName = releasedTarget && releasedTarget.portEl
+      ? releasedTarget.portEl.className.split(' ').find(c => c.startsWith('input_') || c.startsWith('output_'))
+      : snapState.targetPortName;
     
     clearSnapHighlight();
     snapState.active = false;
     snapState.sourceNodeId = null;
     snapState.sourceOutput = null;
     snapState.targetNodeId = null;
+    snapState.targetPortName = null;
+    snapState.lastX = null;
+    snapState.lastY = null;
     
     if(targetNodeId && sourceNodeId && sourceOutput){
-      const beforeCount = Object.keys(store.data.edges).length;
-      setTimeout(()=>{
-        const afterCount = Object.keys(store.data.edges).length;
-        if(afterCount === beforeCount){
-          const targetPort = findAvailableInputPort(targetNodeId, sourceNodeId, sourceOutput);
-          const exists = findEdgeByPorts(sourceNodeId, targetNodeId, sourceOutput, targetPort);
-          if(!exists){
-            try{
-              store.editor.addConnection(sourceNodeId, targetNodeId, sourceOutput, targetPort);
-              haptic('light');
-            }catch(_){}
-          }
+      const targetPort = resolveDirectInputPort(targetPortName);
+      const exists = targetPort ? findEdgeByPorts(sourceNodeId, targetNodeId, sourceOutput, targetPort) : null;
+      if(!targetPort) return;
+      if(!exists){
+        try{
+          store.editor.addConnection(sourceNodeId, targetNodeId, sourceOutput, targetPort);
+          haptic('light');
+        }catch(err){
+          console.warn('[BidirectionalPorts] addConnection error:', err);
         }
-      }, 50);
+      }
     }
   }, true);
 }
@@ -4596,49 +4771,25 @@ function clearSnapHighlight(){
 }
 
 function findSnapTarget(mouseX, mouseY, excludeNodeId){
-  const nodes = document.querySelectorAll('.drawflow-node');
-  let bestTarget = null;
-  let bestDist = Infinity;
+  const el = document.elementFromPoint(mouseX, mouseY);
+  if(!el) return null;
+  const portEl = el.closest('.input, .output');
+  if(!portEl) return null;
+  if(portEl.classList.contains('output_proxy_1') || portEl.classList.contains('output_proxy_2')) return null;
+  const nodeEl = portEl.closest('.drawflow-node');
+  if(!nodeEl) return null;
+  const nodeId = nodeEl.id.slice(5);
   const exId = excludeNodeId || snapState.sourceNodeId;
-
-  nodes.forEach(nodeEl=>{
-    const nodeId = nodeEl.id.slice(5);
-
-    // 不能连接到自己
-    if(nodeId === exId) return;
-    
-    // 如果节点被锁定，也不能连接
-    if(nodeEl.classList.contains('locked')) return;
-    
-    const rect = nodeEl.getBoundingClientRect();
-    const portEls = nodeEl.querySelectorAll('.input, .output');
-    if(!portEls.length) return;
-
-    let closestPort = null;
-    let closestDist = Infinity;
-
-    portEls.forEach(portEl => {
-      const portRect = portEl.getBoundingClientRect();
-      const px = portRect.left + portRect.width / 2;
-      const py = portRect.top + portRect.height / 2;
-      const d = Math.sqrt((mouseX - px) ** 2 + (mouseY - py) ** 2);
-      if(d < closestDist){ closestDist = d; closestPort = { el: portEl, x: px, y: py }; }
-    });
-
-    if(!closestPort) return;
-
-    const dx = mouseX - closestPort.x;
-    const dy = mouseY - closestPort.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-
-    // 吸附范围：端口附近 80px
-    if(dist < 80 && dist < bestDist){
-      bestDist = dist;
-      bestTarget = { nodeId, inputX: closestPort.x, inputY: closestPort.y, dist, portEl: closestPort.el };
-    }
-  });
-  
-  return bestTarget;
+  if(nodeId === exId) return null;
+  if(nodeEl.classList.contains('locked')) return null;
+  const rect = portEl.getBoundingClientRect();
+  return {
+    nodeId,
+    inputX: rect.left + rect.width / 2,
+    inputY: rect.top + rect.height / 2,
+    dist: 0,
+    portEl,
+  };
 }
 
 /* ============================================================
@@ -6974,7 +7125,7 @@ function initBidirectionalPorts(){
     e.preventDefault();
 
     const sourceNodeId = nodeEl.id.slice(5);
-    const sourcePortName = portEl.className.split(' ').find(c => c.startsWith('input_'));
+    const sourcePortName = proxyInputPortAsOutput(portEl);
     if(!sourcePortName) return;
 
     // 计算画布坐标
@@ -7030,9 +7181,8 @@ function initBidirectionalPorts(){
 
         // Drawflow 要求 output → input，做端口替换
         var actualOut = sourcePortName.replace('input_', 'output_');  // input_1 → output_1
-        var actualIn  = targetPortName.startsWith('output_')
-          ? findAvailableInputPort(targetNodeId, sourceNodeId, actualOut)
-          : targetPortName;
+        var actualIn  = resolveDirectInputPort(targetPortName);
+        if(!actualIn) return;
 
         if(!findEdgeByPorts(sourceNodeId, targetNodeId, actualOut, actualIn)){
           try{

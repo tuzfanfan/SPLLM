@@ -2157,21 +2157,6 @@ body{transition:.25s}
       <div class="meta"><div class="t">页面帧 / 关键帧</div><div class="d">起止帧、关键帧、提示词单元</div></div>
       <div class="grip">⋮⋮</div>
     </div>
-    <div class="asset-card ac-visual" data-type="visual" draggable="true">
-      <svg class="ic" viewBox="0 0 1024 1024" width="36" height="36"><path d="M512 96c-229.75 0-416 153.25-416 342.4 0 118.4 73.6 222.72 185.6 284.16L256 928l189.44-117.76c21.76 3.52 44.16 5.76 66.56 5.76 229.75 0 416-153.25 416-342.4S741.75 96 512 96zM320 512a64 64 0 1 1 0-128 64 64 0 0 1 0 128zm192 64a64 64 0 1 1 0-128 64 64 0 0 1 0 128zm192-64a64 64 0 1 1 0-128 64 64 0 0 1 0 128z" fill="var(--c-visual)"/></svg>
-      <div class="meta"><div class="t">视觉圣经</div><div class="d">风格、灯光、镜头默认值</div></div>
-      <div class="grip">⋮⋮</div>
-    </div>
-    <div class="asset-card ac-asset" data-type="asset" draggable="true">
-      <svg class="ic" viewBox="0 0 1024 1024" width="36" height="36"><path d="M512 64 896 256v512L512 960 128 768V256L512 64zm0 96L256 288l256 128 256-128L512 160zM224 372v340l240 120V492L224 372zm336 460 240-120V372L560 492v340z" fill="var(--c-asset)"/></svg>
-      <div class="meta"><div class="t">资产 / 道具</div><div class="d">道具、地点、空间锁</div></div>
-      <div class="grip">⋮⋮</div>
-    </div>
-    <div class="asset-card ac-page" data-type="page" draggable="true">
-      <svg class="ic" viewBox="0 0 1024 1024" width="36" height="36"><path d="M160 128h704a64 64 0 0 1 64 64v640a64 64 0 0 1-64 64H160a64 64 0 0 1-64-64V192a64 64 0 0 1 64-64zm32 128v512h640V256H192zm96 400 144-176 112 128 80-96 144 144H288z" fill="var(--c-page)"/></svg>
-      <div class="meta"><div class="t">页面帧 / 关键帧</div><div class="d">起止帧、关键帧、提示词单元</div></div>
-      <div class="grip">⋮⋮</div>
-    </div>
 
     <div class="sec-title" style="margin-top:18px">⌨️ 快捷操作</div>
     <div class="hint">
@@ -2339,15 +2324,6 @@ body{transition:.25s}
     </div>
     <div class="qc-item" data-type="container">
       <span class="ic">📁</span><span class="t">容器</span>
-    </div>
-    <div class="qc-item" data-type="page">
-      <span class="ic">🖼️</span><span class="t">页面帧</span>
-    </div>
-    <div class="qc-item" data-type="visual">
-      <span class="ic">🎨</span><span class="t">视觉</span>
-    </div>
-    <div class="qc-item" data-type="asset">
-      <span class="ic">🧩</span><span class="t">资产</span>
     </div>
     <div class="qc-item" data-type="page">
       <span class="ic">🖼️</span><span class="t">页面帧</span>
@@ -5948,7 +5924,6 @@ function doExportMd(){
   });
 
   const sectionMeta = {
-    visual: {icon:'🎨', title:'视觉圣经'},
     char:   {icon:'🎭', title:'角色'},
     container: {icon:'📁', title:'容器 / 场景资产'},
     shot:   {icon:'🎬', title:'分镜'},

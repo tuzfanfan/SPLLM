@@ -120,3 +120,120 @@ Required fields for each entry:
 - Details: In light mode, the asset panel now uses a semi-transparent white glass surface with blur and a subtle border/shadow, and its labels switch to darker text for better contrast. The rest of the app remains unchanged.
 - Compatibility: This only affects `[data-theme="light"] .palette` and its text styles.
 - Follow-up: If the panel still feels too airy or too dense on your display, we can fine-tune the opacity or blur without touching the rest of the layout.
+
+## 2026-06-30 01:15:00 +08:00
+
+- Agent: QoderWork
+- Files: `index.html`
+- Summary: Added flowing light (流光) animation to connection lines.
+- Details: Replaced static connection strokes with animated dash patterns (`stroke-dasharray: 14 22`, `stroke-dashoffset` keyframe animation at 1.6s cycle). Three visual states: base (black, opacity .5, subtle glow), hover (thicker, brighter, double drop-shadow), selected (accent color, max glow). Base color set to `#000`, hover/selected use `var(--fg-2)` and `var(--accent)`.
+- Compatibility: `.type-dash` and `.type-dot` connection types retain their own `!important` dasharray overrides and are unaffected.
+- Follow-up: If the animation feels too prominent on dense canvases, consider reducing dash segment length or slowing the cycle.
+
+## 2026-06-30 01:30:00 +08:00
+
+- Agent: QoderWork
+- Files: `index.html`
+- Summary: Optimized connection animation performance by replacing CSS `drop-shadow` with SVG filters.
+- Details: Root cause of animation jank: CSS `filter: drop-shadow()` rebuilds the shadow stack every frame during `stroke-dashoffset` animation. Replaced with two SVG `<filter>` definitions (`conn-glow` and `conn-glow-strong`) using `feGaussianBlur` + `feColorMatrix` + `feMerge` in the SVG `<defs>` block. Added `will-change: stroke-dashoffset` for GPU compositing hint. Removed `transition` property (conflicts with infinite animation, causes double interpolation). Added `stroke-linecap: round` for lighter rendering. Default stroke-width increased to 5px, hover/selected to 6px.
+- Compatibility: SVG filters are defined in the existing `<svg><defs>` block and referenced via `url(#conn-glow)`. No runtime JS changes.
+- Follow-up: If filter performance is still an issue on low-end devices, consider disabling the animation via `prefers-reduced-motion` media query.
+
+## 2026-06-30 01:50:00 +08:00
+
+- Agent: QoderWork
+- Files: `index.html`, `index-entry.html`, `pics/logo.png`
+- Summary: Replaced text+emoji logo with image logo and added mirror-shine hover effect.
+- Details: Replaced `<span class="logo">🎬</span> Copy Me <small>v1.0</small>` in `index.html` and `<span class="logo">🎨</span> 漫剧画布 <small>项目管理中心</small>` in `index-entry.html` with `<img src="pics/logo.png">`. Added CSS for `.logo-img` (height: 44px/48px), `.brand` with `position:relative; overflow:hidden` for shine clipping, and `::after` pseudo-element implementing a diagonal gradient band (`linear-gradient(105deg, transparent→white→transparent)`, `skewX(-25deg)`) that sweeps left-to-right on hover (0.6s ease transition). Logo scales to `1.05` on hover.
+- Compatibility: Old `.brand .logo` and `.brand small` CSS rules are now dead code (no matching DOM elements) and can be cleaned up later.
+- Follow-up: Consider updating the `<title>` tag and favicon to match the new branding.
+
+## 2026-06-30 02:05:00 +08:00
+
+- Agent: QoderWork
+- Files: `pics/logo.png`
+- Summary: Removed white/light-gray background from logo image, exported as transparent PNG.
+- Details: Used Pillow to analyze corner pixels (~RGB 240,240,240), applied threshold-based background removal (brightness > 215, saturation < 25 → transparent). Transition zone (brightness > 195) uses partial alpha for smooth edges. Image cropped to content bounds, aspect ratio changed from 4:3 to ~2.14:1.
+- Compatibility: Same file path `pics/logo.png`, just transparent background now. Works on both dark and light themes.
+- Follow-up: None.
+
+## 2026-06-30 02:15:00 +08:00
+
+- Agent: QoderWork
+- Files: `index.html`, `index-entry.html`
+- Summary: Increased logo size and reduced gap to 文件 button.
+- Details: Logo height set to 80px in both pages. Nav-links `margin-left` reduced from 24px to 8px to bring logo closer to the 文件 dropdown button.
+- Compatibility: No structural HTML changes.
+- Follow-up: If the logo is too large on smaller screens, add a media query to reduce height.
+
+## 2026-06-30 02:25:00 +08:00
+
+- Agent: QoderWork
+- Files: `index.html`
+- Summary: Aligned inspector panel height with asset palette panel.
+- Details: Inspector was full grid-cell height while palette had `height:calc(100% - 64px)` + `margin:32px`. Applied matching height/margin to inspector. Changed `border-left` to full `border` with `border-radius:16px` for consistent card styling with the palette. Both panels now share the same visual treatment.
+- Compatibility: Mobile responsive CSS (`.inspector{display:none}`) and `pure-mode` CSS (`transform:translateX(100%)`) are unaffected.
+- Follow-up: The minimap `right:calc(var(--inspector-w) + 12px)` may need adjustment since the inspector now has a 32px right margin.
+
+## 2026-06-30 02:40:00 +08:00
+
+- Agent: QoderWork
+- Files: `index.html`
+- Summary: Inspector panel now auto-hides when no node is selected.
+- Details: Added `.main.no-inspector` CSS class that collapses the grid from 3 columns to 2 (`grid-template-columns: var(--palette-w) 1fr`) and sets `.inspector{display:none}`. Modified `renderInspector()` to toggle this class: adds it when `!sel && selectedIds.length === 0`, removes it otherwise. Also fixed the empty `nodeUnselected` event handler — it now clears `store.selectedId`/`store.selectedIds` and calls `renderInspector()`, so clicking empty canvas properly hides the panel.
+- Compatibility: The `no-inspector` class is on `.main`, not the inspector itself, avoiding conflicts with mobile `display:none` and `pure-mode` `transform` rules. All existing `renderInspector()` call sites (Delete key, Escape key, box selection, node deletion, connection deselect, etc.) work correctly with the new logic.
+- Follow-up: The `_origRenderInspector` override pattern (inspector enhancement module) still works because it only adds fields when `sel` is a valid string.
+
+## 2026-06-30 02:49:40 +08:00
+
+- Agent: QoderWork
+- Files: `index.html`, `log.md`
+- Summary: Added collapsible sidebar toggle to the asset palette panel.
+- Details: Added a « / » toggle button in the top-right corner of the palette. Clicking it toggles `.palette-collapsed` on `.main`, which shrinks the grid column from 272px to 56px, hides all text (section titles, card meta, grip handles, hint block), and centers the SVG icons vertically. The collapsed state maintains drag-and-drop functionality — dragging an icon from the narrow sidebar still creates nodes on the canvas. Added `position:relative` to `.palette` for proper button anchoring. Both dark and light theme styles are handled.
+- Compatibility: The `.palette-collapsed` class works alongside the existing `.no-inspector` class (combined selector `.main.palette-collapsed.no-inspector`). Mobile responsive CSS already hides the palette entirely at 768px, so no conflict.
+- Follow-up: Consider adding a CSS transition for smooth width animation, or persisting the collapsed state in `localStorage` across sessions.
+
+## 2026-06-30 03:12:40 +08:00
+
+- Agent: QoderWork
+- Files: `index.html`, `log.md`
+- Summary: Fixed minimap viewport box aspect ratio by using actual node dimensions instead of hardcoded 200×60.
+- Details: The minimap bounding box calculation used hardcoded `w=200, h=60` for all nodes, which didn't match actual node sizes (char nodes are 160×245, containers are 280×200, etc.). This made the world bounding box disproportionately wide relative to its height, causing the viewport selection box to appear with incorrect aspect ratio. Fixed in three places: `renderMinimap()`, the `translate` event handler, and the minimap drag handler. All now use `el.offsetWidth`/`el.offsetHeight` from the DOM with 200×60 as fallback. Also updated SVG node rendering and connection line center-point calculations to use actual dimensions.
+- Compatibility: If a node DOM element doesn't exist (e.g., during initialization), the code falls back to the previous 200×60 defaults. Added `container` type color to the minimap type-color map.
+- Follow-up: The DOM query inside the translate handler adds slight overhead during canvas panning. If performance becomes an issue, cache the node dimensions and invalidate on node resize/create/delete.
+
+## 2026-07-01 00:41:49 +08:00
+
+- Agent: QoderWork
+- Files: `index.html`, `index-entry.html`, `log.md`
+- Summary: Continued the interrupted node-model refactor and repaired the project entry page syntax.
+- Details: `index.html` now keeps the active node model aligned with the requested UX changes: line nodes use one port and derive speaker from connections, scene/asset/visual/end are folded into container/page/shot flows, container placement and snapping were tightened, and node refresh logic now keeps links and positions in sync during drag, undo, and container moves. `index-entry.html` was also repaired by fixing the duplicated-quote/new-name path and several comment/code line-break issues so the project manager script parses cleanly again.
+- Verification: `node --check` passes for the extracted main application IIFE in `index.html` and for the full script block in `index-entry.html`.
+- Follow-up: If you want, the next pass can focus on interactive smoke testing in the browser for container drop, undo/redo, and line-node presentation.
+
+## 2026-07-01 01:05:17 +08:00
+
+- Agent: Codex
+- Files: `index.html`, `log.md`
+- Summary: Fixed container follow behavior after nodes are placed into a container.
+- Details: Added a shared position sync helper for node movement, clamped newly attached child nodes into the container's usable interior so they stop covering the whole container hit area, and updated drag capture so when a container is already selected, dragging across one of its child nodes routes the gesture to the parent container instead of accidentally dragging the child away. This keeps parent-child membership stable while moving the container.
+- Compatibility: Verified against the live editor at `http://127.0.0.1:8080/index.html`; after attaching a character into a container, dragging the container moves both nodes together and preserves `_parentId` / `_children`.
+- Follow-up: Undo/redo position recovery still needs a separate repair pass.
+
+## 2026-07-01 01:10:30 +08:00
+
+- Agent: Codex
+- Files: `index.html`, `log.md`
+- Summary: Restyled the dialogue node to match the provided speech-bubble reference.
+- Details: Reworked the `line` node into a long rounded white bubble with a darker outline, centered body text, hidden inline speaker label, and a two-circle tail at the lower-left corner. Also raised the line node width override so the bubble keeps its horizontal silhouette instead of collapsing into the old square card proportions.
+- Compatibility: Verified visually in the live editor by creating a new dialogue node and comparing its rendered silhouette against the supplied sample image.
+- Follow-up: If you want, we can do one more pass to fine-tune the border thickness or tail size for even closer pixel-level matching.
+
+## 2026-07-01 01:30:14 +08:00
+
+- Agent: Codex
+- Files: `music-player.js`, `log.md`
+- Summary: Hardened roaming mode so it can fall back to other sources instead of stopping on a single-source miss.
+- Details: Extracted plugin search into a reusable fallback path, added roaming source rotation (`wy/tx/kw/kg/mg/qsvip`), and taught roaming to automatically switch the active source button when another source successfully returns playable songs. The failure toast was also updated to reflect backend unavailability instead of incorrectly implying roaming itself was paused.
+- Compatibility: `node --check music-player.js` passes. In a browser-level mock test where the current source returned no songs and `tx` returned one song, roaming switched to `tx`, updated the active source button, and appended the fallback song into the playlist.
+- Follow-up: If the external proxy remains unavailable on this machine, the next pass should focus on the backend search source itself rather than the roaming control flow.

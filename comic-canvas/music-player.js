@@ -224,32 +224,39 @@ const MusicAPI = (() => {
 
   const _urlCache = new Map();
 
+  async function searchWithPlugins(query, source) {
+    if (!window.LXPlugins || typeof window.LXPlugins.search !== 'function') return [];
+    const pluginSources = Array.from(new Set([
+      String(source || 'wy').trim() || 'wy',
+      source === 'wy' ? 'qsvip' : null,
+    ].filter(Boolean)));
+
+    for (const pluginSource of pluginSources) {
+      try {
+        const result = await window.LXPlugins.search(query, pluginSource);
+        const pluginSongs = extractSongList(result);
+        if (pluginSongs.length > 0) {
+          console.log(`[MusicAPI] plugin search hit ${pluginSongs.length} from ${pluginSource}`);
+          return pluginSongs.map(s => normalizeSong(s, {
+            source: s.source || pluginSource,
+            apiId: 'plugin',
+            backendKind: 'plugin',
+          }));
+        }
+      } catch (e) {
+        console.log(`[MusicAPI] plugin search unavailable for ${pluginSource}, trying next backend:`, e.message);
+      }
+    }
+    return [];
+  }
+
   async function search(query, source = 'wy') {
     const settings = readSettings();
     await waitForPlugins();
 
-    if (settings.usePluginSearch && window.LXPlugins && typeof window.LXPlugins.search === 'function') {
-      const pluginSources = Array.from(new Set([
-        String(source || 'wy').trim() || 'wy',
-        source === 'wy' ? 'qsvip' : null,
-      ].filter(Boolean)));
-
-      for (const pluginSource of pluginSources) {
-        try {
-          const result = await window.LXPlugins.search(query, pluginSource);
-          const pluginSongs = extractSongList(result);
-          if (pluginSongs.length > 0) {
-            console.log(`[MusicAPI] plugin search hit ${pluginSongs.length} from ${pluginSource}`);
-            return pluginSongs.map(s => normalizeSong(s, {
-              source: s.source || pluginSource,
-              apiId: 'plugin',
-              backendKind: 'plugin',
-            }));
-          }
-        } catch (e) {
-          console.log(`[MusicAPI] plugin search unavailable for ${pluginSource}, trying next backend:`, e.message);
-        }
-      }
+    if (settings.usePluginSearch) {
+      const pluginSongs = await searchWithPlugins(query, source);
+      if (pluginSongs.length > 0) return pluginSongs;
     }
 
     const backendSongs = await searchWithBackend(query, source, settings);
@@ -270,6 +277,11 @@ const MusicAPI = (() => {
     } catch (e) {
       console.warn('[MusicAPI] netease search failed:', e.message);
     }
+
+    // Final rescue path: even when plugin search is not explicitly enabled,
+    // try it before giving up so roaming/search can survive backend outages.
+    const pluginFallbackSongs = await searchWithPlugins(query, source);
+    if (pluginFallbackSongs.length > 0) return pluginFallbackSongs;
 
     return [];
   }
@@ -1028,6 +1040,7 @@ class MusicPlayer {
     try {
       let newSongs = [];
       let tries = 0;
+      let matchedSource = this.selectedSource || 'wy';
       while (tries < 6 && newSongs.length === 0) {
         if (this._roamingPool.length === 0) {
           this._roamingPool = this._getRoamingKeywords();
@@ -1036,17 +1049,26 @@ class MusicPlayer {
         const keyword = this._roamingPool.pop();
         if (!keyword) break;
 
-        const results = await MusicAPI.search(keyword, this.selectedSource || 'wy');
-        const songs = Array.isArray(results) ? results : [];
-        if (songs.length > 0) {
+        for (const source of this._getRoamingSources()) {
+          const results = await MusicAPI.search(keyword, source);
+          const songs = Array.isArray(results) ? results : [];
+          if (!songs.length) continue;
           newSongs = songs.filter(s => !this._roamingHistory.includes(s.id + '_' + s.source));
+          if (newSongs.length > 0) {
+            matchedSource = source;
+            break;
+          }
         }
         tries++;
       }
 
       if (newSongs.length === 0) {
-        if (this.roaming) this._showToast('No songs found from current source, roaming paused');
+        if (this.roaming) this._showToast('Current source unavailable, roaming could not find playable songs');
         return;
+      }
+
+      if (matchedSource && matchedSource !== this.selectedSource) {
+        this._setSelectedSource(matchedSource, false);
       }
 
       // 闅忔満閫?1-3 棣栨坊鍔犲埌鎾斁鍒楄〃
@@ -1354,6 +1376,30 @@ class MusicPlayer {
     this.searchEmpty.textContent = 'Enter keywords to search online music';
     this.searchLoading.style.display = 'none';
     this.searchResults.style.display = 'none';
+  }
+
+  _setSelectedSource(source, rerunSearch = false) {
+    const next = String(source || 'wy').trim() || 'wy';
+    this.selectedSource = next;
+    this.sourceBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.source === next);
+    });
+    if (rerunSearch) {
+      const q = this.searchInput.value.trim();
+      if (q) this._doSearch(q);
+    }
+  }
+
+  _getRoamingSources() {
+    return Array.from(new Set([
+      this.selectedSource || 'wy',
+      'wy',
+      'tx',
+      'kw',
+      'kg',
+      'mg',
+      'qsvip',
+    ].filter(Boolean)));
   }
 
   async _doSearch(query) {

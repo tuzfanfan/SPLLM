@@ -193,11 +193,47 @@ SPLLM/
 |- assets/                  shared static assets
 |- records/                 tracked workflow records
 |- reports/                 tracked audit or maintenance reports
+|- comic-canvas/            browser-based comic/storyboard creation tool
 |- AGENTS.md                project operating instructions
 |- CLAUDE.md                agent manual
 |- SCHEMA.md                schema and content rules
 |- ARCHITECTURE.md          core architecture summary
 `- README.md                this file
+```
+
+---
+
+## Projects
+
+### comic-canvas
+
+A browser-based comic and storyboard creation tool built as a single-file
+vanilla HTML/JS application with no build tools or frameworks.
+
+Key features:
+
+- **Visual node canvas**: organize characters, shots, dialogue, scenes, pages,
+  and containers on a Drawflow-powered canvas with drag-and-drop, connection
+  snapping, and container grouping.
+- **Cinematic node model**: production-grade fields for shot language, continuity
+  locks, identity locks, scene topology, dialogue coverage, and page metadata.
+- **AI integration**: OpenAI-compatible API for Markdown import/export with
+  embedded JSON snapshots for lossless round-trip.
+- **Music system**: embedded player with NetEase Cloud Music API, multi-source
+  plugin support via lx-shim, and a roaming mode that auto-discovers music.
+- **Design system**: Totality Festival purple theme with dark/light modes,
+  glass-morphism effects, flowing-light connection animations, and a 3D
+  character card component (Three.js sphere).
+
+Tech stack: single `index.html` (~7000 lines), Drawflow 0.0.60 (inlined),
+Three.js v0.160.0 (CDN), Node.js dev server (`server.cjs`).
+
+Run locally:
+
+```bash
+cd comic-canvas
+node server.cjs
+# Open http://localhost:8080/index-entry.html
 ```
 
 ---

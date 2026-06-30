@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>漫剧画布 · 项目管理中心</title>
+<title>婕墽鐢诲竷 路 椤圭洰绠＄悊涓績</title>
 <style>
 /* ============ Totality Festival Tokens ============ */
 :root{
-  /* ---- 色彩 ---- */
+  /* ---- 鑹插僵 ---- */
   --bg: #070711;
   --surface: #111126;
   --surface-warm: #1e1540;
@@ -61,7 +61,7 @@
   --overlay-bg: rgba(7,7,17,.7);
 }
 
-/* ---- 浅色主题 ---- */
+/* ---- 娴呰壊涓婚 ---- */
 [data-theme="light"]{
   --bg: #f5f3f0;
   --surface: #ffffff;
@@ -106,7 +106,7 @@ body{
   transition: background var(--motion-base) var(--ease-standard), color var(--motion-base) var(--ease-standard);
 }
 
-/* ============ 背景 ============ */
+/* ============ 鑳屾櫙 ============ */
 .bg-layer{
   position:fixed; inset:0; z-index:0; pointer-events:none;
   background:
@@ -116,10 +116,10 @@ body{
   transition: background var(--motion-base) var(--ease-standard);
 }
 
-/* ============ 布局 ============ */
+/* ============ 甯冨眬 ============ */
 .app{position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column}
 
-/* ============ 顶栏 ============ */
+/* ============ 椤舵爮 ============ */
 .topbar{
   height:56px; display:flex; align-items:center; gap:12px;
   padding:0 var(--space-6);
@@ -130,12 +130,15 @@ body{
   flex-shrink:0;
   transition: background var(--motion-base) var(--ease-standard), border-color var(--motion-base) var(--ease-standard);
 }
-.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:var(--text-lg); letter-spacing:var(--tracking-display); color:var(--fg); white-space:nowrap}
-.brand .logo{font-size:var(--text-xl); filter:drop-shadow(0 0 8px rgba(192,132,252,.4))}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:var(--text-lg); letter-spacing:var(--tracking-display); color:var(--fg); white-space:nowrap; position:relative; overflow:hidden; cursor:pointer}
+.brand .logo-img{height:44px; width:104px; transition:transform .3s ease}
+.brand:hover .logo-img{transform:scale(1.05)}
+.brand::after{content:''; position:absolute; top:0; left:-80%; width:50%; height:100%; background:linear-gradient(105deg, transparent 40%, rgba(255,255,255,.35) 45%, rgba(255,255,255,.55) 50%, rgba(255,255,255,.35) 55%, transparent 60%); transform:skewX(-25deg); pointer-events:none; transition:left .6s ease}
+.brand:hover::after{left:130%}
 .brand small{color:var(--muted); font-weight:400; font-size:var(--text-xs); margin-left:4px}
 .topbar-spacer{flex:1}
 
-/* 搜索框 */
+/* 鎼滅储妗?*/
 .search-box{
   position:relative; display:flex; align-items:center;
 }
@@ -153,7 +156,7 @@ body{
   color:var(--muted); font-size:14px; pointer-events:none;
 }
 
-/* 新建按钮 */
+/* 鏂板缓鎸夐挳 */
 .btn-primary{
   height:34px; padding:0 18px; border-radius:var(--radius-sm); border:none;
   background:var(--accent); color:var(--accent-on); font-size:var(--text-sm);
@@ -164,7 +167,7 @@ body{
 .btn-primary:hover{background:var(--accent-hover); transform:translateY(-1px)}
 .btn-primary:active{background:var(--accent-active); transform:translateY(0)}
 
-/* 主题切换按钮 */
+/* 涓婚鍒囨崲鎸夐挳 */
 .theme-toggle-entry{
   width:34px; height:34px; border-radius:var(--radius-sm);
   border:1px solid var(--border); background:var(--surface);
@@ -193,13 +196,13 @@ body{
 [data-theme="light"] .theme-toggle-entry .icon-dark{ opacity:0; transform:scale(0.5); }
 [data-theme="light"] .theme-toggle-entry .icon-light{ opacity:1; transform:scale(1); }
 
-/* ============ 主内容区 ============ */
+/* ============ 涓诲唴瀹瑰尯 ============ */
 .main{
   flex:1; padding:var(--space-8) var(--space-6);
   max-width:1200px; width:100%; margin:0 auto;
 }
 
-/* 标题区 */
+/* 鏍囬鍖?*/
 .header{
   margin-bottom:var(--space-8);
 }
@@ -210,7 +213,7 @@ body{
 }
 .header p{color:var(--muted); font-size:var(--text-sm)}
 
-/* 排序/视图控制 */
+/* 鎺掑簭/瑙嗗浘鎺у埗 */
 .toolbar-row{
   display:flex; align-items:center; gap:12px; margin-bottom:var(--space-6);
   flex-wrap:wrap;
@@ -225,14 +228,14 @@ body{
 .sort-group select:focus{border-color:var(--accent)}
 .stat-text{color:var(--muted); font-size:var(--text-xs); margin-left:auto}
 
-/* ============ 项目网格 ============ */
+/* ============ 椤圭洰缃戞牸 ============ */
 .project-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
   gap:var(--space-5);
 }
 
-/* 项目卡片 */
+/* 椤圭洰鍗＄墖 */
 .project-card{
   background:var(--surface);
   border:1px solid var(--border);
@@ -249,7 +252,7 @@ body{
 }
 .project-card:active{transform:translateY(-1px)}
 
-/* 卡片封面 */
+/* 鍗＄墖灏侀潰 */
 .card-cover{
   height:140px; position:relative; overflow:hidden;
   background:linear-gradient(135deg, var(--surface-warm) 0%, var(--surface) 100%);
@@ -280,7 +283,7 @@ body{
 }
 .card-cover .empty-cover .empty-icon{font-size:32px; opacity:0.5}
 
-/* 卡片信息 */
+/* 鍗＄墖淇℃伅 */
 .card-body{padding:var(--space-4)}
 .card-title{
   font-size:var(--text-base); font-weight:600; color:var(--fg);
@@ -293,7 +296,7 @@ body{
 }
 .card-meta span{display:flex; align-items:center; gap:4px}
 
-/* 卡片操作按钮 */
+/* 鍗＄墖鎿嶄綔鎸夐挳 */
 .card-actions{
   position:absolute; top:8px; left:8px; z-index:3;
   display:flex; gap:4px;
@@ -310,7 +313,7 @@ body{
 .card-action-btn:hover{background:var(--accent); color:var(--accent-on); border-color:var(--accent)}
 .card-action-btn.danger:hover{background:var(--danger); color:#fff; border-color:var(--danger)}
 
-/* ============ 新建项目卡片 ============ */
+/* ============ 鏂板缓椤圭洰鍗＄墖 ============ */
 .new-project-card{
   background:transparent;
   border:2px dashed var(--border);
@@ -332,7 +335,7 @@ body{
 }
 .new-project-card span{font-size:var(--text-sm); font-weight:500}
 
-/* ============ 空状态 ============ */
+/* ============ 绌虹姸鎬?============ */
 .empty-state{
   text-align:center; padding:var(--space-12) var(--space-4);
   color:var(--muted);
@@ -341,7 +344,7 @@ body{
 .empty-state h3{font-size:var(--text-lg); color:var(--fg-2); margin-bottom:var(--space-2)}
 .empty-state p{font-size:var(--text-sm); max-width:360px; margin:0 auto}
 
-/* ============ 对话框 ============ */
+/* ============ 瀵硅瘽妗?============ */
 .modal-overlay{
   position:fixed; inset:0; z-index:100;
   background:var(--overlay-bg); backdrop-filter:blur(8px);
@@ -391,7 +394,7 @@ body{
 }
 .btn-danger:hover{filter:brightness(1.1)}
 
-/* ============ 右键菜单 ============ */
+/* ============ 鍙抽敭鑿滃崟 ============ */
 .ctx-menu{
   position:fixed; z-index:200;
   background:var(--surface); border:1px solid var(--border);
@@ -411,7 +414,7 @@ body{
 .ctx-item.danger:hover{background:rgba(255,77,141,.1)}
 .ctx-sep{height:1px; background:var(--border); margin:var(--space-1) 0}
 
-/* ============ 响应式 ============ */
+/* ============ 鍝嶅簲寮?============ */
 @media(max-width:640px){
   .topbar{padding:0 var(--space-3); gap:8px}
   .brand small{display:none}
@@ -425,51 +428,49 @@ body{
 <body>
 <div class="bg-layer"></div>
 <div class="app">
-  <!-- 顶栏 -->
+  <!-- 椤舵爮 -->
   <div class="topbar">
     <div class="brand">
-      <span class="logo">🎨</span>
-      漫剧画布
-      <small>项目管理中心</small>
+      <img src="pics/logo.png" alt="婕墽鐢诲竷" class="logo-img" />
     </div>
     <div class="topbar-spacer"></div>
     <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="搜索项目…" autocomplete="off" />
+      <span class="search-icon">馃攳</span>
+      <input type="text" id="searchInput" placeholder="鎼滅储椤圭洰鈥? autocomplete="off" />
     </div>
-    <button class="btn-ghost" id="btnImport" style="height:34px;padding:0 14px;font-size:var(--text-sm)">📤 导入</button>
-    <button class="theme-toggle-entry" id="btn-theme-entry" title="切换深色/浅色主题" aria-label="切换主题">
-      <span class="icon-dark">🌙</span>
-      <span class="icon-light">☀️</span>
+    <button class="btn-ghost" id="btnImport" style="height:34px;padding:0 14px;font-size:var(--text-sm)">馃摛 瀵煎叆</button>
+    <button class="theme-toggle-entry" id="btn-theme-entry" title="鍒囨崲娣辫壊/娴呰壊涓婚" aria-label="鍒囨崲涓婚">
+      <span class="icon-dark">馃寵</span>
+      <span class="icon-light">鈽€锔?/span>
     </button>
     <button class="btn-primary" id="btnNew">
-      <span>＋</span> 新建项目
+      <span>锛?/span> 鏂板缓椤圭洰
     </button>
     <input type="file" id="fileImport" accept=".json" style="display:none" />
   </div>
 
-  <!-- 主区域 -->
+  <!-- 涓诲尯鍩?-->
   <div class="main">
     <div class="header">
-      <h1>我的项目</h1>
-      <p>管理你的所有漫剧创作项目</p>
+      <h1>鎴戠殑椤圭洰</h1>
+      <p>绠＄悊浣犵殑鎵€鏈夋极鍓у垱浣滈」鐩?/p>
     </div>
 
     <div class="toolbar-row">
       <div class="sort-group">
-        <label>排序</label>
+        <label>鎺掑簭</label>
         <select id="sortSelect">
-          <option value="updatedAt">最近修改</option>
-          <option value="createdAt">创建时间</option>
-          <option value="name">名称</option>
-          <option value="nodeCount">节点数量</option>
+          <option value="updatedAt">鏈€杩戜慨鏀?/option>
+          <option value="createdAt">鍒涘缓鏃堕棿</option>
+          <option value="name">鍚嶇О</option>
+          <option value="nodeCount">鑺傜偣鏁伴噺</option>
         </select>
       </div>
       <div class="sort-group">
-        <label>顺序</label>
+        <label>椤哄簭</label>
         <select id="orderSelect">
-          <option value="desc">降序</option>
-          <option value="asc">升序</option>
+          <option value="desc">闄嶅簭</option>
+          <option value="asc">鍗囧簭</option>
         </select>
       </div>
       <span class="stat-text" id="statText"></span>
@@ -479,29 +480,29 @@ body{
   </div>
 </div>
 
-<!-- 新建/重命名对话框 -->
+<!-- 鏂板缓/閲嶅懡鍚嶅璇濇 -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
-    <h2 id="modalTitle">新建项目</h2>
-    <label id="modalLabel">项目名称</label>
-    <input type="text" id="modalInput" placeholder="输入项目名称…" maxlength="60" />
+    <h2 id="modalTitle">鏂板缓椤圭洰</h2>
+    <label id="modalLabel">椤圭洰鍚嶇О</label>
+    <input type="text" id="modalInput" placeholder="杈撳叆椤圭洰鍚嶇О鈥? maxlength="60" />
     <div class="modal-actions">
-      <button class="btn-ghost" id="modalCancel">取消</button>
-      <button class="btn-danger" id="modalConfirmDanger" style="display:none">确认删除</button>
-      <button class="btn-primary" id="modalConfirm">确定</button>
+      <button class="btn-ghost" id="modalCancel">鍙栨秷</button>
+      <button class="btn-danger" id="modalConfirmDanger" style="display:none">纭鍒犻櫎</button>
+      <button class="btn-primary" id="modalConfirm">纭畾</button>
     </div>
   </div>
 </div>
 
-<!-- 右键菜单 -->
+<!-- 鍙抽敭鑿滃崟 -->
 <div class="ctx-menu" id="ctxMenu">
-  <div class="ctx-item" data-action="open">📂 打开项目</div>
-  <div class="ctx-item" data-action="rename">✏️ 重命名</div>
-  <div class="ctx-item" data-action="duplicate">📋 复制项目</div>
+  <div class="ctx-item" data-action="open">馃搨 鎵撳紑椤圭洰</div>
+  <div class="ctx-item" data-action="rename">鉁忥笍 閲嶅懡鍚?/div>
+  <div class="ctx-item" data-action="duplicate">馃搵 澶嶅埗椤圭洰</div>
   <div class="ctx-sep"></div>
-  <div class="ctx-item" data-action="export">📤 导出 JSON</div>
+  <div class="ctx-item" data-action="export">馃摛 瀵煎嚭 JSON</div>
   <div class="ctx-sep"></div>
-  <div class="ctx-item danger" data-action="delete">🗑️ 删除项目</div>
+  <div class="ctx-item danger" data-action="delete">馃棏锔?鍒犻櫎椤圭洰</div>
 </div>
 
 <script>
@@ -509,8 +510,7 @@ body{
 'use strict';
 
 /* ============================================================
-   主题管理（与 index.html 共享）
-============================================================ */
+   涓婚绠＄悊锛堜笌 index.html 鍏变韩锛?============================================================ */
 const THEME_LS_KEY = 'comic-canvas:theme';
 let currentTheme = 'dark';
 try { currentTheme = localStorage.getItem(THEME_LS_KEY) || 'dark'; } catch(_) {}
@@ -525,20 +525,25 @@ function toggleEntryTheme(){
 }
 
 /* ============================================================
-   常量 & 工具
+   甯搁噺 & 宸ュ叿
 ============================================================ */
 const PROJECT_REG_KEY = 'comic-canvas:projects';
 const DEFAULT_LS_KEY = 'comic-canvas:v1';
 const TYPE_COLORS = {
   char:'#c084fc', shot:'#818cf8', line:'#fb923c',
-  scene:'#34d399', end:'#ff6b9d',
-  visual:'#22d3ee', asset:'#a3e635', page:'#f472b6'
+  container:'#64748b', page:'#f472b6'
 };
 const TYPE_LABELS = {
   char:'角色', shot:'分镜', line:'台词',
-  scene:'场景', end:'结局',
-  visual:'视觉', asset:'资产', page:'页面帧'
+  container:'容器', page:'页面帧'
 };
+function normalizeProjectNodeType(type){
+  if(type === 'branch') return 'page';
+  if(type === 'scene' || type === 'asset') return 'container';
+  if(type === 'visual') return 'shot';
+  if(type === 'end') return 'page';
+  return TYPE_COLORS[type] ? type : 'shot';
+}
 
 function genId(){ return 'p_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,8); }
 
@@ -575,7 +580,7 @@ function formatDate(iso){
 }
 
 /* ============================================================
-   确保默认项目被纳入注册表
+   纭繚榛樿椤圭洰琚撼鍏ユ敞鍐岃〃
 ============================================================ */
 function ensureDefaultProject(){
   const raw = localStorage.getItem(DEFAULT_LS_KEY);
@@ -584,17 +589,18 @@ function ensureDefaultProject(){
     const data = JSON.parse(raw);
     if(!data || !data.nodes || !Object.keys(data.nodes).length) return;
     const reg = getReg();
-    // 检查是否已有默认项目条目
+    // 检查是否已有默认项目
     const hasDefault = reg.some(p => p.id === '__default__');
     if(!hasDefault){
-      // 统计节点类型
+      // 缁熻鑺傜偣绫诲瀷
       const typeCounts = {};
       Object.values(data.nodes).forEach(n => {
-        typeCounts[n.type] = (typeCounts[n.type]||0) + 1;
+        const nt = normalizeProjectNodeType(n.type);
+        typeCounts[nt] = (typeCounts[nt]||0) + 1;
       });
       reg.push({
         id: '__default__',
-        name: '默认项目',
+        name: '榛樿椤圭洰',
         createdAt: data.exportedAt || new Date().toISOString(),
         updatedAt: data.exportedAt || new Date().toISOString(),
         nodeCount: Object.keys(data.nodes).length,
@@ -606,7 +612,7 @@ function ensureDefaultProject(){
 }
 
 /* ============================================================
-   封面生成
+   灏侀潰鐢熸垚
 ============================================================ */
 function generateCover(canvas, project){
   const ctx = canvas.getContext('2d');
@@ -632,12 +638,12 @@ function generateCover(canvas, project){
   const total = project.nodeCount || 0;
   if(total === 0) return;
 
-  // 绘制抽象节点表示
+  // 缁樺埗鎶借薄鑺傜偣琛ㄧず
   const seed = project.id.split('').reduce((a,c) => a + c.charCodeAt(0), 0);
   let rng = seed;
   function rand(){ rng = (rng * 16807 + 11) % 2147483647; return (rng & 0x7fffffff) / 0x7fffffff; }
 
-  // 绘制连线
+  // 缁樺埗杩炵嚎
   const nodes = [];
   const types = Object.entries(tc);
   let idx = 0;
@@ -652,7 +658,7 @@ function generateCover(canvas, project){
     }
   });
 
-  // 连线
+  // 杩炵嚎
   const connColor = currentTheme === 'dark' ? 'rgba(192,132,252,0.15)' : 'rgba(139,92,246,0.12)';
   ctx.strokeStyle = connColor;
   ctx.lineWidth = 1;
@@ -663,7 +669,7 @@ function generateCover(canvas, project){
       if(j !== i){
         ctx.beginPath();
         ctx.moveTo(nodes[i].x, nodes[i].y);
-        // 贝塞尔曲线
+        // 贝塞尔曲线控制点
         const cx1 = nodes[i].x + (rand()-0.5)*60;
         const cy1 = nodes[i].y + (rand()-0.5)*40;
         const cx2 = nodes[j].x + (rand()-0.5)*60;
@@ -674,7 +680,7 @@ function generateCover(canvas, project){
     }
   }
 
-  // 节点圆点
+  // 鑺傜偣鍦嗙偣
   nodes.forEach(n => {
     const color = TYPE_COLORS[n.type] || '#c084fc';
     ctx.beginPath();
@@ -683,7 +689,7 @@ function generateCover(canvas, project){
     ctx.globalAlpha = 0.7;
     ctx.fill();
     ctx.globalAlpha = 1;
-    // 光晕
+    // 鍏夋檿
     ctx.beginPath();
     ctx.arc(n.x, n.y, n.r + 3, 0, Math.PI*2);
     ctx.fillStyle = color.replace(')', ',0.15)').replace('rgb', 'rgba');
@@ -692,7 +698,7 @@ function generateCover(canvas, project){
 }
 
 /* ============================================================
-   渲染
+   娓叉煋
 ============================================================ */
 const grid = document.getElementById('projectGrid');
 const searchInput = document.getElementById('searchInput');
@@ -713,7 +719,8 @@ function loadProjects(){
     const typeCounts = {};
     if(data && data.nodes){
       Object.values(data.nodes).forEach(n => {
-        typeCounts[n.type] = (typeCounts[n.type]||0) + 1;
+        const nt = normalizeProjectNodeType(n.type);
+        typeCounts[nt] = (typeCounts[nt]||0) + 1;
       });
     }
     return {
@@ -727,12 +734,12 @@ function loadProjects(){
 
 function getFilteredSorted(){
   let list = [...allProjects];
-  // 搜索过滤
+  // 鎼滅储杩囨护
   const q = searchInput.value.trim().toLowerCase();
   if(q){
     list = list.filter(p => (p.name||'').toLowerCase().includes(q) || (p.id||'').toLowerCase().includes(q));
   }
-  // 排序
+  // 鎺掑簭
   const sortBy = sortSelect.value;
   const order = orderSelect.value;
   list.sort((a, b) => {
@@ -768,9 +775,9 @@ function render(){
     // 空状态
     grid.innerHTML = `
       <div class="empty-state" style="grid-column:1/-1">
-        <div class="empty-icon">🎬</div>
+        <div class="empty-icon">🎨</div>
         <h3>还没有任何项目</h3>
-        <p>点击「新建项目」开始你的漫剧创作之旅吧！</p>
+        <p>点击“新建项目”开始你的漫剧创作。</p>
       </div>
     `;
     // 仍然显示新建卡片
@@ -784,7 +791,7 @@ function render(){
       <div class="empty-state" style="grid-column:1/-1">
         <div class="empty-icon">🔍</div>
         <h3>没有找到匹配的项目</h3>
-        <p>试试其他关键词吧</p>
+        <p>试试其他关键词。</p>
       </div>
     `;
     const newCard = createNewCard();
@@ -792,23 +799,23 @@ function render(){
     return;
   }
 
-  // 渲染项目卡片
+  // 娓叉煋椤圭洰鍗＄墖
   list.forEach(p => {
     const card = document.createElement('div');
     card.className = 'project-card';
     card.dataset.id = p.id;
 
-    // 操作按钮
+    // 鎿嶄綔鎸夐挳
     const actions = document.createElement('div');
     actions.className = 'card-actions';
     actions.innerHTML = `
-      <button class="card-action-btn" data-act="rename" title="重命名">✏️</button>
-      <button class="card-action-btn" data-act="duplicate" title="复制">📋</button>
-      <button class="card-action-btn danger" data-act="delete" title="删除">🗑️</button>
+      <button class="card-action-btn" data-act="rename" title="閲嶅懡鍚?>鉁忥笍</button>
+      <button class="card-action-btn" data-act="duplicate" title="澶嶅埗">馃搵</button>
+      <button class="card-action-btn danger" data-act="delete" title="鍒犻櫎">馃棏锔?/button>
     `;
     card.appendChild(actions);
 
-    // 封面
+    // 灏侀潰
     const cover = document.createElement('div');
     cover.className = 'card-cover';
     if(p.nodeCount > 0){
@@ -819,28 +826,28 @@ function render(){
       cover.appendChild(overlay);
       const badge = document.createElement('div');
       badge.className = 'node-count-badge';
-      badge.textContent = p.nodeCount + ' 节点';
+      badge.textContent = p.nodeCount + ' 鑺傜偣';
       cover.appendChild(badge);
-      // 延迟渲染 canvas
+      // 寤惰繜娓叉煋 canvas
       requestAnimationFrame(() => generateCover(cvs, p));
     } else {
-      cover.innerHTML = `<div class="empty-cover"><span class="empty-icon">📄</span><span>空项目</span></div>`;
+      cover.innerHTML = `<div class="empty-cover"><span class="empty-icon">馃搫</span><span>绌洪」鐩?/span></div>`;
     }
     card.appendChild(cover);
 
-    // 信息
+    // 淇℃伅
     const body = document.createElement('div');
     body.className = 'card-body';
     body.innerHTML = `
       <div class="card-title" title="${escHtml(p.name)}">${escHtml(p.name)}</div>
       <div class="card-meta">
-        <span>🕐 ${formatDate(p.updatedAt)}</span>
+        <span>馃晲 ${formatDate(p.updatedAt)}</span>
         ${renderTypeBadges(p.typeCounts)}
       </div>
     `;
     card.appendChild(body);
 
-    // 点击打开
+    // 鐐瑰嚮鎵撳紑
     card.addEventListener('click', (e) => {
       const act = e.target.closest('[data-act]');
       if(act){
@@ -851,7 +858,7 @@ function render(){
       openProject(p.id);
     });
 
-    // 右键菜单
+    // 鍙抽敭鑿滃崟
     card.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       showCtxMenu(e.clientX, e.clientY, p.id);
@@ -860,16 +867,23 @@ function render(){
     grid.appendChild(card);
   });
 
-  // 新建卡片
+  // 鏂板缓鍗＄墖
   grid.appendChild(createNewCard());
 }
 
 function renderTypeBadges(typeCounts){
   if(!typeCounts || !Object.keys(typeCounts).length) return '';
+  const labelMap = {
+    char:'瑙掕壊',
+    shot:'鍒嗛暅',
+    line:'鍙拌瘝',
+    container:'瀹瑰櫒',
+    page:'页面帧'
+  };
   return Object.entries(typeCounts)
     .sort((a,b) => b[1]-a[1])
     .slice(0, 3)
-    .map(([t,c]) => `<span style="color:${TYPE_COLORS[t]||'#ccc'}">${TYPE_LABELS[t]||t} ${c}</span>`)
+    .map(([t,c]) => `<span style="color:${TYPE_COLORS[t]||'#ccc'}">${labelMap[t] || TYPE_LABELS[t] || t} ${c}</span>`)
     .join('');
 }
 
@@ -882,13 +896,13 @@ function escHtml(s){
 function createNewCard(){
   const card = document.createElement('div');
   card.className = 'new-project-card';
-  card.innerHTML = `<div class="plus-icon">＋</div><span>新建项目</span>`;
+  card.innerHTML = `<div class="plus-icon">锛?/div><span>鏂板缓椤圭洰</span>`;
   card.addEventListener('click', () => showCreateModal());
   return card;
 }
 
 /* ============================================================
-   操作
+   鎿嶄綔
 ============================================================ */
 function openProject(id){
   if(id === '__default__'){
@@ -918,7 +932,7 @@ function showCreateModal(){
   title.textContent = '新建项目';
   label.textContent = '项目名称';
   input.value = '';
-  input.placeholder = '输入项目名称…';
+  input.placeholder = '输入项目名称';
   confirmBtn.textContent = '创建';
   dangerBtn.style.display = 'none';
   overlay.classList.add('active');
@@ -941,7 +955,7 @@ function showRenameModal(id){
   title.textContent = '重命名项目';
   label.textContent = '新名称';
   input.value = p.name || '';
-  input.placeholder = '输入新名称…';
+  input.placeholder = '输入新名称';
   confirmBtn.textContent = '确定';
   dangerBtn.style.display = 'none';
   overlay.classList.add('active');
@@ -968,7 +982,7 @@ function showDeleteConfirm(id){
   label.style.display = 'block';
   confirmBtn.style.display = 'none';
   dangerBtn.style.display = 'inline-flex';
-  dangerBtn.textContent = '确认删除';
+  dangerBtn.textContent = '纭鍒犻櫎';
   overlay.classList.add('active');
   overlay.dataset.mode = 'delete';
   overlay.dataset.targetId = id;
@@ -994,20 +1008,21 @@ function duplicateProject(id){
   if(!data) return;
 
   const newId = genId();
-  const newName = (src.name || '未命名') + ' (副本)';
+  const newName = (src.name || '未命名') + '（副本）';
 
-  // 复制数据
+  // 澶嶅埗鏁版嵁
   setProjectData(newId, JSON.parse(JSON.stringify(data)));
 
-  // 统计节点类型
+  // 缁熻鑺傜偣绫诲瀷
   const typeCounts = {};
   if(data.nodes){
     Object.values(data.nodes).forEach(n => {
-      typeCounts[n.type] = (typeCounts[n.type]||0) + 1;
+      const nt = normalizeProjectNodeType(n.type);
+      typeCounts[nt] = (typeCounts[nt]||0) + 1;
     });
   }
 
-  // 注册
+  // 娉ㄥ唽
   reg.push({
     id: newId,
     name: newName,
@@ -1025,7 +1040,7 @@ function exportProject(id){
   const src = reg.find(x => x.id === id);
   if(!src) return;
   const data = getProjectData(id === '__default__' ? null : id);
-  if(!data){ alert('项目数据为空'); return; }
+  if(!data){ alert('椤圭洰鏁版嵁涓虹┖'); return; }
 
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
@@ -1037,7 +1052,7 @@ function exportProject(id){
 }
 
 /* ============================================================
-   右键菜单
+   鍙抽敭鑿滃崟
 ============================================================ */
 const ctxMenu = document.getElementById('ctxMenu');
 
@@ -1046,7 +1061,7 @@ function showCtxMenu(x, y, id){
   ctxMenu.style.left = x + 'px';
   ctxMenu.style.top = y + 'px';
   ctxMenu.classList.add('active');
-  // 边界检测
+  // 边界检查
   requestAnimationFrame(() => {
     const rect = ctxMenu.getBoundingClientRect();
     if(rect.right > window.innerWidth) ctxMenu.style.left = (x - rect.width) + 'px';
@@ -1072,11 +1087,11 @@ ctxMenu.addEventListener('click', (e) => {
 });
 
 /* ============================================================
-   事件绑定
+   浜嬩欢缁戝畾
 ============================================================ */
 document.getElementById('btnNew').addEventListener('click', showCreateModal);
 
-// 导入项目
+// 瀵煎叆椤圭洰
 document.getElementById('btnImport').addEventListener('click', () => {
   document.getElementById('fileImport').click();
 });
@@ -1089,14 +1104,17 @@ document.getElementById('fileImport').addEventListener('change', (e) => {
     try{
       const data = JSON.parse(ev.target.result);
       if(!data || data.app !== 'comic-canvas'){
-        alert('不是有效的漫剧画布项目文件'); return;
+        alert('这不是有效的漫剧画布项目文件。'); return;
       }
       const id = genId();
       const name = file.name.replace(/\.json$/i, '');
       const now = new Date().toISOString();
       const typeCounts = {};
       if(data.nodes){
-        Object.values(data.nodes).forEach(n => { typeCounts[n.type] = (typeCounts[n.type]||0)+1; });
+        Object.values(data.nodes).forEach(n => {
+          const nt = normalizeProjectNodeType(n.type);
+          typeCounts[nt] = (typeCounts[nt]||0)+1;
+        });
       }
       const reg = getReg();
       reg.push({
@@ -1140,7 +1158,7 @@ document.getElementById('modalConfirm').addEventListener('click', () => {
       typeCounts: {},
     });
     setReg(reg);
-    // 初始化空数据
+    // 鍒濆鍖栫┖鏁版嵁
     setProjectData(id, { version:1, app:'comic-canvas', exportedAt:now, nodes:{}, positions:{}, edges:{} });
     closeModal();
     render();
@@ -1183,7 +1201,7 @@ document.getElementById('modalInput').addEventListener('keydown', (e) => {
   if(e.key === 'Escape') closeModal();
 });
 
-// 搜索 & 排序
+// 鎼滅储 & 鎺掑簭
 searchInput.addEventListener('input', render);
 sortSelect.addEventListener('change', render);
 orderSelect.addEventListener('change', render);
@@ -1194,14 +1212,14 @@ document.addEventListener('keydown', (e) => {
     closeModal();
     hideCtxMenu();
   }
-  // Ctrl/Cmd + N 新建
+  // Ctrl/Cmd + N 鏂板缓
   if((e.ctrlKey || e.metaKey) && e.key === 'n'){
     e.preventDefault();
     showCreateModal();
   }
-  // Ctrl/Cmd + F 聚焦搜索
+  // Ctrl/Cmd + F 鑱氱劍鎼滅储
   if((e.ctrlKey || e.metaKey) && e.key === 'f'){
-    // 只在非编辑器页面生效
+    // 鍙湪闈炵紪杈戝櫒椤甸潰鐢熸晥
     e.preventDefault();
     searchInput.focus();
     searchInput.select();
@@ -1209,10 +1227,9 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* ============================================================
-   初始化
-============================================================ */
+   鍒濆鍖?============================================================ */
 
-// 主题切换按钮
+// 涓婚鍒囨崲鎸夐挳
 const themeBtnEntry = document.getElementById('btn-theme-entry');
 if(themeBtnEntry){
   themeBtnEntry.addEventListener('click', toggleEntryTheme);

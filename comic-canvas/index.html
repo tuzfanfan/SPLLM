@@ -269,7 +269,6 @@ button{font-family:inherit;cursor:pointer}
 }
 .resizable-navbar .brand{
   display:flex; align-items:center; gap:8px;
-  /* Featurebase: font-bold text-gray-600 dark:text-gray-50 */
   font-weight:700;
   font-size:var(--text-sm);
   letter-spacing:var(--tracking-display);
@@ -277,18 +276,32 @@ button{font-family:inherit;cursor:pointer}
   color:var(--fg);
   line-height:1.1;
   cursor:pointer; user-select:none;
+  position:relative; overflow:hidden;
 }
-.resizable-navbar .brand .logo{
-  /* Featurebase: indigo-500 colored icon */
-  font-size:var(--text-lg);
-  filter: drop-shadow(0 0 6px rgba(112,100,242,.5));
+.resizable-navbar .brand .logo-img{
+  height:44px; width:104px;
+  transition: transform .3s ease;
+}
+.resizable-navbar .brand:hover .logo-img{
+  transform: scale(1.05);
+}
+/* 镜面擦亮光效 */
+.resizable-navbar .brand::after{
+  content:''; position:absolute;
+  top:0; left:-80%; width:50%; height:100%;
+  background:linear-gradient(105deg, transparent 40%, rgba(255,255,255,.35) 45%, rgba(255,255,255,.55) 50%, rgba(255,255,255,.35) 55%, transparent 60%);
+  transform:skewX(-25deg);
+  pointer-events:none;
+  transition: left .6s ease;
+}
+.resizable-navbar .brand:hover::after{
+  left:130%;
 }
 .resizable-navbar .brand small{
   color:var(--muted); font-weight:400; font-size:var(--text-xs); margin-left:2px;
 }
 .resizable-navbar .nav-links{
-  /* Featurebase: 居中导航，max-w-max */
-  display:flex; align-items:center; gap:0; margin-left:24px;
+  display:flex; align-items:center; gap:0; margin-left:8px;
 }
 .resizable-navbar .nav-link{
   /* Featurebase: text-sm font-medium text-gray-500 hover:text-gray-300 dark:text-gray-50 dark:hover:text-gray-100 */
@@ -768,9 +781,12 @@ button{font-family:inherit;cursor:pointer}
 
 /* ============ 主体三栏 ============ */
 .main{display:grid; grid-template-columns:var(--palette-w) 1fr var(--inspector-w); height:calc(100vh - var(--topbar-h) - 46px); margin-top:calc(var(--topbar-h) + 5px)}
+.main.no-inspector{grid-template-columns:var(--palette-w) 1fr}
+.main.no-inspector .inspector{display:none}
 
 /* —— 左：资产区 —— */
 .palette{
+  position:relative;
   width:calc(100% - 32px);
   height:calc(100% - 64px);
   margin:32px 0 32px 32px;
@@ -865,6 +881,36 @@ button{font-family:inherit;cursor:pointer}
   color: var(--fg-2);
 }
 
+/* —— 资产区收缩按钮 —— */
+.palette-toggle{
+  position:absolute; top:10px; right:10px; z-index:5;
+  width:24px; height:24px; border:none; border-radius:6px;
+  background:rgba(255,255,255,.08); color:rgba(245,245,245,.7);
+  font-size:14px; line-height:24px; text-align:center;
+  cursor:pointer; transition:background .2s, color .2s;
+  display:grid; place-items:center; padding:0;
+}
+.palette-toggle:hover{background:rgba(255,255,255,.16); color:#fff}
+[data-theme="light"] .palette-toggle{background:rgba(0,0,0,.06); color:var(--fg-2)}
+[data-theme="light"] .palette-toggle:hover{background:rgba(0,0,0,.12)}
+
+/* —— 资产区收缩态 —— */
+.main.palette-collapsed{grid-template-columns:56px 1fr var(--inspector-w)}
+.main.palette-collapsed.no-inspector{grid-template-columns:56px 1fr}
+.main.palette-collapsed .palette{
+  width:calc(100% - 8px); margin:32px 0 32px 8px; padding:34px 4px 6px;
+  border-radius:12px;
+}
+.main.palette-collapsed .palette-toggle{top:6px; right:6px}
+.main.palette-collapsed .sec-title,
+.main.palette-collapsed .asset-card .meta,
+.main.palette-collapsed .asset-card .grip,
+.main.palette-collapsed .hint{display:none}
+.main.palette-collapsed .asset-card{
+  justify-content:center; padding:6px; margin-bottom:4px; min-height:auto;
+}
+.main.palette-collapsed .asset-card .ic{width:28px; height:28px}
+
 /* —— 中：画布 —— */
 .canvas-wrap{position:relative; background:transparent; overflow:hidden}
 
@@ -892,7 +938,10 @@ button{font-family:inherit;cursor:pointer}
 
 /* —— 右：属性区 —— */
 .inspector{
-  background:var(--glass-bg); border-left:1px solid var(--border);
+  height:calc(100% - 64px);
+  margin:32px 32px 32px 0;
+  border-radius:16px;
+  background:var(--glass-bg); border:1px solid var(--border);
   overflow-y:auto; padding:var(--space-4); line-height:20px;
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
@@ -946,6 +995,16 @@ button{font-family:inherit;cursor:pointer}
   outline:none; border-color:var(--accent);
   box-shadow:var(--focus-ring);
   background:var(--surface-warm);
+}
+.field-readonly{
+  width:100%;
+  background:var(--glass-bg);
+  border:var(--elev-ring);
+  border-radius:var(--radius-sm);
+  color:var(--fg);
+  padding:var(--space-3) var(--space-4);
+  font-size:var(--text-sm);
+  line-height:1.5;
 }
 .field-row{display:flex; gap:var(--space-3)}
 .field-row .field{flex:1}
@@ -1094,6 +1153,85 @@ button{font-family:inherit;cursor:pointer}
   fill:none; stroke:var(--accent); stroke-width:2.5;
   stroke-dasharray:8 4; opacity:.7; pointer-events:none;
 }
+.drawflow .drawflow-node.node-line{
+  width:320px !important;
+  height:auto !important;
+  min-height:132px !important;
+  border-radius:0 !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+.drawflow .drawflow-node.node-line .drawflow_content_node{
+  width:100%;
+  height:100%;
+  padding:0 !important;
+}
+.line-bubble{
+  position:relative;
+  width:100%;
+  min-height:132px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:28px 36px 26px 46px;
+  border-radius:46px;
+  background:#fbfbfb;
+  border:5px solid #3f3c3c;
+  box-shadow:0 8px 22px rgba(36,33,33,.08);
+  animation:lineBubblePop .26s var(--ease-standard);
+  overflow:visible;
+}
+.line-bubble::before,
+.line-bubble::after{
+  content:'';
+  position:absolute;
+  border-radius:999px;
+  background:#fbfbfb;
+  border:5px solid #3f3c3c;
+  box-sizing:border-box;
+}
+.line-bubble::before{
+  left:14px;
+  bottom:-18px;
+  width:46px;
+  height:46px;
+}
+.line-bubble::after{
+  left:8px;
+  bottom:-34px;
+  width:28px;
+  height:28px;
+}
+.line-speaker{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+.line-content{
+  font-size:18px;
+  line-height:1.35;
+  color:#242326;
+  font-weight:500;
+  white-space:pre-wrap;
+  word-break:break-word;
+  text-align:center;
+  max-width:100%;
+}
+.line-meta{
+  display:none !important;
+}
+@keyframes lineBubblePop{
+  0%{ opacity:0; transform:translateY(10px) scale(.94); }
+  100%{ opacity:1; transform:translateY(0) scale(1); }
+}
 .node-skin{width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;height:100%;justify-content:center}
 .node-skin .n-top{display:flex;align-items:center;gap:5px;margin-bottom:2px;justify-content:center}
 .node-skin .n-ic{
@@ -1203,18 +1341,38 @@ button{font-family:inherit;cursor:pointer}
   filter:drop-shadow(0 -2px 2px rgba(0,0,0,.1));
 }
 
-.drawflow .connection .main-path{
-  stroke-width:2.5px;
-  stroke:var(--border);
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,.15));
+/* ---- 流光连线 ---- */
+@keyframes conn-flow {
+  from { stroke-dashoffset: 0 }
+  to   { stroke-dashoffset: -40 }
 }
-.drawflow .connection .main-path.selected{
-  stroke:var(--accent) !important;
-  filter: drop-shadow(0 2px 8px rgba(59,109,214,.35));
+
+/* 基础连线 + 流光脉冲 */
+.drawflow .connection .main-path {
+  stroke-width: 5px;
+  stroke: #000;
+  opacity: .5;
+  stroke-dasharray: 14 22;
+  stroke-linecap: round;
+  animation: conn-flow 1.6s linear infinite;
+  filter: url(#conn-glow);
+  will-change: stroke-dashoffset;
 }
-.drawflow .connection .main-path:hover{
-  stroke:var(--fg-2) !important;
-  filter: drop-shadow(0 2px 6px rgba(59,109,214,.2));
+
+/* 悬停：光效加亮、线条加粗 */
+.drawflow .connection .main-path:hover {
+  stroke-width: 6px !important;
+  stroke: var(--fg-2) !important;
+  opacity: .9 !important;
+  filter: url(#conn-glow-strong) !important;
+}
+
+/* 选中：主题强调色 + 强发光 */
+.drawflow .connection .main-path.selected {
+  stroke-width: 6px !important;
+  stroke: var(--accent) !important;
+  opacity: 1 !important;
+  filter: url(#conn-glow-strong) !important;
 }
 /* 连线类型 */
 .drawflow .connection.type-dash .main-path{stroke-dasharray:8,4 !important}
@@ -1880,6 +2038,19 @@ body{transition:.25s}
     <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
       <polygon points="0 0, 10 3.5, 0 7" fill="var(--border)" />
     </marker>
+    <!-- 连线辉光滤镜（性能优化：SVG filter 比 CSS drop-shadow 更高效） -->
+    <filter id="conn-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="0 0 0 0 0.231  0 0 0 0 0.427  0 0 0 0 0.839  0 0 0 0.5 0" result="cb"/>
+      <feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="conn-glow-strong" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="b2"/>
+      <feColorMatrix in="b1" type="matrix" values="0 0 0 0 0.231  0 0 0 0 0.427  0 0 0 0 0.839  0 0 0 0.7 0" result="c1"/>
+      <feColorMatrix in="b2" type="matrix" values="0 0 0 0 0.231  0 0 0 0 0.427  0 0 0 0 0.839  0 0 0 0.3 0" result="c2"/>
+      <feMerge><feMergeNode in="c2"/><feMergeNode in="c1"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
 </svg>
 
@@ -1887,7 +2058,7 @@ body{transition:.25s}
 <header class="resizable-navbar" id="resizable-navbar">
   <canvas class="wave-canvas" id="wave-canvas"></canvas>
   <div class="brand" style="cursor:pointer" onclick="location.href='index-entry.html'" title="返回项目管理">
-    <span class="logo">🎬</span> Copy Me <small>v1.0</small>
+    <img src="pics/logo.png" alt="漫剧画布" class="logo-img" />
   </div>
 
   <nav class="nav-links">
@@ -1958,7 +2129,8 @@ body{transition:.25s}
 <div class="main">
 
   <!-- 左：资产区 -->
-  <aside class="palette">
+  <aside class="palette" id="palette">
+    <button class="palette-toggle" id="palette-toggle" title="收缩/展开资产区">«</button>
     <div class="sec-title">🗂️ 资产区</div>
     <div class="asset-card ac-char" data-type="char" draggable="true">
       <svg class="ic" viewBox="0 0 1024 1024" width="36" height="36"><path d="M512 53.333333c253.312 0 458.666667 205.354667 458.666667 458.666667S765.312 970.666667 512 970.666667a457.386667 457.386667 0 0 1-327.552-137.6 32 32 0 0 1 45.738667-44.8 394.666667 394.666667 0 1 0-104.96-197.290667 32 32 0 0 1-62.72 12.714667A460.8 460.8 0 0 1 53.333333 512C53.333333 258.688 258.688 53.333333 512 53.333333z m0 256a32 32 0 0 1 32 32V494.933333l113.749333 75.818667a32 32 0 0 1-35.498666 53.248l-128-85.333333A32 32 0 0 1 480 512V341.333333a32 32 0 0 1 32-32z" fill="var(--c-char)"/></svg>
@@ -1975,19 +2147,14 @@ body{transition:.25s}
       <div class="meta"><div class="t">台词 / 旁白</div><div class="d">对白、情绪、时长</div></div>
       <div class="grip">⋮⋮</div>
     </div>
-    <div class="asset-card ac-scene" data-type="scene" draggable="true">
-      <svg class="ic" viewBox="0 0 1024 1024" width="36" height="36"><path d="M512 53.333333c253.312 0 458.666667 205.354667 458.666667 458.666667S765.312 970.666667 512 970.666667a457.386667 457.386667 0 0 1-327.552-137.6 32 32 0 0 1 45.738667-44.8 394.666667 394.666667 0 1 0-104.96-197.290667 32 32 0 0 1-62.72 12.714667A460.8 460.8 0 0 1 53.333333 512C53.333333 258.688 258.688 53.333333 512 53.333333z m0 256a32 32 0 0 1 32 32V494.933333l113.749333 75.818667a32 32 0 0 1-35.498666 53.248l-128-85.333333A32 32 0 0 1 480 512V341.333333a32 32 0 0 1 32-32z" fill="var(--c-scene)"/></svg>
-      <div class="meta"><div class="t">场景 / 道具</div><div class="d">背景、道具、氛围</div></div>
-      <div class="grip">⋮⋮</div>
-    </div>
-    <div class="asset-card ac-end" data-type="end" draggable="true">
-      <svg class="ic" viewBox="0 0 1024 1024" width="36" height="36"><path d="M512 53.333333c253.312 0 458.666667 205.354667 458.666667 458.666667S765.312 970.666667 512 970.666667a457.386667 457.386667 0 0 1-327.552-137.6 32 32 0 0 1 45.738667-44.8 394.666667 394.666667 0 1 0-104.96-197.290667 32 32 0 0 1-62.72 12.714667A460.8 460.8 0 0 1 53.333333 512C53.333333 258.688 258.688 53.333333 512 53.333333z m0 256a32 32 0 0 1 32 32V494.933333l113.749333 75.818667a32 32 0 0 1-35.498666 53.248l-128-85.333333A32 32 0 0 1 480 512V341.333333a32 32 0 0 1 32-32z" fill="var(--c-end)"/></svg>
-      <div class="meta"><div class="t">结局 / 终章</div><div class="d">故事终点、收束</div></div>
-      <div class="grip">⋮⋮</div>
-    </div>
     <div class="asset-card ac-container" data-type="container" draggable="true">
       <svg class="ic" viewBox="0 0 1024 1024" width="36" height="36"><path d="M160 96h256l64 64h384a64 64 0 0 1 64 64v512a64 64 0 0 1-64 64H160a64 64 0 0 1-64-64V160a64 64 0 0 1 64-64z" fill="none" stroke="var(--c-container)" stroke-width="64" stroke-linejoin="round"/></svg>
-      <div class="meta"><div class="t">容器 / 章节</div><div class="d">分组节点、章节管理</div></div>
+      <div class="meta"><div class="t">容器 / 场景资产</div><div class="d">章节、场景、地点、道具统一承载</div></div>
+      <div class="grip">⋮⋮</div>
+    </div>
+    <div class="asset-card ac-page" data-type="page" draggable="true">
+      <svg class="ic" viewBox="0 0 1024 1024" width="36" height="36"><path d="M160 128h704a64 64 0 0 1 64 64v640a64 64 0 0 1-64 64H160a64 64 0 0 1-64-64V192a64 64 0 0 1 64-64zm32 128v512h640V256H192zm96 400 144-176 112 128 80-96 144 144H288z" fill="var(--c-page)"/></svg>
+      <div class="meta"><div class="t">页面帧 / 关键帧</div><div class="d">起止帧、关键帧、提示词单元</div></div>
       <div class="grip">⋮⋮</div>
     </div>
     <div class="asset-card ac-visual" data-type="visual" draggable="true">
@@ -2170,11 +2337,11 @@ body{transition:.25s}
     <div class="qc-item" data-type="line">
       <span class="ic">💬</span><span class="t">台词</span>
     </div>
-    <div class="qc-item" data-type="scene">
-      <span class="ic">🏞️</span><span class="t">场景</span>
+    <div class="qc-item" data-type="container">
+      <span class="ic">📁</span><span class="t">容器</span>
     </div>
-    <div class="qc-item" data-type="end">
-      <span class="ic">🏁</span><span class="t">结局</span>
+    <div class="qc-item" data-type="page">
+      <span class="ic">🖼️</span><span class="t">页面帧</span>
     </div>
     <div class="qc-item" data-type="visual">
       <span class="ic">🎨</span><span class="t">视觉</span>
@@ -2238,11 +2405,7 @@ const TYPE_META = {
   char:      { label:'角色',  icon:'🎭', cls:'node-char',   icCls:'ic-char'   },
   shot:      { label:'分镜',  icon:'🎬', cls:'node-shot',   icCls:'ic-shot'   },
   line:      { label:'台词',  icon:'💬', cls:'node-line',   icCls:'ic-line'   },
-  scene:     { label:'场景',  icon:'🏞️', cls:'node-scene',  icCls:'ic-scene'  },
-  end:       { label:'结局',  icon:'🏁', cls:'node-end',    icCls:'ic-end'    },
   container: { label:'容器',  icon:'📁', cls:'node-container', icCls:'ic-container' },
-  visual:    { label:'视觉圣经', icon:'🎨', cls:'node-visual', icCls:'ic-visual' },
-  asset:     { label:'资产', icon:'🧩', cls:'node-asset', icCls:'ic-asset' },
   page:      { label:'页面帧', icon:'🖼️', cls:'node-page', icCls:'ic-page' },
 };
 
@@ -2297,55 +2460,7 @@ const SCHEMA = {
     { key:'transition_out', label:'出场转场', type:'text', ph:'切到哪个状态或页面帧' },
     { key:'required_pages', label:'所需页面帧', type:'text', ph:'如：start-frame, end-frame, keyframe' },
     { key:'rationale', label:'镜头设计理由', type:'textarea', ph:'为什么用这个景别、角度、运动、灯光和焦段？' },
-    { key:'status', label:'完成状态', type:'select', options:['OPEN','AUTO','DRAFT','LOCKED','NEEDS_PAGE','PROMPT_READY'] },
-    { key:'note',     label:'备注',   type:'textarea', ph:'特效、生成限制、平台提示词注意事项' },
-  ],
-  line: [
-    { key:'speaker',  label:'说话人', type:'text',     ph:'角色名 或 旁白', required:true },
-    { key:'content',  label:'内容',   type:'textarea', ph:'台词 / 旁白文本', required:true },
-    { key:'mood',     label:'情绪',   type:'select',   options:['','平静','激动','悲伤','愤怒','喜悦','紧张','嘲讽'] },
-    { key:'dur',      label:'时长(秒)', type:'text',   ph:'如：2' },
-    { key:'coverage', label:'覆盖方式', type:'select', options:['','two-shot anchor','over-shoulder','inner reverse single','outer reverse single','power close-up','reaction insert','wide reset'] },
-    { key:'relationship_state', label:'关系状态', type:'text', ph:'亲密 / 对抗 / 试探 / 权力翻转等' },
-    { key:'power_imbalance', label:'权力关系', type:'select', options:['','balanced','unstable','one-sided'] },
-    { key:'subtext', label:'潜台词', type:'textarea', ph:'角色真正想表达但没有说出口的东西' },
-    { key:'reaction_needed', label:'反应镜头需求', type:'textarea', ph:'谁需要反应镜头？在台词前、中、后？' },
-  ],
-  scene: [
-    { key:'sub',      label:'子类',   type:'select',   options:['场景','道具'], required:true },
-    { key:'name',     label:'名称',   type:'text',     ph:'如：黄昏的街道 / 神秘项链', required:true },
-    { key:'desc',     label:'描述',   type:'textarea', ph:'外观、细节、用途' },
-    { key:'mood',     label:'氛围',   type:'text',     ph:'如：温馨、压抑、神秘' },
-    { key:'location_id', label:'地点/资产ID', type:'text', ph:'如：LOC-01 / ASSET-SCENE-01' },
-    { key:'time_weather', label:'时间与天气', type:'text', ph:'夜雨 / 清晨薄雾 / 正午硬光' },
-    { key:'narrative_function', label:'场景叙事功能', type:'textarea', ph:'这个场景承载什么冲突、信息或情绪' },
-    { key:'entering_state', label:'进入状态', type:'textarea', ph:'角色进入时空间、情绪、道具状态' },
-    { key:'exiting_state', label:'离开状态', type:'textarea', ph:'场景结束时留下什么变化' },
-    { key:'topology', label:'空间拓扑', type:'textarea', ph:'门窗、桌椅、道路、入口出口、运动路径' },
-    { key:'landmarks', label:'空间锚点', type:'textarea', ph:'必须保持的家具、窗口、招牌、道具及相对位置' },
-    { key:'practical_lights', label:'实用光源', type:'textarea', ph:'灯、窗、屏幕、火光、霓虹等光源位置和颜色' },
-    { key:'continuity_lock', label:'一致性锁', type:'textarea', ph:'5-10条禁止漂移的场景规则' },
-    { key:'prohibited_drift', label:'禁止漂移', type:'textarea', ph:'如：不要改门窗位置 / 不要换墙面 / 不要改变主光方向' },
-  ],
-  end: [
-    { key:'title',    label:'结局名称', type:'text',   ph:'如：大团圆 / 悲剧结尾', required:true },
-    { key:'content',  label:'结局文本', type:'textarea', ph:'结局描述文字', required:true },
-    { key:'note',     label:'备注',     type:'textarea', ph:'设计意图、伏笔回收等' },
-  ],
-  container: [
-    { key:'title',    label:'章节标题', type:'text',   ph:'如：第一幕·初遇', required:true },
-    { key:'project_id', label:'项目ID', type:'text', ph:'如：PROJECT-01 / ACT-01' },
-    { key:'workflow_module', label:'工作流模块', type:'select', options:['AUTO','narrative-film','social-short-drama','dialogue-coverage','scene-consistency-control','game-demo','product-video','music-video','explainer'] },
-    { key:'intended_use', label:'用途', type:'text', ph:'如：短剧分镜 / AI视频生成 / 客户提案' },
-    { key:'target_duration', label:'目标时长', type:'text', ph:'如：30s / 12 shots / 3 scenes' },
-    { key:'aspect_ratio', label:'画幅', type:'select', options:['AUTO','16:9','9:16','1:1','4:5','21:9'] },
-    { key:'visual_default', label:'视觉默认值', type:'textarea', ph:'本章节继承的风格、镜头、灯光、运动规则' },
-    { key:'continuity_priorities', label:'连续性优先级', type:'textarea', ph:'角色、场景、道具、时间、屏幕方向等重点' },
-    { key:'locked_fields', label:'锁定字段', type:'textarea', ph:'下游镜头必须保留的项目级决定' },
-    { key:'note',     label:'备注',     type:'textarea', ph:'章节说明、剧情概要' },
-  ],
-  visual: [
-    { key:'title', label:'视觉圣经名称', type:'text', ph:'如：雨夜霓虹现实主义', required:true },
+    { key:'visual_title', label:'视觉基调名', type:'text', ph:'如：雨夜霓虹现实主义 / 温暖写实 / 压抑悬疑' },
     { key:'world_era', label:'世界与时代', type:'textarea', ph:'时代、地域、科技水平、社会质感' },
     { key:'medium_rendering', label:'媒介/渲染', type:'text', ph:'live action / anime / 3D / ink / cinematic realism' },
     { key:'art_direction', label:'美术方向', type:'textarea', ph:'建筑、服装、材质、画面密度、参考风格' },
@@ -2356,19 +2471,46 @@ const SCHEMA = {
     { key:'edit_rhythm', label:'剪辑节奏', type:'text', ph:'慢推 / 快切 / 长镜头 / 三秒一节拍' },
     { key:'typography_ui', label:'字幕/UI语言', type:'textarea', ph:'字体、屏幕文字、HUD、图形语言' },
     { key:'avoid', label:'禁用规则', type:'textarea', ph:'禁止的风格、镜头、色彩、构图或生成倾向' },
-    { key:'lock_state', label:'锁定状态', type:'select', options:['OPEN','FLEXIBLE','LOCKED'] },
+    { key:'visual_lock_state', label:'视觉锁定状态', type:'select', options:['OPEN','FLEXIBLE','LOCKED'] },
+    { key:'status', label:'完成状态', type:'select', options:['OPEN','AUTO','DRAFT','LOCKED','NEEDS_PAGE','PROMPT_READY'] },
+    { key:'note',     label:'备注',   type:'textarea', ph:'特效、生成限制、平台提示词注意事项' },
   ],
-  asset: [
-    { key:'asset_id', label:'资产ID', type:'text', ph:'如：ASSET-01 / LOC-01 / PROP-01', required:true },
-    { key:'name', label:'资产名称', type:'text', ph:'如：旧式录音机 / 城堡房间 / 红色雨伞', required:true },
-    { key:'asset_type', label:'资产类型', type:'select', options:['prop','costume','location','vehicle','creature','ui','reference-bundle','space-model','angle-library'] },
-    { key:'description', label:'外观描述', type:'textarea', ph:'形状、材质、尺寸、磨损、识别特征' },
-    { key:'function', label:'叙事功能', type:'textarea', ph:'它在剧情、动作或视觉识别中承担什么作用' },
+  line: [
+    { key:'content',  label:'内容',   type:'textarea', ph:'台词 / 旁白文本', required:true },
+    { key:'mood',     label:'情绪',   type:'select',   options:['','平静','激动','悲伤','愤怒','喜悦','紧张','嘲讽'] },
+    { key:'dur',      label:'时长(秒)', type:'text',   ph:'如：2' },
+    { key:'subtext', label:'潜台词', type:'textarea', ph:'角色真正想表达但没有说出口的东西' },
+  ],
+  container: [
+    { key:'title',    label:'章节标题', type:'text',   ph:'如：第一幕·初遇', required:true },
+    { key:'content_type', label:'容器类型', type:'select', options:['chapter','scene','prop','asset','location','mixed'] },
+    { key:'project_id', label:'项目ID', type:'text', ph:'如：PROJECT-01 / ACT-01' },
+    { key:'workflow_module', label:'工作流模块', type:'select', options:['AUTO','narrative-film','social-short-drama','dialogue-coverage','scene-consistency-control','game-demo','product-video','music-video','explainer'] },
+    { key:'intended_use', label:'用途', type:'text', ph:'如：短剧分镜 / AI视频生成 / 客户提案' },
+    { key:'target_duration', label:'目标时长', type:'text', ph:'如：30s / 12 shots / 3 scenes' },
+    { key:'aspect_ratio', label:'画幅', type:'select', options:['AUTO','16:9','9:16','1:1','4:5','21:9'] },
+    { key:'desc', label:'场景/资产描述', type:'textarea', ph:'外观、细节、用途、空间主题' },
+    { key:'mood', label:'氛围', type:'text', ph:'如：温馨、压抑、神秘、潮湿、热闹' },
+    { key:'location_id', label:'地点/资产ID', type:'text', ph:'如：LOC-01 / PROP-01 / ASSET-01' },
+    { key:'asset_type', label:'资产类型', type:'select', options:['','prop','costume','location','vehicle','creature','ui','reference-bundle','space-model','angle-library'] },
+    { key:'time_weather', label:'时间与天气', type:'text', ph:'夜雨 / 清晨薄雾 / 正午硬光' },
+    { key:'narrative_function', label:'场景叙事功能', type:'textarea', ph:'这个容器承载什么冲突、信息或情绪' },
+    { key:'function', label:'资产功能', type:'textarea', ph:'它在剧情、动作或视觉识别中承担什么作用' },
     { key:'placement_logic', label:'放置/挂载逻辑', type:'textarea', ph:'在谁身上、空间哪里、如何移动或被使用' },
     { key:'material_palette', label:'材质与配色', type:'textarea', ph:'金属、布料、玻璃、主色、反光程度' },
-    { key:'continuity_lock', label:'资产锁', type:'textarea', ph:'必须保持不变的形状、位置、颜色、损伤状态' },
+    { key:'visual_default', label:'视觉默认值', type:'textarea', ph:'本章节继承的风格、镜头、灯光、运动规则' },
+    { key:'entering_state', label:'进入状态', type:'textarea', ph:'角色进入时空间、情绪、道具状态' },
+    { key:'exiting_state', label:'离开状态', type:'textarea', ph:'场景结束时留下什么变化' },
+    { key:'topology', label:'空间拓扑', type:'textarea', ph:'门窗、桌椅、道路、入口出口、运动路径' },
+    { key:'landmarks', label:'空间锚点', type:'textarea', ph:'必须保持的家具、窗口、招牌、道具及相对位置' },
+    { key:'practical_lights', label:'实用光源', type:'textarea', ph:'灯、窗、屏幕、火光、霓虹等光源位置和颜色' },
+    { key:'continuity_priorities', label:'连续性优先级', type:'textarea', ph:'角色、场景、道具、时间、屏幕方向等重点' },
+    { key:'continuity_lock', label:'一致性锁', type:'textarea', ph:'必须保持不变的空间、道具、位置、颜色和状态' },
     { key:'allowed_variants', label:'允许变体', type:'textarea', ph:'可替换、可损坏、可隐藏或可改色范围' },
     { key:'source_refs', label:'参考来源', type:'textarea', ph:'图片、截图、文字来源、禁止复制点' },
+    { key:'prohibited_drift', label:'禁止漂移', type:'textarea', ph:'不要改门窗位置 / 不要换墙面 / 不要改变主光方向' },
+    { key:'locked_fields', label:'锁定字段', type:'textarea', ph:'下游镜头必须保留的项目级决定' },
+    { key:'note',     label:'备注',     type:'textarea', ph:'章节说明、剧情概要' },
   ],
   page: [
     { key:'page_id', label:'页面ID', type:'text', ph:'如：PAGE-01-03-A', required:true },
@@ -2377,7 +2519,7 @@ const SCHEMA = {
     { key:'linked_shot', label:'关联镜头', type:'text', ph:'SHOT-01-03' },
     { key:'purpose', label:'页面目的', type:'textarea', ph:'锁空间、锁角色、生成关键帧、补反打等' },
     { key:'aspect_ratio', label:'画幅', type:'select', options:['INHERIT','16:9','9:16','1:1','4:5','21:9'] },
-    { key:'inherited_refs', label:'继承引用', type:'textarea', ph:'角色、资产、场景、视觉圣经、镜头语言' },
+    { key:'inherited_refs', label:'继承引用', type:'textarea', ph:'角色、容器、镜头语言、页面约束' },
     { key:'local_overrides', label:'局部覆盖', type:'textarea', ph:'本页特有服装、表情、损伤、灯光、构图' },
     { key:'composition', label:'画面构成', type:'textarea', ph:'构图、机位、主体位置、前中后景、留白' },
     { key:'peak_moment', label:'峰值动作/关键瞬间', type:'textarea', ph:'这一帧最该被看见的动作或情绪' },
@@ -2397,8 +2539,8 @@ function getProjectId(){
 const LS_KEY = getProjectId() ? ('comic-canvas:proj:' + getProjectId()) : 'comic-canvas:v1';
 
 // 各类节点的"标题字段"和"摘要字段"，用于卡片显示
-const TITLE_FIELD = { char:'name', shot:'no', line:'speaker', scene:'name', end:'title', container:'title', visual:'title', asset:'name', page:'page_id' };
-const DESC_FIELD  = { char:'persona', shot:'purpose', line:'content', scene:'desc', end:'content', container:'note', visual:'camera_language', asset:'function', page:'purpose' };
+const TITLE_FIELD = { char:'name', shot:'no', line:'content', container:'title', page:'page_id' };
+const DESC_FIELD  = { char:'persona', shot:'purpose', line:'subtext', container:'note', page:'purpose' };
 
 const FIELD_SECTIONS = {
   char: {
@@ -2406,23 +2548,15 @@ const FIELD_SECTIONS = {
   },
   shot: {
     no:'基础', narrative_intent:'叙事功能', composition:'镜头语言', dur:'动作与时间',
-    fg_mg_bg:'画面层次', dialogue_or_text:'声音与转场', required_pages:'生成状态'
+    fg_mg_bg:'画面层次', dialogue_or_text:'声音与转场', required_pages:'生成状态',
+    visual_title:'视觉基调', palette:'视觉基调', typography_ui:'视觉基调', avoid:'视觉基调'
   },
   line: {
-    speaker:'台词基础', coverage:'对话覆盖', subtext:'表演信息'
-  },
-  scene: {
-    sub:'场景基础', location_id:'空间与时间', entering_state:'状态变化',
-    topology:'空间一致性', continuity_lock:'漂移控制'
+    content:'台词基础', subtext:'表演信息'
   },
   container: {
-    title:'容器基础', workflow_module:'项目默认值', visual_default:'继承与锁定', note:'备注'
-  },
-  visual: {
-    title:'视觉基础', palette:'影像语言', typography_ui:'限制与锁定'
-  },
-  asset: {
-    asset_id:'资产基础', placement_logic:'使用逻辑', continuity_lock:'连续性'
+    title:'容器基础', content_type:'场景与资产', desc:'场景与资产', asset_type:'场景与资产',
+    visual_default:'继承与锁定', topology:'空间与连续性', continuity_lock:'空间与连续性', note:'备注'
   },
   page: {
     page_id:'页面基础', inherited_refs:'继承与覆盖', composition:'构图与动作',
@@ -2458,6 +2592,8 @@ const store = {
   altPressed: false,    // Alt 键是否按下
   // 主题
   theme: 'dark',        // 'dark' | 'light'
+  mutingDirty: false,
+  liveDragNodeId: null,
 };
 
 /* ============================================================
@@ -2941,12 +3077,11 @@ function ensureInputProxyOutputs(id){
   const drawNode = store.editor && store.editor.drawflow
     ? store.editor.drawflow.drawflow[store.editor.module].data[id]
     : null;
-  if(!el || !node || !node.data || !drawNode || !drawNode.outputs) return;
-  const proxyPairs = [
-    ['input_1', 'output_proxy_1', 'input_proxy_1'],
-    ['input_2', 'output_proxy_2', 'input_proxy_2'],
-  ];
-  proxyPairs.forEach(([inputCls, outputCls, inputProxyCls])=>{
+  if(!el || !node || !node.data || !drawNode || !drawNode.outputs || !drawNode.inputs) return;
+  const pairCount = Math.max(nodeInputCount(node.type), nodeOutputCount(node.type));
+  for(let i = 1; i <= pairCount; i++){
+    const outputCls = 'output_proxy_' + i;
+    const inputProxyCls = 'input_proxy_' + i;
     if(!drawNode.outputs[outputCls]){
       drawNode.outputs[outputCls] = { connections: [] };
     }
@@ -2965,7 +3100,7 @@ function ensureInputProxyOutputs(id){
       proxyPort.className = 'input ' + inputProxyCls;
       inputsWrap.appendChild(proxyPort);
     }
-  });
+  }
 }
 
 // 更新连线标签显示
@@ -3080,6 +3215,7 @@ function updateAllConnStyles(){
    history —— 撤销/重做
 ============================================================ */
 function histPush(){
+  if(store.mutingDirty) return;
   // 截断重做栈
   store.history = store.history.slice(0, store.histIdx + 1);
   // 快照当前状态
@@ -3090,6 +3226,14 @@ function histPush(){
   } else {
     store.histIdx++;
   }
+}
+
+function resetHistoryToCurrent(){
+  store.history = [{
+    nodes: JSON.parse(JSON.stringify(store.data.nodes)),
+    edges: JSON.parse(JSON.stringify(store.data.edges))
+  }];
+  store.histIdx = 0;
 }
 
 function histUndo(){
@@ -3107,6 +3251,7 @@ function histRedo(){
 }
 
 function restoreSnapshot(snap){
+  store.mutingDirty = true;
   // 清空当前
   store.data.nodes = {};
   store.data.edges = {};
@@ -3121,10 +3266,11 @@ function restoreSnapshot(snap){
   });
   // 重建画布
   rebuildCanvasFromSnapshot(snap);
+  store.mutingDirty = false;
   store.selectedId = null;
   renderInspector();
   updateEmpty();
-  markDirty();
+  saveSoon();
 }
 
 // 多选管理
@@ -3176,17 +3322,13 @@ function rebuildCanvasFromSnapshot(snap){
     const n = snap.nodes[id];
     const nodeType = normalizeNodeType(n.type);
     const pos = { x: n.data._posX || 80, y: n.data._posY || 80 };
-    const data = {...n.data};
+    const data = migrateLegacyNodeData(n.type, n.data, id);
     delete data._posX; delete data._posY;
-    if(n.type === 'branch'){
-      if(!data.page_type) data.page_type = 'storyboard-frame';
-      if(!data.page_id) data.page_id = data.label || ('PAGE-' + id);
-      if(!data.purpose) data.purpose = data.note || '由旧分支节点迁移';
-    }
     const html = buildNodeHtml(nodeType, data);
     store.pendingNodes.push({ type:nodeType, data, select:false, remap:id });
+    const inputs = nodeInputCount(nodeType);
     const outputs = nodeOutputCount(nodeType);
-    store.editor.addNode(nodeType, 2, outputs, pos.x, pos.y, TYPE_META[nodeType].cls, data, html, false);
+    store.editor.addNode(nodeType, inputs, outputs, pos.x, pos.y, TYPE_META[nodeType].cls, data, html, false);
   });
   // 重建连线
   Object.keys(snap.edges).forEach(eid=>{
@@ -3224,6 +3366,13 @@ const escapeHtml = s => (s==null?'':String(s)).replace(/[&<>"']/g, c=>({'&':'&am
 
 // 节点摘要显示
 function nodeTitle(type, data){
+  if(type === 'line'){
+    const speaker = deriveLineSpeakerName(null, data);
+    const content = (data.content || '').trim();
+    if(speaker && content) return speaker + ' · ' + content.slice(0, 16);
+    if(content) return content.slice(0, 20);
+    return '新台词';
+  }
   const f = TITLE_FIELD[type];
   return data[f] ? String(data[f]) : (TYPE_META[type].label + ' 节点');
 }
@@ -3231,40 +3380,162 @@ function nodeDesc(type, data){
   const f = DESC_FIELD[type];
   let s = data[f] ? String(data[f]) : '';
   if(type==='shot'){ const bits=[data.size,data.camera_angle,data.move,data.dur?data.dur+'s':''].filter(Boolean); if(bits.length) s = (s?s+' · ':'')+bits.join(' / '); }
-  if(type==='scene'){ const bits=[data.sub, data.mood].filter(Boolean); if(bits.length) s = (s?s+' · ':'')+bits.join(' / '); }
+  if(type==='container'){ const bits=[data.content_type, data.mood].filter(Boolean); if(bits.length) s = (s?s+' · ':'')+bits.join(' / '); }
+  if(type==='line'){
+    const bits = [data.mood].filter(Boolean);
+    if(bits.length) s = (s?s+' · ':'') + bits.join(' / ');
+  }
   return s;
 }
 
 function normalizeNodeType(type){
   if(type === 'branch') return 'page';
+  if(type === 'scene' || type === 'asset') return 'container';
+  if(type === 'visual') return 'shot';
+  if(type === 'end') return 'page';
   return TYPE_META[type] ? type : 'shot';
 }
 
+function nodeInputCount(type){
+  return type === 'line' ? 1 : 2;
+}
+
 function nodeOutputCount(type){
-  return 2;
+  return type === 'line' ? 1 : 2;
+}
+
+function getPortLayout(type){
+  if(type === 'line'){
+    return [{
+      input: { left:-7, top:'50%', transform:'translateY(-50%)' },
+      output: { right:-7, top:'50%', transform:'translateY(-50%)' }
+    }];
+  }
+  return [
+    {
+      input: { left:-7, top:'50%', transform:'translateY(-50%)' },
+      output: { right:-7, top:'50%', transform:'translateY(-50%)' }
+    },
+    {
+      input: { left:'50%', top:-7, transform:'translateX(-50%)' },
+      output: { left:'50%', bottom:-7, transform:'translateX(-50%)' }
+    }
+  ];
+}
+
+function migrateLegacyNodeData(type, source, id){
+  const data = JSON.parse(JSON.stringify(source || {}));
+  if(type === 'branch'){
+    if(!data.page_type) data.page_type = 'storyboard-frame';
+    if(!data.page_id) data.page_id = data.label || ('PAGE-' + id);
+    if(!data.purpose) data.purpose = data.note || '由旧分支节点迁移';
+    return data;
+  }
+  if(type === 'scene'){
+    return {
+      ...data,
+      title: data.name || data.title || ('场景容器-' + id),
+      content_type: data.sub === '道具' ? 'prop' : 'scene',
+      note: data.note || data.desc || '',
+    };
+  }
+  if(type === 'asset'){
+    return {
+      ...data,
+      title: data.name || data.title || data.asset_id || ('资产容器-' + id),
+      content_type: data.asset_type === 'location' ? 'location' : 'asset',
+      desc: data.description || data.desc || '',
+      note: data.note || data.function || '',
+      location_id: data.location_id || data.asset_id || '',
+    };
+  }
+  if(type === 'visual'){
+    return {
+      ...data,
+      no: data.no || ('LOOK-' + id),
+      desc: data.desc || data.art_direction || data.title || '由视觉圣经迁移的镜头设定',
+      purpose: data.purpose || '视觉奇观',
+      visual_title: data.visual_title || data.title || '',
+    };
+  }
+  if(type === 'end'){
+    return {
+      ...data,
+      page_id: data.page_id || ('END-' + id),
+      page_type: data.page_type || 'end-frame',
+      purpose: data.purpose || data.title || '终章收束',
+      peak_moment: data.peak_moment || data.content || '',
+      approval_status: data.approval_status || 'review',
+    };
+  }
+  return data;
+}
+
+function getConnectedCharacterNames(lineId){
+  if(!lineId) return [];
+  const names = [];
+  Object.values(store.data.edges).forEach(edge => {
+    if(String(edge.from) !== String(lineId) && String(edge.to) !== String(lineId)) return;
+    const otherId = String(edge.from) === String(lineId) ? edge.to : edge.from;
+    const otherNode = store.data.nodes[otherId];
+    if(otherNode && otherNode.type === 'char'){
+      const name = (otherNode.data && otherNode.data.name ? String(otherNode.data.name) : '').trim();
+      if(name && !names.includes(name)) names.push(name);
+    }
+  });
+  return names;
+}
+
+function deriveLineSpeakerName(lineId, fallbackData){
+  const names = getConnectedCharacterNames(lineId);
+  if(names.length) return names.join(' / ');
+  const fallback = fallbackData && fallbackData.speaker ? String(fallbackData.speaker).trim() : '';
+  return fallback || '未指派';
+}
+
+function refreshConnectionsForNode(nodeId){
+  if(!store.editor || !nodeId) return;
+  try{ store.editor.updateConnectionNodes('node-' + nodeId); }catch(_){}
+}
+
+function refreshLinePresentation(nodeId){
+  const node = store.data.nodes[nodeId];
+  if(!node || node.type !== 'line') return;
+  refreshNodeDisplay(nodeId);
+  if(String(store.selectedId) === String(nodeId)) renderInspector();
+}
+
+function refreshLineNodesForCharNode(nodeId){
+  Object.values(store.data.edges).forEach(edge => {
+    let lineId = null;
+    if(String(edge.from) === String(nodeId) && store.data.nodes[edge.to]?.type === 'line') lineId = edge.to;
+    if(String(edge.to) === String(nodeId) && store.data.nodes[edge.from]?.type === 'line') lineId = edge.from;
+    if(lineId) refreshLinePresentation(lineId);
+  });
 }
 
 /** 用像素精确设置四个端口位置（CSS 百分比在 width:0 容器上不可靠） */
 function positionPorts(id){
   const el = document.getElementById('node-' + id);
   if(!el) return;
-  const w = el.offsetWidth, h = el.offsetHeight, portSize = 14;
-  const i1 = el.querySelector('.input.input_1');
-  const i2 = el.querySelector('.input.input_2');
-  const ip1 = el.querySelector('.input.input_proxy_1');
-  const ip2 = el.querySelector('.input.input_proxy_2');
-  const o1 = el.querySelector('.output.output_1');
-  const o2 = el.querySelector('.output.output_2');
-  const p1 = el.querySelector('.output.output_proxy_1');
-  const p2 = el.querySelector('.output.output_proxy_2');
-  if(i1){ i1.style.left = (-portSize/2) + 'px'; i1.style.top = (h/2 - portSize/2) + 'px'; i1.style.right = 'auto'; i1.style.bottom = 'auto'; }
-  if(i2){ i2.style.left = (w/2 - portSize/2) + 'px'; i2.style.top = (-portSize/2) + 'px'; i2.style.right = 'auto'; i2.style.bottom = 'auto'; }
-  if(o1){ o1.style.right = (-portSize/2) + 'px'; o1.style.top = (h/2 - portSize/2) + 'px'; o1.style.left = 'auto'; o1.style.bottom = 'auto'; }
-  if(o2){ o2.style.left = (w/2 - portSize/2) + 'px'; o2.style.bottom = (-portSize/2) + 'px'; o2.style.right = 'auto'; o2.style.top = 'auto'; }
-  if(p1){ p1.style.left = (-portSize/2) + 'px'; p1.style.top = (h/2 - portSize/2) + 'px'; p1.style.right = 'auto'; p1.style.bottom = 'auto'; }
-  if(p2){ p2.style.left = (w/2 - portSize/2) + 'px'; p2.style.top = (-portSize/2) + 'px'; p2.style.right = 'auto'; p2.style.bottom = 'auto'; }
-  if(ip1){ ip1.style.right = (-portSize/2) + 'px'; ip1.style.top = (h/2 - portSize/2) + 'px'; ip1.style.left = 'auto'; ip1.style.bottom = 'auto'; }
-  if(ip2){ ip2.style.left = (w/2 - portSize/2) + 'px'; ip2.style.bottom = (-portSize/2) + 'px'; ip2.style.right = 'auto'; ip2.style.top = 'auto'; }
+  const node = store.data.nodes[id];
+  if(!node) return;
+  const layout = getPortLayout(node.type);
+  function applyPort(port, pos){
+    if(!port || !pos) return;
+    port.style.left = pos.left == null ? 'auto' : (typeof pos.left === 'number' ? pos.left + 'px' : pos.left);
+    port.style.right = pos.right == null ? 'auto' : (typeof pos.right === 'number' ? pos.right + 'px' : pos.right);
+    port.style.top = pos.top == null ? 'auto' : (typeof pos.top === 'number' ? pos.top + 'px' : pos.top);
+    port.style.bottom = pos.bottom == null ? 'auto' : (typeof pos.bottom === 'number' ? pos.bottom + 'px' : pos.bottom);
+    port.style.transform = pos.transform || '';
+  }
+  layout.forEach((pair, idx) => {
+    const n = idx + 1;
+    applyPort(el.querySelector('.input.input_' + n), pair.input);
+    applyPort(el.querySelector('.input.input_proxy_' + n), pair.output);
+    applyPort(el.querySelector('.output.output_' + n), pair.output);
+    applyPort(el.querySelector('.output.output_proxy_' + n), pair.input);
+  });
 }
 
 function schemaDefaultValue(field){
@@ -3310,7 +3581,11 @@ function initDrawflow(){
     const shift = store._shiftDown;
     toggleSelected(String(id), shift);
   });
-  editor.on('nodeUnselected', () => { /* 多选模式下不清空 */ });
+  editor.on('nodeUnselected', () => {
+    store.selectedId = null;
+    store.selectedIds = [];
+    renderInspector();
+  });
   editor.on('connectionSelected', info => {
     // info = { output_id, input_id, output_class, input_class }
     store.selectedId = { kind:'edge', out:info.output_id, in:info.input_id, oc:info.output_class, ic:info.input_class };
@@ -3382,6 +3657,7 @@ function initDrawflow(){
     }
     nodeCache.invalidate(id);
     positionPorts(id);
+    refreshLinePresentation(id);
     markDirty(); updateEmpty();
   });
   editor.on('nodeRemoved', id => {
@@ -3406,6 +3682,7 @@ function initDrawflow(){
         }
       }
     }
+    const removedType = removedNode ? removedNode.type : '';
     delete store.data.nodes[id];
     nodeCache.invalidate(id);
     connCache.invalidate();
@@ -3414,6 +3691,7 @@ function initDrawflow(){
       try{ store.nodeSpheres[id].dispose(); }catch(e){}
       delete store.nodeSpheres[id];
     }
+    if(removedType === 'char') refreshLineNodesForCharNode(id);
     markDirty(); updateEmpty();
   });
   editor.on('connectionCreated', info => {
@@ -3429,6 +3707,10 @@ function initDrawflow(){
         connEl.classList.add('type-' + existing.meta.type);
       }
       setTimeout(()=>updateAllConnLabels(), 50);
+      if(store.data.nodes[info.output_id]?.type === 'line') refreshLinePresentation(info.output_id);
+      if(store.data.nodes[info.input_id]?.type === 'line') refreshLinePresentation(info.input_id);
+      if(store.data.nodes[info.output_id]?.type === 'char') refreshLineNodesForCharNode(info.output_id);
+      if(store.data.nodes[info.input_id]?.type === 'char') refreshLineNodesForCharNode(info.input_id);
       markDirty();
       return;
     }
@@ -3450,6 +3732,10 @@ function initDrawflow(){
     if(connEl) connEl.classList.add('type-solid');
     // 延迟更新标签（等 DOM 就绪）
     setTimeout(()=>updateAllConnLabels(), 50);
+    if(store.data.nodes[info.output_id]?.type === 'line') refreshLinePresentation(info.output_id);
+    if(store.data.nodes[info.input_id]?.type === 'line') refreshLinePresentation(info.input_id);
+    if(store.data.nodes[info.output_id]?.type === 'char') refreshLineNodesForCharNode(info.output_id);
+    if(store.data.nodes[info.input_id]?.type === 'char') refreshLineNodesForCharNode(info.input_id);
     markDirty();
   });
   editor.on('connectionRemoved', info => {
@@ -3458,12 +3744,22 @@ function initDrawflow(){
     const found = findEdgeByPorts(info.output_id, info.input_id, info.output_class, info.input_class);
     if(found) delete store.data.edges[found.id];
     connCache.invalidate(info.output_id, info.input_id, info.output_class, info.input_class);
+    if(store.data.nodes[info.output_id]?.type === 'line') refreshLinePresentation(info.output_id);
+    if(store.data.nodes[info.input_id]?.type === 'line') refreshLinePresentation(info.input_id);
+    if(store.data.nodes[info.output_id]?.type === 'char') refreshLineNodesForCharNode(info.output_id);
+    if(store.data.nodes[info.input_id]?.type === 'char') refreshLineNodesForCharNode(info.input_id);
     markDirty();
   });
   editor.on('nodeDataChanged', () => markDirty());
   editor.on('nodeMoved', id=>{
+    const movedStoreNode = store.data.nodes[id];
+    const movedEl = nodeCache.get(id) || document.querySelector(`#node-${id}`);
+    if(movedStoreNode && movedEl){
+      movedStoreNode.data._posX = movedEl.offsetLeft;
+      movedStoreNode.data._posY = movedEl.offsetTop;
+    }
     // 容器节点移动时，子节点跟随
-    const movedNode = store.data.nodes[id];
+    const movedNode = movedStoreNode;
     if(movedNode && movedNode.type === 'container' && movedNode.data._children && movedNode.data._children.length){
       const el = nodeCache.get(id) || document.querySelector(`#node-${id}`);
       if(el){
@@ -3471,7 +3767,7 @@ function initDrawflow(){
         const oldX = parseFloat(el.dataset._lastX) || newX;
         const oldY = parseFloat(el.dataset._lastY) || newY;
         const dx = newX - oldX, dy = newY - oldY;
-        if(dx !== 0 || dy !== 0){
+        if((dx !== 0 || dy !== 0) && store.liveDragNodeId !== String(id)){
           movedNode.data._children.forEach(childId => {
             const childEl = nodeCache.get(childId) || document.querySelector(`#node-${childId}`);
             if(childEl){
@@ -3491,6 +3787,7 @@ function initDrawflow(){
                 childStore.data._posX = cx;
                 childStore.data._posY = cy;
               }
+              refreshConnectionsForNode(childId);
             }
           });
         }
@@ -3531,6 +3828,7 @@ function initDrawflow(){
         node.data._posY = snapY;
       }
     }
+    refreshConnectionsForNode(id);
     // 用 rAF 节流：只更新与该节点相关的连线标签
     rAF.schedule(`conn-label-${id}`, () => {
       updateConnLabelsForNode(id);
@@ -3552,15 +3850,7 @@ function initDrawflow(){
 
   // —— 连线吸附到最近节点端口 ——
   (function enhanceConnectionSnap(){
-    const SNAP_DIST = store.connSnapDist;
     let _origUpdateConn = editor.updateConnection.bind(editor);
-    let _mouseX = 0, _mouseY = 0;
-
-    // 监听 mouseMove 事件记录鼠标位置
-    editor.on('mouseMove', ({x, y}) => {
-      _mouseX = x;
-      _mouseY = y;
-    });
 
     // 清除吸附高亮
     function clearSnapHighlight(){
@@ -3570,39 +3860,15 @@ function initDrawflow(){
       }
     }
 
-    // 查找最近的输入端口
-    function findNearestInputPort(mx, my){
-      const precanvas = editor.precanvas;
-      const preRect = precanvas.getBoundingClientRect();
-      const zoom = editor.zoom;
-      const scaleX = precanvas.clientWidth / (precanvas.clientWidth * zoom);
-      const scaleY = precanvas.clientHeight / (precanvas.clientHeight * zoom);
-
-      // 鼠标在画布坐标系中的位置
-      const canvasMX = mx * scaleX - preRect.left * scaleX;
-      const canvasMY = my * scaleY - preRect.top * scaleY;
-
-      let nearest = null;
-      let minDist = SNAP_DIST;
-
-      // 遍历所有节点的输入端口
-      const inputs = precanvas.querySelectorAll('.input');
-      inputs.forEach(inp => {
-        // 跳过源节点自身的端口（不能连自己）
-        if(editor.ele_selected && inp.closest('.drawflow-node') === editor.ele_selected.closest('.drawflow-node')) return;
-
-        const rect = inp.getBoundingClientRect();
-        const portCX = (rect.left + rect.width / 2) * scaleX - preRect.left * scaleX;
-        const portCY = (rect.top + rect.height / 2) * scaleY - preRect.top * scaleY;
-
-        const dist = Math.sqrt((canvasMX - portCX) ** 2 + (canvasMY - portCY) ** 2);
-        if(dist < minDist){
-          minDist = dist;
-          nearest = { el: inp, x: portCX, y: portCY, dist };
-        }
-      });
-
-      return nearest;
+    function getHoveredInputPort(mouseX, mouseY){
+      const hit = document.elementFromPoint(mouseX, mouseY);
+      if(!hit) return null;
+      const port = hit.closest('.input');
+      if(!port) return null;
+      const sourceNode = editor.ele_selected ? editor.ele_selected.closest('.drawflow-node') : null;
+      const targetNode = port.closest('.drawflow-node');
+      if(sourceNode && targetNode && sourceNode === targetNode) return null;
+      return port;
     }
 
     // 重写 updateConnection 方法
@@ -3612,29 +3878,16 @@ function initDrawflow(){
         return _origUpdateConn(mouseX, mouseY);
       }
 
-      // 查找最近的输入端口
-      const snap = findNearestInputPort(mouseX, mouseY);
-
       // 清除之前的高亮
       clearSnapHighlight();
 
-      if(snap){
+      const snapPort = getHoveredInputPort(mouseX, mouseY);
+      if(snapPort){
         // 高亮吸附目标
-        snap.el.classList.add('snap-target');
-        store.connSnapTarget = snap.el;
-
-        // 使用端口位置代替鼠标位置
-        const precanvas = editor.precanvas;
-        const zoom = editor.zoom;
-        const scaleX = precanvas.clientWidth / (precanvas.clientWidth * zoom);
-        const scaleY = precanvas.clientHeight / (precanvas.clientHeight * zoom);
-
-        // 将画布坐标转换回屏幕坐标
-        const preRect = precanvas.getBoundingClientRect();
-        const screenX = (snap.x + preRect.left * scaleX) / scaleX;
-        const screenY = (snap.y + preRect.top * scaleY) / scaleY;
-
-        return _origUpdateConn(screenX, screenY);
+        snapPort.classList.add('snap-target');
+        store.connSnapTarget = snapPort;
+        const rect = snapPort.getBoundingClientRect();
+        return _origUpdateConn(rect.left + rect.width / 2, rect.top + rect.height / 2);
       } else {
         return _origUpdateConn(mouseX, mouseY);
       }
@@ -3655,8 +3908,11 @@ function initDrawflow(){
       style.textContent = `
         .input.snap-target {
           box-shadow: 0 0 0 3px var(--accent), 0 0 12px var(--accent) !important;
-          transform: scale(1.3);
-          transition: all 0.15s ease;
+          transform: scale(1.22);
+          transition: all 0.12s ease;
+        }
+        .drawflow-node.snap-target{
+          box-shadow: 0 0 0 2px var(--accent), 0 10px 28px rgba(91,141,230,.22) !important;
         }
       `;
       document.head.appendChild(style);
@@ -3664,6 +3920,48 @@ function initDrawflow(){
   })();
 
   // —— 拖拽增强：确保节点拖拽的可靠性 ——
+  function syncNodePositionState(nodeId, x, y){
+    const dfData = editor.drawflow.drawflow[editor.module].data;
+    if(dfData[nodeId]){
+      dfData[nodeId].pos_x = x;
+      dfData[nodeId].pos_y = y;
+    }
+    const storeNode = store.data.nodes[nodeId];
+    if(storeNode){
+      storeNode.data._posX = x;
+      storeNode.data._posY = y;
+    }
+  }
+
+  function placeChildInsideContainer(childId, containerId){
+    const childEl = nodeCache.get(childId) || document.querySelector(`#node-${childId}`);
+    const containerEl = nodeCache.get(containerId) || document.querySelector(`#node-${containerId}`);
+    if(!childEl || !containerEl) return;
+
+    const headerH = 42;
+    const padX = 12;
+    const padBottom = 12;
+    const containerX = containerEl.offsetLeft;
+    const containerY = containerEl.offsetTop;
+    const containerW = containerEl.offsetWidth;
+    const containerH = containerEl.offsetHeight;
+    const childW = childEl.offsetWidth;
+    const childH = childEl.offsetHeight;
+
+    const minX = containerX + padX;
+    const maxX = containerX + Math.max(padX, containerW - childW - padX);
+    const minY = containerY + headerH;
+    const maxY = containerY + Math.max(headerH, containerH - childH - padBottom);
+
+    const nextX = Math.min(maxX, Math.max(minX, childEl.offsetLeft));
+    const nextY = Math.min(maxY, Math.max(minY, childEl.offsetTop));
+
+    childEl.style.left = nextX + 'px';
+    childEl.style.top = nextY + 'px';
+    syncNodePositionState(childId, nextX, nextY);
+    refreshConnectionsForNode(childId);
+  }
+
   // 辅助函数：将节点放入容器（建立父子关系）
   function assignNodeToContainer(childId, containerId){
     const container = store.data.nodes[containerId];
@@ -3688,6 +3986,9 @@ function initDrawflow(){
     // 子节点置于容器顶层，可独立操作
     const childEl = nodeCache.get(childId) || document.querySelector(`#node-${childId}`);
     if(childEl) childEl.style.zIndex = '5';
+    placeChildInsideContainer(childId, containerId);
+    refreshConnectionsForNode(childId);
+    refreshConnectionsForNode(containerId);
     refreshNodeDisplay(containerId);
     markDirty();
     return true;
@@ -3696,25 +3997,24 @@ function initDrawflow(){
   // 辅助函数：检测拖拽节点是否与容器重叠
   function findContainerUnderNode(dragNodeEl, dragNodeId){
     const dragRect = dragNodeEl.getBoundingClientRect();
-    const dragCx = dragRect.left + dragRect.width / 2;
-    const dragCy = dragRect.top + dragRect.height / 2;
-    let bestContainer = null, bestDist = Infinity;
+    let bestContainer = null, bestScore = 0;
     Object.keys(store.data.nodes).forEach(cid => {
       if(String(cid) === String(dragNodeId)) return;
       if(store.data.nodes[cid].type !== 'container') return;
       const cEl = document.querySelector(`#node-${cid}`);
       if(!cEl) return;
       const cRect = cEl.getBoundingClientRect();
-      // 检测拖拽节点中心是否在容器矩形内
-      if(dragCx >= cRect.left && dragCx <= cRect.right && dragCy >= cRect.top && dragCy <= cRect.bottom){
-        const dist = Math.abs(dragCx - (cRect.left + cRect.width/2)) + Math.abs(dragCy - (cRect.top + cRect.height/2));
-        if(dist < bestDist){
-          bestDist = dist;
-          bestContainer = cid;
-        }
+      const overlapW = Math.max(0, Math.min(dragRect.right, cRect.right) - Math.max(dragRect.left, cRect.left));
+      const overlapH = Math.max(0, Math.min(dragRect.bottom, cRect.bottom) - Math.max(dragRect.top, cRect.top));
+      const overlapArea = overlapW * overlapH;
+      const minArea = Math.min(dragRect.width * dragRect.height, cRect.width * cRect.height) || 1;
+      const score = overlapArea / minArea;
+      if(score > bestScore){
+        bestScore = score;
+        bestContainer = cid;
       }
     });
-    return bestContainer;
+    return bestScore >= 0.12 ? bestContainer : null;
   }
 
   (function enhanceDragging(){
@@ -3724,7 +4024,7 @@ function initDrawflow(){
 
     // 在捕获阶段监听 mousedown，确保能正确捕获拖拽起始
     container.addEventListener('mousedown', function(e){
-      const nodeEl = e.target.closest('.drawflow-node');
+      let nodeEl = e.target.closest('.drawflow-node');
       if(!nodeEl) return;
       
       // 如果点击的是缩放手柄，不处理拖拽
@@ -3732,12 +4032,28 @@ function initDrawflow(){
       
       // 如果点击的是输入/输出端口，不处理拖拽
       if(e.target.closest('.input') || e.target.closest('.output')) return;
+
+      const clickedId = nodeEl.id.replace('node-','');
+      const clickedNode = store.data.nodes[clickedId];
+      const selectedNode = store.selectedId ? store.data.nodes[store.selectedId] : null;
+      if(
+        clickedNode &&
+        clickedNode.data &&
+        clickedNode.data._parentId &&
+        selectedNode &&
+        selectedNode.type === 'container' &&
+        String(clickedNode.data._parentId) === String(store.selectedId)
+      ){
+        const parentEl = nodeCache.get(store.selectedId) || document.querySelector(`#node-${store.selectedId}`);
+        if(parentEl) nodeEl = parentEl;
+      }
       
       // 检查节点是否被锁定
       if(nodeEl.classList.contains('locked')) return;
       
       dragNode = nodeEl;
       isDragging = true;
+      store.liveDragNodeId = nodeEl.id.replace('node-','');
       
       // 确保 Drawflow 的拖拽状态正确
       // 注意：不可设置 editor.node_selected，否则会让 Drawflow 库的
@@ -3794,6 +4110,7 @@ function initDrawflow(){
                 if(dfData[childId]){ dfData[childId].pos_x = cx; dfData[childId].pos_y = cy; }
                 const cs = store.data.nodes[childId];
                 if(cs){ cs.data._posX = cx; cs.data._posY = cy; }
+                refreshConnectionsForNode(childId);
               }
             });
           }
@@ -3835,19 +4152,36 @@ function initDrawflow(){
         document.querySelectorAll('.drawflow-node.node-container.drag-over').forEach(el => el.classList.remove('drag-over'));
         dragNode = null;
       }
+      store.liveDragNodeId = null;
     }
     document.addEventListener('mouseup', clearDrag, true);
     document.addEventListener('mouseleave', clearDrag, true);
 
     // 同样处理 touch 事件
     container.addEventListener('touchstart', function(e){
-      const nodeEl = e.target.closest('.drawflow-node');
+      let nodeEl = e.target.closest('.drawflow-node');
       if(!nodeEl) return;
       if(e.target.closest('.input') || e.target.closest('.output')) return;
       if(nodeEl.classList.contains('locked')) return;
+
+      const clickedId = nodeEl.id.replace('node-','');
+      const clickedNode = store.data.nodes[clickedId];
+      const selectedNode = store.selectedId ? store.data.nodes[store.selectedId] : null;
+      if(
+        clickedNode &&
+        clickedNode.data &&
+        clickedNode.data._parentId &&
+        selectedNode &&
+        selectedNode.type === 'container' &&
+        String(clickedNode.data._parentId) === String(store.selectedId)
+      ){
+        const parentEl = nodeCache.get(store.selectedId) || document.querySelector(`#node-${store.selectedId}`);
+        if(parentEl) nodeEl = parentEl;
+      }
       
       dragNode = nodeEl;
       isDragging = true;
+      store.liveDragNodeId = nodeEl.id.replace('node-','');
       nodeEl.classList.add('dragging');
       
       if(!editor.drag) {
@@ -4318,11 +4652,13 @@ function initDrawflow(){
       minimapVp.style.display = 'none';
       return;
     }
-    // 计算所有节点包围盒
+    // 计算所有节点包围盒（使用实际节点尺寸）
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     nodeIds.forEach(id=>{
       const n = nodes[id];
-      const w = 200, h = 60;
+      const el = document.querySelector('#node-'+id);
+      const w = el ? el.offsetWidth : 200;
+      const h = el ? el.offsetHeight : 60;
       if(n.pos_x < minX) minX = n.pos_x;
       if(n.pos_y < minY) minY = n.pos_y;
       if(n.pos_x + w > maxX) maxX = n.pos_x + w;
@@ -4342,15 +4678,21 @@ function initDrawflow(){
     // 连线
     nodeIds.forEach(id=>{
       const n = nodes[id];
+      const srcEl = document.querySelector('#node-'+id);
+      const srcW = srcEl ? srcEl.offsetWidth : 200;
+      const srcH = srcEl ? srcEl.offsetHeight : 60;
       Object.keys(n).forEach(key=>{
         if(key.startsWith('output_') && n[key] && n[key].connections){
           n[key].connections.forEach(c=>{
             const target = nodes[c.node];
             if(!target) return;
-            const x1 = offX + (n.pos_x + 100 - minX) * scale;
-            const y1 = offY + (n.pos_y + 30 - minY) * scale;
-            const x2 = offX + (target.pos_x + 100 - minX) * scale;
-            const y2 = offY + (target.pos_y + 30 - minY) * scale;
+            const tgtEl = document.querySelector('#node-'+c.node);
+            const tgtW = tgtEl ? tgtEl.offsetWidth : 200;
+            const tgtH = tgtEl ? tgtEl.offsetHeight : 60;
+            const x1 = offX + (n.pos_x + srcW/2 - minX) * scale;
+            const y1 = offY + (n.pos_y + srcH/2 - minY) * scale;
+            const x2 = offX + (target.pos_x + tgtW/2 - minX) * scale;
+            const y2 = offY + (target.pos_y + tgtH/2 - minY) * scale;
             const connStroke = store.theme === 'light' ? '#c5c0cc' : '#34265e';
             svgContent += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${connStroke}" stroke-width="0.5"/>`;
           });
@@ -4358,15 +4700,18 @@ function initDrawflow(){
       });
     });
     // 节点
-    const typeColor = {char:'#c084fc',shot:'#818cf8',line:'#fb923c',scene:'#34d399',visual:'#22d3ee',asset:'#a3e635',page:'#f472b6',end:'#ff6b9d'};
+    const typeColor = {char:'#c084fc',shot:'#818cf8',line:'#fb923c',scene:'#34d399',visual:'#22d3ee',asset:'#a3e635',page:'#f472b6',end:'#ff6b9d',container:'#64748b'};
     nodeIds.forEach(id=>{
       const n = nodes[id];
       const nodeData = store.data.nodes[id];
       const color = nodeData ? (typeColor[nodeData.type]||'#c084fc') : '#c084fc';
+      const el = document.querySelector('#node-'+id);
+      const nw = el ? el.offsetWidth : 200;
+      const nh = el ? el.offsetHeight : 60;
       const x = offX + (n.pos_x - minX) * scale;
       const y = offY + (n.pos_y - minY) * scale;
-      const w = 200 * scale;
-      const h = 50 * scale;
+      const w = nw * scale;
+      const h = nh * scale;
       svgContent += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="${color}" opacity="0.6"/>`;
     });
     minimapSvg.innerHTML = svgContent;
@@ -4417,10 +4762,13 @@ function initDrawflow(){
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     nodeIds.forEach(id=>{
       const n = store.editor.export().drawflow.Home.data[id];
+      const el = document.querySelector('#node-'+id);
+      const w = el ? el.offsetWidth : 200;
+      const h = el ? el.offsetHeight : 60;
       if(n.pos_x < minX) minX = n.pos_x;
       if(n.pos_y < minY) minY = n.pos_y;
-      if(n.pos_x + 200 > maxX) maxX = n.pos_x + 200;
-      if(n.pos_y + 60 > maxY) maxY = n.pos_y + 60;
+      if(n.pos_x + w > maxX) maxX = n.pos_x + w;
+      if(n.pos_y + h > maxY) maxY = n.pos_y + h;
     });
     const pad = 40; minX -= pad; minY -= pad; maxX += pad; maxY += pad;
     const worldW = maxX - minX;
@@ -4455,10 +4803,13 @@ function initDrawflow(){
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
         nodeIds.forEach(id=>{
           const n = store.editor.export().drawflow.Home.data[id];
+          const el = document.querySelector('#node-'+id);
+          const w = el ? el.offsetWidth : 200;
+          const h = el ? el.offsetHeight : 60;
           if(n.pos_x < minX) minX = n.pos_x;
           if(n.pos_y < minY) minY = n.pos_y;
-          if(n.pos_x + 200 > maxX) maxX = n.pos_x + 200;
-          if(n.pos_y + 60 > maxY) maxY = n.pos_y + 60;
+          if(n.pos_x + w > maxX) maxX = n.pos_x + w;
+          if(n.pos_y + h > maxY) maxY = n.pos_y + h;
         });
         const pad = 40; minX -= pad; minY -= pad; maxX += pad; maxY += pad;
         const worldW = maxX - minX;
@@ -4765,7 +5116,7 @@ function initConnectionSnap(){
 }
 
 function clearSnapHighlight(){
-  document.querySelectorAll('.drawflow-node.snap-target').forEach(n=>{
+  document.querySelectorAll('.drawflow-node.snap-target, .input.snap-target, .output.snap-target').forEach(n=>{
     n.classList.remove('snap-target');
   });
 }
@@ -4848,6 +5199,13 @@ function buildNodeHtml(type, data){
       </div>
     </div>`;
   }
+  if(type === 'line'){
+    return `<div class="line-bubble" data-type="${type}">
+      <div class="line-speaker" data-field="speaker">未指派</div>
+      <div class="line-content" data-field="content">输入台词内容</div>
+      <div class="line-meta" data-field="meta"></div>
+    </div>`;
+  }
   return `<div class="node-skin" data-type="${type}">
     <div class="n-top">
       <div class="n-ic ${m.icCls}">${m.icon}</div>
@@ -4865,7 +5223,7 @@ function buildNodeHtml(type, data){
 function refreshNodeDisplay(id){
   const node = store.data.nodes[id];
   if(!node) return;
-  const el = document.querySelector(`#node-${id} .node-skin, #node-${id} .comet-card`) || document.querySelector(`#node-${id} .container-skin`);
+  const el = document.querySelector(`#node-${id} .node-skin, #node-${id} .comet-card, #node-${id} .line-bubble`) || document.querySelector(`#node-${id} .container-skin`);
   if(!el) return;
   if(node.type === 'container'){
     const titleEl = el.querySelector('[data-field="title"]');
@@ -4882,6 +5240,20 @@ function refreshNodeDisplay(id){
       } else {
         bodyEl.innerHTML = '<div class="ct-empty">' + children.length + ' 个节点已收入</div>';
       }
+    }
+    return;
+  }
+  if(node.type === 'line'){
+    const speakerEl = el.querySelector('[data-field="speaker"]');
+    const contentEl = el.querySelector('[data-field="content"]');
+    const metaEl = el.querySelector('[data-field="meta"]');
+    const speaker = deriveLineSpeakerName(id, node.data);
+    if(speakerEl) speakerEl.textContent = speaker === '未指派' ? '等待角色连线' : speaker;
+    if(contentEl) contentEl.textContent = node.data.content || '输入台词内容';
+    if(metaEl){
+      const bits = [node.data.mood, node.data.dur ? node.data.dur + 's' : ''].filter(Boolean);
+      metaEl.textContent = bits.join(' · ');
+      metaEl.style.display = bits.length ? 'block' : 'none';
     }
     return;
   }
@@ -4959,6 +5331,18 @@ function initPalette(){
     createNode(type, x - 100, y - 30);
     console.log('[drop] node created');
   });
+
+  // 资产区收缩/展开切换
+  const toggleBtn = $('#palette-toggle');
+  if(toggleBtn){
+    toggleBtn.addEventListener('click', ()=>{
+      const mainEl = $('.main');
+      if(!mainEl) return;
+      const collapsed = mainEl.classList.toggle('palette-collapsed');
+      toggleBtn.textContent = collapsed ? '»' : '«';
+      toggleBtn.title = collapsed ? '展开资产区' : '收缩资产区';
+    });
+  }
 }
 
 function initPalette3DSpheres(){
@@ -5022,8 +5406,9 @@ function createNode(type, posX, posY){
   // Drawflow 0.0.60 addNode 签名：
   //   addNode(name, in, out, pos_x, pos_y, class_str, data_obj, html_str, nodeId_flag)
   // 第7=data, 第8=html, 第9必须为 false（否则走 Vue render 路径）
+  const inputs = nodeInputCount(type);
   const outputs = nodeOutputCount(type);
-  store.editor.addNode(type, 2, outputs, posX, posY, TYPE_META[type].cls, data, html, false);
+  store.editor.addNode(type, inputs, outputs, posX, posY, TYPE_META[type].cls, data, html, false);
 
   // 注意：选中需在 nodeCreated 回调中完成（拿到真实 id 后）
   updateEmpty();
@@ -5035,16 +5420,15 @@ function createNode(type, posX, posY){
 function renderInspector(){
   const insp = $('#inspector');
   const sel = store.selectedId;
+  const mainEl = $('.main');
 
   if(!sel && store.selectedIds.length === 0){
-    insp.innerHTML = `<div class="insp-empty">
-      <div class="em">👆</div>
-      <p>点击画布中的任意节点</p>
-      <p>在这里编辑它的详细内容</p>
-      <p>改动会实时显示在画布上</p>
-    </div>`;
+    if(mainEl) mainEl.classList.add('no-inspector');
+    insp.innerHTML = '';
     return;
   }
+
+  if(mainEl) mainEl.classList.remove('no-inspector');
 
   // 多选状态
   if(store.selectedIds.length > 1){
@@ -5180,6 +5564,7 @@ function renderInspector(){
   if(!node){ store.selectedId=null; renderInspector(); return; }
   const m = TYPE_META[node.type];
   const fields = SCHEMA[node.type];
+  const derivedSpeaker = node.type === 'line' ? deriveLineSpeakerName(sel, node.data) : '';
 
   let html = `<div class="insp-head">
     <div class="badge ${m.icCls}">${m.icon}</div>
@@ -5189,6 +5574,13 @@ function renderInspector(){
       <div class="id">${sel}</div>
     </div>
   </div>`;
+
+  if(node.type === 'line'){
+    html += `<div class="field">
+      <label>说话人（由连线推断）</label>
+      <div class="field-readonly">${escapeHtml(derivedSpeaker)}</div>
+    </div>`;
+  }
 
   let currentSection = '';
   fields.forEach((f,i)=>{
@@ -5244,8 +5636,9 @@ function duplicateNode(srcId){
   const data = {...src.data};
   const html = buildNodeHtml(src.type, data);
   store.pendingNodes.push({ type: src.type, data, select:true });
+  const inputs = nodeInputCount(src.type);
   const outputs = nodeOutputCount(src.type);
-  store.editor.addNode(src.type, 2, outputs, x, y, TYPE_META[src.type].cls, data, html, false);
+  store.editor.addNode(src.type, inputs, outputs, x, y, TYPE_META[src.type].cls, data, html, false);
   updateEmpty();
 }
 
@@ -5275,8 +5668,9 @@ function pasteFromClipboard(){
   const { type, data, pos_x, pos_y } = clipData;
   const html = buildNodeHtml(type, data);
   store.pendingNodes.push({ type, data, select:true });
+  const inputs = nodeInputCount(type);
   const outputs = nodeOutputCount(type);
-  store.editor.addNode(type, 2, outputs, pos_x+40, pos_y+40, TYPE_META[type].cls, data, html, false);
+  store.editor.addNode(type, inputs, outputs, pos_x+40, pos_y+40, TYPE_META[type].cls, data, html, false);
   updateEmpty();
 }
 
@@ -5325,6 +5719,7 @@ function serialize(){
 }
 
 function markDirty(){
+  if(store.mutingDirty) return;
   store.dirty = true;
   histPush();  // 每次修改都推入历史栈
   saveSoon();
@@ -5354,7 +5749,10 @@ function doSave(){
         item.nodeCount = Object.keys(data.nodes||{}).length;
         // 统计节点类型
         const tc = {};
-        Object.values(data.nodes||{}).forEach(n => { tc[n.type] = (tc[n.type]||0)+1; });
+        Object.values(data.nodes||{}).forEach(n => {
+          const nt = normalizeNodeType(n.type);
+          tc[nt] = (tc[nt]||0)+1;
+        });
         item.typeCounts = tc;
         localStorage.setItem(PROJECT_REG_KEY, JSON.stringify(reg));
       }catch(_){}
@@ -5372,6 +5770,7 @@ function doSave(){
 function loadFrom(obj){
   if(!obj || obj.app!=='comic-canvas'){ throw new Error('文件格式不正确'); }
   // 清空现有
+  store.mutingDirty = true;
   clearCanvas(false);
   // 旧id -> 新id 映射（Drawflow 自己分配数字 id，无法指定）
   idMap = {};
@@ -5381,17 +5780,13 @@ function loadFrom(obj){
     const n = obj.nodes[oldId];
     const nodeType = normalizeNodeType(n.type);
     const pos = obj.positions && obj.positions[oldId] ? obj.positions[oldId] : { x:80+Math.random()*200, y:80+Math.random()*200 };
-    const data = {...n.data};
-    if(n.type === 'branch'){
-      if(!data.page_type) data.page_type = 'storyboard-frame';
-      if(!data.page_id) data.page_id = data.label || ('PAGE-' + oldId);
-      if(!data.purpose) data.purpose = data.note || '由旧分支节点迁移';
-    }
+    const data = migrateLegacyNodeData(n.type, n.data, oldId);
     const html = buildNodeHtml(nodeType, data);
     // 标记，在 nodeCreated 回调里建立映射（不自动选中）
     store.pendingNodes.push({ type:nodeType, data, select:false, remap:oldId });
+    const inputs = nodeInputCount(nodeType);
     const outputs = nodeOutputCount(nodeType);
-    store.editor.addNode(nodeType, 2, outputs, pos.x, pos.y, TYPE_META[nodeType].cls, data, html, false);
+    store.editor.addNode(nodeType, inputs, outputs, pos.x, pos.y, TYPE_META[nodeType].cls, data, html, false);
   });
   // 用映射表建连线
   if(obj.edges){
@@ -5444,10 +5839,14 @@ function loadFrom(obj){
     updateAllConnStyles();
     updateAllConnLabels();
   }, 100);
+  store.mutingDirty = false;
+  resetHistoryToCurrent();
   doSave();
 }
 
 function clearCanvas(saveBackup){
+  const prevMuting = store.mutingDirty;
+  store.mutingDirty = true;
   if(saveBackup && Object.keys(store.data.nodes).length){
     localStorage.setItem(LS_KEY+':backup', JSON.stringify(serialize()));
   }
@@ -5463,6 +5862,10 @@ function clearCanvas(saveBackup){
   store.histIdx = -1;
   renderInspector();
   updateEmpty();
+  store.mutingDirty = prevMuting;
+  if(!store.mutingDirty){
+    resetHistoryToCurrent();
+  }
 }
 
 /* —— 导出 —— */
@@ -5536,7 +5939,7 @@ function doExportMd(){
   lines.push('> 导出时间：' + new Date().toLocaleString('zh-CN'));
   lines.push('');
 
-  const typeOrder = ['visual','char','scene','asset','shot','page','line','end'];
+  const typeOrder = ['char','container','shot','page','line'];
   const nodesByType = {};
   typeOrder.forEach(t => nodesByType[t] = []);
   Object.keys(data.nodes).forEach(id => {
@@ -5547,12 +5950,10 @@ function doExportMd(){
   const sectionMeta = {
     visual: {icon:'🎨', title:'视觉圣经'},
     char:   {icon:'🎭', title:'角色'},
-    scene:  {icon:'🏞️', title:'场景 / 道具'},
-    asset:  {icon:'🧩', title:'资产'},
+    container: {icon:'📁', title:'容器 / 场景资产'},
     shot:   {icon:'🎬', title:'分镜'},
     page:   {icon:'🖼️', title:'页面帧'},
     line:   {icon:'💬', title:'台词'},
-    end:    {icon:'🏁', title:'结局'},
   };
 
   typeOrder.forEach(type => {
@@ -5569,6 +5970,10 @@ function doExportMd(){
       lines.push('');
       const schema = SCHEMA[type];
       if(schema){
+        if(type === 'line'){
+          const speaker = deriveLineSpeakerName(String(n.id), d);
+          if(speaker) lines.push('- **说话人（由连线推断）**：' + speaker);
+        }
         schema.forEach(f => {
           if(f.key === titleField) return;
           const v = d[f.key];
@@ -5628,7 +6033,7 @@ function doExportMd(){
 /* 获取节点的显示标题 */
 function getNodeTitle(n){
   const d = n.data || {};
-  return d.name || d.no || d.speaker || d.label || d.title || '未命名';
+  return d.name || d.no || d.page_id || d.title || d.content || d.label || '未命名';
 }
 
 /* —— 导入 Markdown —— */
@@ -5679,30 +6084,27 @@ function analyzeWithAi(mdText, settings){
   var systemPrompt = ''
     + '你是一个专业的漫剧/漫画创作助手，擅长把各种格式的文本解析为结构化的画布节点。\n\n'
     + '## 你的任务\n'
-    + '分析用户提供的文本（可能是 Markdown、剧本、小说、纯文本），提取角色、视觉设定、场景、资产、分镜、页面帧、台词、结局等元素，'
+    + '分析用户提供的文本（可能是 Markdown、剧本、小说、纯文本），提取角色、容器场景资产、分镜、页面帧、台词等元素，'
     + '转化为漫剧画布的节点和连线结构。\n\n'
     + '## 节点类型与字段（务必严格遵守字段取值约束）\n'
-    + '- visual（视觉圣经）：title(必填,名称), art_direction(美术方向), palette(调色板), lighting_logic(灯光逻辑), camera_language(镜头语言), avoid(禁用规则)\n'
     + '- char（角色）：name(必填,姓名), role(身份职能), face_hair(脸型与发型), outfit(主服装), persona(性格驱动), identity_lock(身份锁)\n'
-    + '- scene（场景/道具）：sub(必填,仅限"场景"或"道具"), name(必填,名称), desc(描述), mood(氛围), topology(空间拓扑), continuity_lock(一致性锁)\n'
-    + '- asset（资产）：asset_id(必填,资产ID), name(必填,名称), asset_type(类型), description(外观), function(叙事功能)\n'
-    + '- shot（分镜）：no(必填,镜号如S01), purpose(镜头目的), size(景别), camera_angle(机位角度), move(镜头运动), dur(时长秒数), desc(必填,画面描述), start_state(起始状态), end_state(结束状态), continuity(连续性依赖)\n'
+    + '- container（容器/场景资产）：title(必填,标题), content_type(类型, chapter/scene/prop/asset/location/mixed), desc(描述), mood(氛围), topology(空间拓扑), continuity_lock(一致性锁)\n'
+    + '- shot（分镜）：no(必填,镜号如S01), purpose(镜头目的), size(景别), camera_angle(机位角度), move(镜头运动), dur(时长秒数), desc(必填,画面描述), start_state(起始状态), end_state(结束状态), continuity(连续性依赖), visual_title(视觉基调名), art_direction(美术方向), palette(调色板)\n'
     + '- page（页面帧）：page_id(必填,页面ID), page_type(类型), linked_shot(关联镜头), purpose(页面目的), composition(构图), peak_moment(关键瞬间)\n'
-    + '- line（台词）：speaker(必填,说话人或"旁白"), content(必填,台词内容), mood(情绪), coverage(覆盖方式), subtext(潜台词)\n'
-    + '- end（结局）：title(必填,结局标题), content(必填,结局内容), note(备注)\n\n'
+    + '- line（台词）：content(必填,台词内容), mood(情绪), subtext(潜台词), speaker(可选,仅作无连线时回退)\n\n'
     + '## 格式识别策略（自动适配多种输入）\n'
-    + '1. 若文本是「漫剧画布导出的 Markdown」：识别 `## 🎨 视觉圣经`、`## 🎭 角色`、`## 🏞️ 场景`、`## 🧩 资产`、`## 🎬 分镜`、`## 🖼️ 页面帧`、`## 💬 台词`、`## 🏁 结局` 等分区标题；'
-    + '每个 `### 标题` 是一个节点的标题字段（视觉→title、角色→name、分镜→no、页面帧→page_id、台词→speaker、结局→title）；'
+    + '1. 若文本是「漫剧画布导出的 Markdown」：识别 `## 🎭 角色`、`## 📁 容器 / 场景资产`、`## 🎬 分镜`、`## 🖼️ 页面帧`、`## 💬 台词` 等分区标题；'
+    + '每个 `### 标题` 是一个节点的标题字段（角色→name、容器→title、分镜→no、页面帧→page_id、台词→content）；'
     + '形如 `- **字段名**：值` 的列表项对应同名字段（如"**身份**：主角"→role="主角"，"**性格**：勇敢"→persona="勇敢"）。'
     + '`## 🔗 连线关系` 区的 `A → B` 描述需转为 edges。\n'
-    + '2. 若文本是「剧本/脚本」：`[场景名]` 或「场景：xx」提取为 scene 节点；'
-    + '形如「角色名：台词」或「角色名（情绪）：台词」的行提取为 line 节点（括号内为 mood）；'
+    + '2. 若文本是「剧本/脚本」：`[场景名]` 或「场景：xx」提取为 container 节点；'
+    + '形如「角色名：台词」或「角色名（情绪）：台词」的行提取为 line 节点（括号内为 mood），并尽量建立角色到台词的直接连线；'
     + '可按出场顺序补充 shot 分镜节点和 page 页面帧节点串联叙事。\n'
-    + '3. 若文本是「小说/散文」：从中识别人物→char、关键地点/物品→scene/asset、重要对话→line、镜头设计→shot、结尾→end，并按情节顺序建立连线。\n'
+    + '3. 若文本是「小说/散文」：从中识别人物→char、关键地点/物品→container、重要对话→line、镜头设计→shot，并按情节顺序建立连线。\n'
     + '4. 其它纯文本：尽力推断最贴切的节点类型，宁缺毋滥，但至少产出几个核心节点。\n\n'
     + '## 连线规则\n'
-    + '- 每条边用 {"from":"源id","to":"目标id","out_port":"output_1","in_port":"input_1"} 表示；'
-    + '- 按"视觉圣经→角色/场景/资产""场景/资产→分镜""分镜→页面帧""角色→其首句台词""分镜→台词"等叙事逻辑合理串联，避免出现孤立节点。\n\n'
+    + '- 每条边用 {"from":"源id","to":"目标id","out_port":"output_1","in_port":"input_1"} 表示；台词节点优先只使用 `output_1` / `input_1`；'
+    + '- 按"容器→分镜""分镜→页面帧""角色→其首句台词""分镜→台词"等叙事逻辑合理串联，避免出现孤立节点。\n\n'
     + '## 输出格式（极其重要）\n'
     + '只返回一个 JSON 对象，禁止任何额外文字、解释或 markdown 代码块标记。结构：\n'
     + '{"nodes":[{"id":"1","type":"char","data":{"name":"小明","role":"主角"}},'
@@ -5776,13 +6178,10 @@ var AI_TITLE_FIELD = TITLE_FIELD;
 /* 预览中分组的顺序与标题 */
 var AI_PREVIEW_ORDER = [
   {type:'char',   icon:'🎭', title:'角色'},
-  {type:'visual', icon:'🎨', title:'视觉圣经'},
-  {type:'scene',  icon:'🏞️', title:'场景 / 道具'},
-  {type:'asset',  icon:'🧩', title:'资产'},
+  {type:'container', icon:'📁', title:'容器 / 场景资产'},
   {type:'shot',   icon:'🎬', title:'分镜'},
   {type:'page',   icon:'🖼️', title:'页面帧'},
   {type:'line',   icon:'💬', title:'台词'},
-  {type:'end',    icon:'🏁', title:'结局'},
 ];
 
 function showAiPreview(parsed, rawText, errMsg, rawContent){
@@ -5808,9 +6207,12 @@ function showAiPreview(parsed, rawText, errMsg, rawContent){
     // 按类型分组
     var byType = {};
     nodes.forEach(function(n){
-      var t = (TYPE_META[n.type] ? n.type : 'shot');
+      var t = normalizeNodeType(n.type || 'shot');
       if(!byType[t]) byType[t] = [];
-      byType[t].push(n);
+      byType[t].push({
+        ...n,
+        data: migrateLegacyNodeData(n.type || t, n.data || {}, n.id || '')
+      });
     });
 
     // 统计胶囊
@@ -5893,6 +6295,7 @@ function doAiPasteSubmit(){
 
 /* —— 将 AI 返回的结果加载到画布 —— */
 function loadFromAiResult(parsed){
+  store.mutingDirty = true;
   clearCanvas(false);
   idMap = {};
   edgeIdCounter = 0;
@@ -5907,23 +6310,20 @@ function loadFromAiResult(parsed){
   // 创建节点
   parsed.nodes.forEach(function(n, idx){
     var type = normalizeNodeType(n.type || 'shot');
+    var sourceData = migrateLegacyNodeData(n.type || type, n.data || {}, n.id || idx + 1);
     var data = {};
     // 填充字段，缺失的给默认值
     var schema = SCHEMA[type];
     if(schema){
       schema.forEach(function(f){
-        data[f.key] = (n.data && n.data[f.key]) || schemaDefaultValue(f);
+        data[f.key] = sourceData[f.key] || schemaDefaultValue(f);
       });
     }
-    if(n.type === 'branch'){
-      if(!data.page_type) data.page_type = 'storyboard-frame';
-      if(!data.page_id) data.page_id = (n.data && n.data.label) || ('PAGE-' + (n.id || idx + 1));
-      if(!data.purpose) data.purpose = (n.data && n.data.note) || '由旧分支节点迁移';
-    }
+    if(type === 'line' && sourceData.speaker) data.speaker = sourceData.speaker;
     // 确保必填字段
     var requiredField = TITLE_FIELD[type];
     if(requiredField && !data[requiredField]){
-      data[requiredField] = (n.data && n.data[requiredField]) || TYPE_META[type].label;
+      data[requiredField] = sourceData[requiredField] || TYPE_META[type].label;
     }
 
     // 网格布局：按列数换行
@@ -5933,9 +6333,10 @@ function loadFromAiResult(parsed){
     var posY = startY + row * gapY + (Math.random() * 16 - 8);
 
     var html = buildNodeHtml(type, data);
+    var inputs = nodeInputCount(type);
     var outputs = nodeOutputCount(type);
     store.pendingNodes.push({type: type, data: data, select: false, remap: String(n.id)});
-    store.editor.addNode(type, 2, outputs, posX, posY, TYPE_META[type].cls, data, html, false);
+    store.editor.addNode(type, inputs, outputs, posX, posY, TYPE_META[type].cls, data, html, false);
   });
 
   // 创建连线
@@ -5953,7 +6354,11 @@ function loadFromAiResult(parsed){
   }
 
   // 保存
-  setTimeout(function(){ markDirty(); }, 200);
+  setTimeout(function(){
+    store.mutingDirty = false;
+    resetHistoryToCurrent();
+    doSave();
+  }, 200);
 }
 
 /* ============================================================
@@ -6969,6 +7374,10 @@ renderInspector = function(){
   actionsEl.parentNode.insertBefore(colorSection, actionsEl);
   actionsEl.parentNode.insertBefore(lockSection, actionsEl);
 
+  if(node.type === 'line'){
+    return;
+  }
+
   // 附件区块
   const attachSection = document.createElement('div');
   attachSection.innerHTML = renderAttachHtml(sel);
@@ -7270,6 +7679,9 @@ function boot(){
   updateEmpty();
   renderInspector();
   renderGroups();
+  if(store.history.length === 0){
+    resetHistoryToCurrent();
+  }
   if(loaded){
     const t = new Date();
     const _st4 = $('#save-text'); if(_st4) _st4.textContent = '已从本地恢复 ' + String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');

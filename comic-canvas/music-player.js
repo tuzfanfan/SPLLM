@@ -1,9 +1,9 @@
-﻿/* ==========================================================
-   婕墽鐢诲竷 路 鍐呭祵闊充箰鎾斁鍣?   搴曢儴鍥哄畾鎾斁鏍?+ 鎼滅储 + 鎾斁鍒楄〃
-   闊虫簮锛氱綉鏄撲簯闊充箰 API锛堢粡 CORS 浠ｇ悊杞彂锛? 娲涢洩鎻掍欢
+/* ==========================================================
+   漫剧画布 · 内嵌音乐播放器
+   底部固定播放栏 + 搜索 + 播放列表
    ========================================================== */
 
-/* ==================== 闊虫簮 API 鏈嶅姟 ==================== */
+/* ==================== 音源 API 服务 ==================== */
 const MusicAPI = (() => {
   const PROXY = '/api/proxy?url=';
   const NETEASE = 'https://music.163.com';
@@ -354,9 +354,11 @@ const MusicAPI = (() => {
 })();
 
 
-/* ==================== 鑳屾櫙娴佸姩鎺у埗鍣?==================== */
+/* ==================== 背景流动控制器 ==================== */
 /**
- * 鐢ㄥ灞傛寮︽尝鍙犲姞锛堥鐜囧熀浜庨粍閲戞瘮渚嬶級浜х敓鍑嗛殢鏈恒€佹案涓嶉噸澶嶇殑娴佸姩杞ㄨ抗銆? * 鍚屾椂鍝嶅簲闊抽鑳介噺锛岃皟鑺傛祦閫熷拰鑹插僵銆? */
+ * 用多层正弦波叠加（频率基于黄金比例）产生准随机、永不重复的流动轨迹。
+ * 同时响应音频能量，调节流速和色彩。
+ */
 class FlowController {
   constructor() {
     // Golden-ratio related constant
@@ -366,8 +368,8 @@ class FlowController {
     this.SQ5  = Math.sqrt(5);
     this.SQ7  = Math.sqrt(7);
 
-    // SVG 婊ら暅鍏冪礌寮曠敤
-    this._turbEls = null;   // [涓绘祦灞? 閫嗘祦灞俔
+    // SVG 滤镜元素引用
+    this._turbEls = null;   // [主流层, 逆流层]
     this._hueEl  = null;
 
     // 音频能量，由 AudioReactor 写入
@@ -384,7 +386,7 @@ class FlowController {
     this._rippleThreshold = 0.25;
   }
 
-  /** 鑾峰彇 SVG 婊ら暅鍏冪礌 */
+  /** 获取 SVG 滤镜元素 */
   _init() {
     if (this._turbEls) return;
     this._turbEls = document.querySelectorAll('#shadowFilter feTurbulence');
@@ -392,7 +394,7 @@ class FlowController {
     this._hueEl = matrices[1] || null;
   }
 
-  /** 鍚姩娴佸姩鍔ㄧ敾锛堝缁堣繍琛岋級 */
+  /** 启动流动动画（始终运行） */
   start() {
     if (this._running) return;
     this._init();
@@ -401,7 +403,7 @@ class FlowController {
     this._loop();
   }
 
-  /** 涓诲惊鐜?*/
+  /** 主循环 */
   _loop() {
     if (!this._running) return;
     requestAnimationFrame(() => this._loop());
@@ -409,7 +411,7 @@ class FlowController {
     const t = (performance.now() - this._t0) / 1000;
     const 蠁 = this.PHI;
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲 涓绘祦灞傛紓绉伙紙澶у昂搴︼紝缂撴參锛?鈺愨晲鈺愨晲鈺愨晲鈺愨晲
+    // ════════ 主流层漂移（大尺度，缓慢） ════════
     const a1 = Math.sin(t * 0.063);
     const a2 = Math.sin(t * 0.063 / 蠁);
     const a3 = Math.sin(t * 0.041 * this.SQ2);
@@ -420,8 +422,8 @@ class FlowController {
     let drift1X = a1 * 0.35 + a2 * 0.25 + a3 * 0.20 + a5 * 0.12 + a6 * 0.08;
     let drift1Y = a4 * 0.35 + a3 * 0.20 + a6 * 0.25 + a2 * 0.12 + a1 * 0.08;
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲 閫嗘祦灞傛紓绉伙紙涓昂搴︼紝鏇村揩锛屼笉鍚岀浉浣嶏級 鈺愨晲鈺愨晲鈺愨晲鈺愨晲
-    // 浣跨敤瀹屽叏涓嶅悓鐨勯鐜囩粍鍚堬紝璁╃浜屽眰涓庣涓€灞?鑴辫€?
+    // ════════ 逆流层漂移（中尺度，更快，不同相位） ════════
+    // 使用完全不同的频率组合，让第二层与第一层"脱耦"
     const b1 = Math.cos(t * 0.089);
     const b2 = Math.sin(t * 0.077 * this.SQ3);
     const b3 = Math.cos(t * 0.053 / 蠁);
@@ -432,7 +434,7 @@ class FlowController {
     let drift2X = b1 * 0.30 + b2 * 0.25 + b3 * 0.22 + b5 * 0.15 + b6 * 0.08;
     let drift2Y = b4 * 0.30 + b3 * 0.22 + b6 * 0.20 + b2 * 0.15 + b1 * 0.13;
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲 鐭冲瓙鍏ユ按锛氭稛婕娴?鈺愨晲鈺愨晲鈺愨晲鈺愨晲
+    // ════════ 石子入水：涟漪检测 ════════
     const bass = this.audioBass;
     if (bass > this._rippleThreshold && t - this._lastSplash > 0.3) {
       this._splashes.push({
@@ -445,7 +447,7 @@ class FlowController {
       if (this._splashes.length > 8) this._splashes.shift();
     }
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲 娑熸吉鍙犲姞 鈺愨晲鈺愨晲鈺愨晲鈺愨晲
+    // ════════ 涟漪叠加 ════════
     let rippleX = 0, rippleY = 0;
     for (let i = this._splashes.length - 1; i >= 0; i--) {
       const s = this._splashes[i];
@@ -457,20 +459,20 @@ class FlowController {
       rippleY += Math.cos(age * freq * 0.8 + s.py) * env;
     }
 
-    // 娑熸吉瀵逛袱灞傜殑褰卞搷涓嶅悓锛堜富娴佸眰鍋忓ぇ鏂瑰悜锛岄€嗘祦灞傚亸纰庢柟鍚戯級
+    // 涟漪对两层的影响不同（主流层偏大方向，逆流层偏碎方向）
     drift1X += rippleX * 0.5;
     drift1Y += rippleY * 0.5;
     drift2X += rippleX * 0.8 + Math.sin(t * 3.7) * rippleY * 0.3;
     drift2Y += rippleY * 0.8 + Math.cos(t * 2.9) * rippleX * 0.3;
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲 鑹茬浉婕傜Щ 鈺愨晲鈺愨晲鈺愨晲鈺愨晲
+    // ════════ 色相漂移 ════════
     const hueDrift = Math.sin(t * 0.04) * 120
                    + Math.sin(t * 0.04 / 蠁) * 80
                    + Math.sin(t * 0.025 * this.SQ2) * 60
                    + 180;
     const hueBoost = 1 + this.audioMid * 3;
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲 鍐欏叆 SVG 鈺愨晲鈺愨晲鈺愨晲鈺愨晲
+    // ════════ 写入 SVG ════════
     if (this._turbEls && this._turbEls.length >= 2) {
       // Main layer: low frequency drift
       this._turbEls[0].setAttribute('baseFrequency',
@@ -490,9 +492,11 @@ class FlowController {
 }
 
 
-/* ==================== 闊抽鍝嶅簲鍣?==================== */
+/* ==================== 音频响应器 ==================== */
 /**
- * 閫氳繃 Web Audio API 瀹炴椂鍒嗘瀽闊抽棰戣氨锛? * 鎻愬彇棰戞鑳介噺鍐欏叆 FlowController锛岄┍鍔ㄨ儗鏅殢闊充箰寰嬪姩銆? */
+ * 通过 Web Audio API 实时分析音频频谱，
+ * 提取频段能量写入 FlowController，驱动背景随音乐律动。
+ */
 class AudioReactor {
   constructor(audioEl, flowController) {
     this.audio = audioEl;
@@ -504,14 +508,14 @@ class AudioReactor {
     this._raf = null;
     this._active = false;
 
-    // 骞虫粦鍚庣殑棰戞鑳介噺
+    // 平滑后的频段能量
     this.bass = 0;
     this.mid = 0;
     this.treble = 0;
     this.energy = 0;
   }
 
-  /** 鍒濆鍖?Web Audio API 杩炴帴 */
+  /** 初始化 Web Audio API 连接 */
   _init() {
     if (this.ctx) return true;
     try {
@@ -526,12 +530,12 @@ class AudioReactor {
       console.log('[AudioReactor] Web Audio connected');
       return true;
     } catch (e) {
-      console.warn('[AudioReactor] Web Audio 鍒濆鍖栧け璐?', e.message);
+      console.warn('[AudioReactor] Web Audio 初始化失败:', e.message);
       return false;
     }
   }
 
-  /** 鍚姩闊抽鍒嗘瀽 */
+  /** 启动音频分析 */
   start() {
     if (!this._init()) return;
     if (this._active) return;
@@ -540,14 +544,14 @@ class AudioReactor {
     this._loop();
   }
 
-  /** 鍋滄鍒嗘瀽锛屽钩婊戣“鍑?*/
+  /** 停止分析，平滑衰减 */
   stop() {
     this._active = false;
     if (this._raf) {
       cancelAnimationFrame(this._raf);
       this._raf = null;
     }
-    // 骞虫粦琛板噺鑳介噺
+    // 平滑衰减能量
     const decay = () => {
       if (this._active) return;
       this.bass *= 0.93; this.mid *= 0.93; this.treble *= 0.93;
@@ -558,7 +562,7 @@ class AudioReactor {
     decay();
   }
 
-  /** 鍒嗘瀽寰幆 */
+  /** 分析循环 */
   _loop() {
     if (!this._active) return;
     this._raf = requestAnimationFrame(() => this._loop());
@@ -585,13 +589,13 @@ class AudioReactor {
     this._pushToFlow();
   }
 
-  /** 灏嗚兘閲忔暟鎹帹閫佺粰 FlowController */
+  /** 将能量数据推送给 FlowController */
   _pushToFlow() {
     if (!this.flow) return;
     this.flow.audioBass   = this.bass;
     this.flow.audioMid    = this.mid;
     this.flow.audioEnergy = this.energy;
-    // 鍚屾椂鎺ㄩ€佸埌姘村ⅷ娴佷綋绯荤粺
+    // 同时推送到水墨流体系
     if (window.__inkRipple){
       window.__inkRipple.setEnergy(this.bass, this.mid, this.treble, this.energy);
     }
@@ -599,25 +603,25 @@ class AudioReactor {
 }
 
 
-/* ==================== 鎾斁鍣ㄤ富绫?==================== */
+/* ==================== 播放器主类 ==================== */
 class MusicPlayer {
   constructor() {
     this.audio = new Audio();
     this.audio.preload = 'metadata';
-    this.audio.crossOrigin = 'anonymous';  // 鍏佽 Web Audio API 鍒嗘瀽璺ㄥ煙闊抽
+    this.audio.crossOrigin = 'anonymous';  // 允许 Web Audio API 分析跨域音频
     this.playlist = [];
     this.currentIdx = -1;
     this.isPlaying = false;
     this.volume = 0.7;
-    this.mode = 0; // 0=椤哄簭 1=鍗曟洸寰幆 2=闅忔満
+    this.mode = 0; // 0=顺序 1=单曲循环 2=随机
     this._searchTimer = null;
     this._urlLoading = false;
 
     // Roaming mode state
     this.roaming = false;
-    this._roamingHistory = [];   // 宸叉挱鏀炬瓕鏇?ID 闆嗗悎锛堟极娓告湡闂撮伩鍏嶉噸澶嶏級
-    this._roamingPool = [];      // 褰撳墠婕父鍏抽敭璇嶆睜
-    this._roamingLoading = false; // 闃叉骞跺彂鎼滅储
+    this._roamingHistory = [];   // 已播放歌曲 ID 集合（漫游期间避免重复）
+    this._roamingPool = [];      // 当前漫游关键词池
+    this._roamingLoading = false; // 防止并发搜索
 
     this.audio.volume = this.volume;
     this._prevVolume = this.volume;
@@ -626,7 +630,7 @@ class MusicPlayer {
     this.flowController = new FlowController();
     this.flowController.start();
 
-    // 闊抽鍝嶅簲鍣細鍒嗘瀽棰戣氨锛屽皢鑳介噺鎺ㄩ€佺粰 FlowController
+    // 音频响应器：分析频谱，将能量推送给 FlowController
     this.reactor = new AudioReactor(this.audio, this.flowController);
 
     this._buildDOM();
@@ -634,12 +638,12 @@ class MusicPlayer {
     this._restorePlaylist();
   }
 
-  /* ---------- DOM 鏋勫缓 ---------- */
+  /* ---------- DOM 构建 ---------- */
   _buildDOM() {
     const root = document.createElement('div');
     root.id = 'music-player';
     root.innerHTML = `
-      <!-- 搴曢儴鎾斁鏍?-->
+      <!-- 底部播放栏 -->
       <div class="mp-bar">
         <div class="mp-bar-left">
           <div class="mp-cover">
@@ -653,13 +657,13 @@ class MusicPlayer {
         </div>
         <div class="mp-bar-center">
           <div class="mp-controls">
-            <button class="mp-btn mp-mode-btn" title="鎾斁妯″紡">
+            <button class="mp-btn mp-mode-btn" title="播放模式">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
             </button>
             <button class="mp-btn mp-prev-btn" title="Previous">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
             </button>
-            <button class="mp-btn mp-play-btn" title="鎾斁/鏆傚仠">
+            <button class="mp-btn mp-play-btn" title="播放/暂停">
               <svg class="mp-icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
               <svg class="mp-icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
@@ -667,14 +671,14 @@ class MusicPlayer {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
             </button>
           </div>
-          <div class="mp-waveform" title="鐐瑰嚮璺宠浆">
+          <div class="mp-waveform" title="点击跳转">
             <span class="mp-waveform-time mp-cur-time">0:00</span>
             <div class="mp-waveform-track" id="waveform-bars"></div>
             <span class="mp-waveform-time mp-dur-time">0:00</span>
           </div>
         </div>
         <div class="mp-bar-right">
-          <button class="mp-btn mp-list-btn" title="鎾斁鍒楄〃">
+          <button class="mp-btn mp-list-btn" title="播放列表">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
             <span class="mp-list-count">0</span>
           </button>
@@ -682,7 +686,7 @@ class MusicPlayer {
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
           </button>
           <div class="mp-volume">
-            <button class="mp-btn mp-vol-btn" title="闊抽噺">
+            <button class="mp-btn mp-vol-btn" title="音量">
               <svg class="mp-vol-on" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
               <svg class="mp-vol-off" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
             </button>
@@ -690,7 +694,7 @@ class MusicPlayer {
               <div class="mp-vol-fill"></div>
             </div>
           </div>
-          <button class="mp-btn mp-search-btn" title="鎼滅储闊充箰">
+          <button class="mp-btn mp-search-btn" title="搜索音乐">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </button>
           <button class="mp-btn mp-backend-btn" title="Backend settings">
@@ -699,20 +703,20 @@ class MusicPlayer {
         </div>
       </div>
 
-      <!-- 鎼滅储闈㈡澘 -->
+      <!-- 搜索面板 -->
       <div class="mp-search-panel">
         <div class="mp-search-head">
           <div class="mp-search-input-wrap">
             <svg class="mp-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" class="mp-search-input" placeholder="鎼滅储姝屾洸鍚嶇О / 姝屾墜..." autocomplete="off">
+            <input type="text" class="mp-search-input" placeholder="搜索歌曲名称 / 歌手">
             <button class="mp-search-close">&times;</button>
           </div>
           <div class="mp-search-sources">
-            <button class="mp-source-btn active" data-source="wy">缃戞槗</button>
+            <button class="mp-source-btn active" data-source="wy">网易</button>
             <button class="mp-source-btn" data-source="tx">QQ</button>
-            <button class="mp-source-btn" data-source="kw">閰锋垜</button>
-            <button class="mp-source-btn" data-source="kg">閰风嫍</button>
-            <button class="mp-source-btn" data-source="mg">鍜挄</button>
+            <button class="mp-source-btn" data-source="kw">酷我</button>
+            <button class="mp-source-btn" data-source="kg">酷狗</button>
+            <button class="mp-source-btn" data-source="mg">咪咕</button>
           </div>
         </div>
         <div class="mp-search-body">
@@ -725,14 +729,14 @@ class MusicPlayer {
         </div>
       </div>
 
-      <!-- 鎾斁鍒楄〃闈㈡澘 -->
+      <!-- 播放列表面板 -->
       <div class="mp-playlist-panel">
         <div class="mp-playlist-head">
-          <span>鎾斁鍒楄〃</span>
-          <button class="mp-btn mp-clear-btn">娓呯┖</button>
+          <span>播放列表</span>
+          <button class="mp-btn mp-clear-btn">清空</button>
         </div>
         <div class="mp-playlist-body">
-          <div class="mp-playlist-empty">鎾斁鍒楄〃涓虹┖</div>
+          <div class="mp-playlist-empty">播放列表为空</div>
           <ul class="mp-playlist-items"></ul>
         </div>
       </div>
@@ -757,7 +761,7 @@ class MusicPlayer {
     document.body.appendChild(root);
     this.el = root;
 
-    // 缂撳瓨甯哥敤鍏冪礌
+    // 缓存常用元素
     this.$ = sel => root.querySelector(sel);
     this.coverImg = this.$('.mp-cover img');
     this.coverPh = this.$('.mp-cover-ph');
@@ -803,9 +807,9 @@ class MusicPlayer {
     this.selectedSource = 'wy';
   }
 
-  /* ---------- 浜嬩欢缁戝畾 ---------- */
+  /* ---------- 事件绑定 ---------- */
   _bindEvents() {
-    // 鎾斁鎺у埗
+    // 播放控制
     this.playBtn.addEventListener('click', () => this.togglePlay());
     this.prevBtn.addEventListener('click', () => this.playPrev());
     this.nextBtn.addEventListener('click', () => this.playNext());
@@ -816,12 +820,12 @@ class MusicPlayer {
     this.progressBar.addEventListener('click', e => this._seekTo(e));
     this.progressBar.addEventListener('mousedown', e => this._startDrag(e, 'progress'));
 
-    // 闊抽噺
+    // 音量
     this.volBtn.addEventListener('click', () => this.toggleMute());
     this.volBar.addEventListener('click', e => this._setVolumeFromEvent(e));
     this.volBar.addEventListener('mousedown', e => this._startDrag(e, 'volume'));
 
-    // 鎼滅储
+    // 搜索
     this.searchBtn.addEventListener('click', () => this._toggleSearch());
     this.searchClose.addEventListener('click', () => this._closeSearch());
     this.searchInput.addEventListener('input', () => {
@@ -843,7 +847,7 @@ class MusicPlayer {
       if (e.key === 'Escape') this._closeSearch();
     });
 
-    // 闊虫簮鍒囨崲
+    // 音源切换
     this.sourceBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         this.sourceBtns.forEach(b => b.classList.remove('active'));
@@ -854,7 +858,7 @@ class MusicPlayer {
       });
     });
 
-    // 鎾斁鍒楄〃
+    // 播放列表
     this.listBtn.addEventListener('click', () => this._togglePlaylist());
     this.clearBtn.addEventListener('click', () => this.clearPlaylist());
     this.backendBtn.addEventListener('click', () => this._openBackendModal());
@@ -870,7 +874,7 @@ class MusicPlayer {
       }
     });
 
-    // Audio 浜嬩欢
+    // Audio 事件
     this.audio.addEventListener('timeupdate', () => this._onTimeUpdate());
     this.audio.addEventListener('loadedmetadata', () => this._onMetaLoaded());
     this.audio.addEventListener('ended', () => this._onEnded());
@@ -878,7 +882,7 @@ class MusicPlayer {
     this.audio.addEventListener('playing', () => {
       this.isPlaying = true;
       this._updatePlayBtn();
-      this.reactor.start();  // 寮€濮嬮煶棰戝垎鏋愶紝椹卞姩鑳屾櫙鍔ㄧ敾
+      this.reactor.start();  // 开始音频分析，驱动背景动画
     });
     this.audio.addEventListener('pause', () => {
       this.isPlaying = false;
@@ -904,7 +908,7 @@ class MusicPlayer {
     }
   }
 
-  /* ---------- 鎾斁鎺у埗 ---------- */
+  /* ---------- 播放控制 ---------- */
   togglePlay() {
     if (this.currentIdx < 0 && this.playlist.length > 0) {
       this.playAt(0);
@@ -930,7 +934,7 @@ class MusicPlayer {
   async _loadAndPlay(song) {
     if (this._urlLoading) return;
     this._urlLoading = true;
-    this.titleEl.textContent = '鍔犺浇涓?..';
+    this.titleEl.textContent = '加载中...';
 
     try {
       let url = song.url;
@@ -939,7 +943,7 @@ class MusicPlayer {
       }
       if (!url) {
         this.titleEl.textContent = song.name;
-        this.artistEl.textContent = '鏃犳硶鑾峰彇鎾斁閾炬帴';
+        this.artistEl.textContent = '无法获取播放链接';
         this._urlLoading = false;
         return;
       }
@@ -949,7 +953,7 @@ class MusicPlayer {
       this.audio.src = '/api/proxy?url=' + encodeURIComponent(url);
       this.audio.play().catch(() => {});
     } catch (e) {
-      console.warn('鎾斁澶辫触:', e);
+      console.warn('播放失败:', e);
       this.artistEl.textContent = 'Playback failed, trying next track';
       setTimeout(() => this.playNext(), 2000);
     }
@@ -958,12 +962,12 @@ class MusicPlayer {
 
   playNext() {
     if (this.playlist.length === 0) {
-      // 婕父妯″紡涓嬬┖鍒楄〃鑷姩鍙戠幇
+      // 漫游模式下空列表自动发现
       if (this.roaming) this._roamingDiscover();
       return;
     }
     if (this.mode === 2) {
-      // 闅忔満
+      // 随机
       let next = Math.floor(Math.random() * this.playlist.length);
       if (next === this.currentIdx && this.playlist.length > 1) {
         next = (next + 1) % this.playlist.length;
@@ -986,22 +990,22 @@ class MusicPlayer {
 
   cycleMode() {
     this.mode = (this.mode + 1) % 3;
-    const labels = ['椤哄簭鎾斁', '鍗曟洸寰幆', '闅忔満鎾斁'];
+    const labels = ['顺序播放', '单曲循环', '随机播放'];
     const icons = [
-      // 椤哄簭
+      // 顺序
       `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>`,
-      // 鍗曟洸寰幆
+      // 单曲循环
       `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/><text x="12" y="14" font-size="8" fill="currentColor" stroke="none" text-anchor="middle">1</text></svg>`,
-      // 闅忔満
+      // 随机
       `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>`
     ];
     this.modeBtn.innerHTML = icons[this.mode];
     this.modeBtn.title = labels[this.mode];
   }
 
-  /* ---------- 婕父妯″紡 ---------- */
+  /* ---------- 漫游模式 ---------- */
 
-  // 婕父鍏抽敭璇嶆睜锛氳鐩栧绉嶉鏍硷紝閫傚悎鍒涗綔鑳屾櫙闊充箰
+  // 漫游关键词池：覆盖多种风格，适合作为创作背景音乐
   _getRoamingKeywords() {
     return [
       'ambient', 'lofi', 'chill', 'piano', 'guitar', 'strings',
@@ -1012,7 +1016,7 @@ class MusicPlayer {
     ];
   }
 
-  /** 鍒囨崲婕父妯″紡 */
+  /** 切换漫游模式 */
   toggleRoaming() {
     this.roaming = !this.roaming;
     if (this.roaming) {
@@ -1032,7 +1036,7 @@ class MusicPlayer {
     }
   }
 
-  /** 婕父鑷姩鍙戠幇锛氶殢鏈哄叧閿瘝鎼滅储锛屾坊鍔犳柊姝屽埌鍒楄〃 */
+  /** 漫游自动发现：随机关键词搜索，添加新歌到列表 */
   async _roamingDiscover() {
     if (this._roamingLoading) return;
     this._roamingLoading = true;
@@ -1071,7 +1075,7 @@ class MusicPlayer {
         this._setSelectedSource(matchedSource, false);
       }
 
-      // 闅忔満閫?1-3 棣栨坊鍔犲埌鎾斁鍒楄〃
+      // 随机选 1-3 首添加到播放列表
       const count = Math.min(Math.floor(Math.random() * 3) + 1, newSongs.length);
       this._shuffleArray(newSongs);
       let added = 0;
@@ -1100,13 +1104,13 @@ class MusicPlayer {
     }
   }
 
-  /** 婕父 - 璺宠繃褰撳墠姝屾洸锛堜笉鍠滄锛?*/
+  /** 漫游 - 跳过当前歌曲（不喜欢） */
   roamingSkip() {
     if (!this.roaming) return;
     // Record dislike and reduce similar keywords
     const current = this.playlist[this.currentIdx];
     if (current) {
-      // 绠€鍗曠瓥鐣ワ細浠庢睜涓Щ闄や笌褰撳墠姝屾洸椋庢牸鐩稿叧鐨勫叧閿瘝
+      // 简单策略：从池中移除与当前歌曲风格相关的关键词
       this._roamingPool = this._roamingPool.filter(k =>
         !current.name.includes(k) && !current.artist.includes(k)
       );
@@ -1114,7 +1118,7 @@ class MusicPlayer {
     this.playNext();
   }
 
-  /** 婕父 - 鍠滄褰撳墠姝屾洸 */
+  /** 漫游 - 喜欢当前歌曲 */
   roamingLike() {
     if (!this.roaming) return;
     const current = this.playlist[this.currentIdx];
@@ -1131,7 +1135,7 @@ class MusicPlayer {
     }
   }
 
-  /** Fisher-Yates 娲楃墝 */
+  /** Fisher-Yates 洗牌 */
   _shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -1140,7 +1144,7 @@ class MusicPlayer {
     return arr;
   }
 
-  /** 杞婚噺 Toast 鎻愮ず */
+  /** 轻量 Toast 提示 */
   _showToast(msg) {
     let toast = document.getElementById('mp-toast');
     if (!toast) {
@@ -1155,9 +1159,9 @@ class MusicPlayer {
     this._toastTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2000);
   }
 
-  /* ---------- 鎾斁鍒楄〃绠＄悊 ---------- */
+  /* ---------- 播放列表管理 ---------- */
   addToPlaylist(song) {
-    // 鍘婚噸
+    // 去重
     if (this.playlist.some(s => s.id === song.id && s.source === song.source)) {
       return;
     }
@@ -1203,7 +1207,7 @@ class MusicPlayer {
     this.listCount.textContent = 0;
   }
 
-  /* ---------- UI 鏇存柊 ---------- */
+  /* ---------- UI 更新 ---------- */
   _updateNowPlaying(song) {
     this.titleEl.textContent = song.name || 'Unknown Track';
     this.artistEl.textContent = song.artist || 'Unknown Artist';
@@ -1215,7 +1219,7 @@ class MusicPlayer {
       this.coverImg.style.display = 'none';
       this.coverPh.style.display = 'flex';
     }
-    // 鏇存柊濯掍綋浼氳瘽
+    // 更新媒体会话
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: song.name,
@@ -1256,11 +1260,11 @@ class MusicPlayer {
 
   _onEnded() {
     if (this.mode === 1) {
-      // 鍗曟洸寰幆
+      // 单曲循环
       this.audio.currentTime = 0;
       this.audio.play().catch(() => {});
     } else {
-      // 婕父妯″紡锛氭挱鏀惧垪琛ㄥ墿浣欎笉瓒?2 棣栨椂鎻愬墠鍙戠幇鏂版瓕
+      // 漫游模式：播放列表剩余不足 2 首时提前发现新歌
       if (this.roaming && this.currentIdx >= this.playlist.length - 2) {
         this._roamingDiscover();
       }
@@ -1273,13 +1277,13 @@ class MusicPlayer {
       console.warn('Audio playback error, trying next track');
       const song = this.playlist[this.currentIdx];
       if (song) {
-        song.url = null; // 娓呴櫎缂撳瓨鐨勯敊璇?URL
+        song.url = null; // 清除缓存的错误 URL
       }
       setTimeout(() => this.playNext(), 1500);
     }
   }
 
-  /* ---------- 娉㈠舰杩涘害鏉?---------- */
+  /* ---------- 波形进度条 ---------- */
   _initWaveform() {
     if (!this.waveformTrack) return;
     if (this.waveformTrack.children.length > 0) return; // already init
@@ -1302,7 +1306,7 @@ class MusicPlayer {
     }
   }
 
-  /* ---------- 杩涘害鏉℃嫋鎷?---------- */
+  /* ---------- 进度条拖拽 ---------- */
   _seekTo(e) {
     if (!this.audio.duration) return;
     const rect = this.progressBar.getBoundingClientRect();
@@ -1327,7 +1331,7 @@ class MusicPlayer {
     document.addEventListener('mouseup', onUp);
   }
 
-  /* ---------- 闊抽噺鎺у埗 ---------- */
+  /* ---------- 音量控制 ---------- */
   _setVolumeFromEvent(e) {
     const rect = this.volBar.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
@@ -1353,7 +1357,7 @@ class MusicPlayer {
     }
   }
 
-  /* ---------- 鎼滅储 ---------- */
+  /* ---------- 搜索 ---------- */
   _toggleSearch() {
     const open = this.searchPanel.style.display === 'flex';
     this.searchPanel.style.display = open ? 'none' : 'flex';
@@ -1463,7 +1467,7 @@ class MusicPlayer {
       </li>
     `).join('');
 
-    // 缁戝畾浜嬩欢
+    // 绑定事件
     this.searchResults.querySelectorAll('.mp-search-item').forEach(li => {
       li.addEventListener('click', e => {
         if (e.target.closest('.mp-search-add-btn')) return;
@@ -1480,7 +1484,7 @@ class MusicPlayer {
     });
   }
 
-  /* ---------- 鎾斁鍒楄〃娓叉煋 ---------- */
+  /* ---------- 播放列表渲染 ---------- */
   _togglePlaylist() {
     const open = this.playlistPanel.style.display === 'flex';
     this.playlistPanel.style.display = open ? 'none' : 'flex';
@@ -1503,7 +1507,7 @@ class MusicPlayer {
           <div class="mp-pl-item-name">${this._esc(s.name)}</div>
           <div class="mp-pl-item-artist">${this._esc(s.artist)}</div>
         </div>
-        <button class="mp-btn mp-pl-item-del" data-idx="${i}" title="绉婚櫎">&times;</button>
+        <button class="mp-btn mp-pl-item-del" data-idx="${i}" title="移除">&times;</button>
       </li>
     `).join('');
 
@@ -1522,7 +1526,7 @@ class MusicPlayer {
     });
   }
 
-  /* ---------- 鎸佷箙鍖?---------- */
+  /* ---------- 持久化 ---------- */
   _savePlaylist() {
     try {
       const data = this.playlist.map(s => ({
@@ -1552,11 +1556,11 @@ class MusicPlayer {
         }
       }
     } catch (e) { /* ignore */ }
-    // 鍒濆鍖栭煶閲忔潯
+    // 初始化音量条
     this.volFill.style.width = (this.volume * 100) + '%';
   }
 
-  /* ---------- 宸ュ叿鏂规硶 ---------- */
+  /* ---------- 工具方法 ---------- */
   _fmtTime(sec) {
     if (!sec || isNaN(sec)) return '0:00';
     const m = Math.floor(sec / 60);
@@ -1572,7 +1576,7 @@ class MusicPlayer {
 }
 
 
-/* ==================== 鍒濆鍖?==================== */
+/* ==================== 初始化 ==================== */
 (function initMusicPlayer() {
   function boot() {
     window.musicPlayer = new MusicPlayer();

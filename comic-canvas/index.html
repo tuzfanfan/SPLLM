@@ -1154,9 +1154,9 @@ button{font-family:inherit;cursor:pointer}
   stroke-dasharray:8 4; opacity:.7; pointer-events:none;
 }
 .drawflow .drawflow-node.node-line{
-  width:320px !important;
+  width:235px !important;
   height:auto !important;
-  min-height:132px !important;
+  min-height:50px !important;
   border-radius:0 !important;
   padding:0 !important;
   background:transparent !important;
@@ -1171,15 +1171,15 @@ button{font-family:inherit;cursor:pointer}
 .line-bubble{
   position:relative;
   width:100%;
-  min-height:132px;
+  min-height:50px;
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:28px 36px 26px 46px;
-  border-radius:46px;
+  padding:20px 28px 20px 34px;
+  border-radius:36px;
   background:#fbfbfb;
-  border:5px solid #3f3c3c;
-  box-shadow:0 8px 22px rgba(36,33,33,.08);
+  border:3px solid #3f3c3c;
+  box-shadow:0 6px 18px rgba(36,33,33,.06);
   animation:lineBubblePop .26s var(--ease-standard);
   overflow:visible;
 }
@@ -1189,20 +1189,20 @@ button{font-family:inherit;cursor:pointer}
   position:absolute;
   border-radius:999px;
   background:#fbfbfb;
-  border:5px solid #3f3c3c;
+  border:3px solid #3f3c3c;
   box-sizing:border-box;
 }
 .line-bubble::before{
-  left:14px;
-  bottom:-18px;
-  width:46px;
-  height:46px;
+  left:10px;
+  bottom:-14px;
+  width:36px;
+  height:36px;
 }
 .line-bubble::after{
-  left:8px;
-  bottom:-34px;
-  width:28px;
-  height:28px;
+  left:6px;
+  bottom:-26px;
+  width:22px;
+  height:22px;
 }
 .line-speaker{
   position:absolute;
@@ -1216,7 +1216,7 @@ button{font-family:inherit;cursor:pointer}
   border:0;
 }
 .line-content{
-  font-size:18px;
+  font-size:15px;
   line-height:1.35;
   color:#242326;
   font-weight:500;

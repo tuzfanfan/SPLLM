@@ -252,3 +252,11 @@ Required fields for each entry:
 - Compatibility: All functionality preserved. Drawflow is loaded as a classic script before the ES module, so `window.Drawflow` is available to `canvas.js`. The navbar behavior script remains an inline classic script in `index.html` (unchanged). `lx-shim.js` and `music-player.js` remain classic scripts loaded after the module.
 - Follow-up: `modules/canvas.js` (~2,980 lines) is still large and could be further split into sub-modules (node-rendering, inspector, connections, AI, menus) in a future pass. The unused `modules/navbar.js` can be removed or integrated.
 
+## 2026-07-01 12:24:00 +08:00
+
+- Agent: Codex
+- Files: `music-player.js`, `lx-shim.js`, `log.md`
+- Summary: Added deployed-host fallback for music search, roaming, and playback when `/api/proxy` and `/api/plugins` are unavailable.
+- Details: `music-player.js` now detects whether it is running on the local dev host (`localhost` / `127.0.0.1`) or on a deployed static host such as `xfan.kdns.fr`. On local hosts it preserves the original `server.cjs` flow, including plugin loading and proxy-based playback. On deployed hosts it automatically switches search and URL resolution to direct requests against `https://music-api.gdstudio.xyz`, disables plugin-dependent lookups that require `/api/plugins`, and plays resolved audio URLs directly instead of forcing them back through `/api/proxy`. `lx-shim.js` was also softened so missing plugin APIs no longer spam errors or block readiness when the page is running outside the local server environment.
+- Compatibility: Designed to keep local `node server.cjs` behavior unchanged while restoring a usable fallback path for the public homepage. Syntax validation should be run after deployment because the public host could not be probed directly from this session.
+- Follow-up: If some songs still fail only on the public host, the next check should be whether the resolved remote audio URLs send the CORS/range headers needed by the browser for playback and waveform analysis.

@@ -6,6 +6,12 @@
   'use strict';
 
   const PROXY = '/api/proxy?url=';
+  const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '::1', '[::1]']);
+
+  function canUseSameOriginMusicApis() {
+    const host = String(window.location?.hostname || '').toLowerCase();
+    return LOCAL_HOSTS.has(host);
+  }
 
   /* ==================== 事件系统 ==================== */
   const _listeners = {};
@@ -233,8 +239,18 @@
       _pluginsLoadedOnce = false;
     }
     _loadPromise = (async () => {
+    if (!canUseSameOriginMusicApis()) {
+      _pluginsLoadedOnce = true;
+      console.info('[LX shim] skip plugin loading: same-origin music APIs are unavailable on this host');
+      return;
+    }
     try {
       const resp = await fetch('/api/plugins');
+      if (!resp.ok) {
+        console.warn(`[LX shim] plugin list unavailable: HTTP ${resp.status}`);
+        _pluginsLoadedOnce = true;
+        return;
+      }
       const plugins = await resp.json();
       _pluginsLoadedOnce = true;
       if (!plugins.length) {

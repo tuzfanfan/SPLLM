@@ -7,6 +7,7 @@
 const MusicAPI = (() => {
   const PROXY = '/api/proxy?url=';
   const NETEASE = 'https://music.163.com';
+  const DIRECT_BACKEND_BASE = 'https://music-api.gdstudio.xyz';
   const SETTINGS_KEY = 'comic-canvas:music-backends';
   const DEFAULT_SETTINGS = {
     usePluginSearch: false,
@@ -29,6 +30,51 @@ const MusicAPI = (() => {
 
   function clone(value) {
     return JSON.parse(JSON.stringify(value));
+  }
+
+  function canUseSameOriginMusicApis() {
+    const host = String(window.location?.hostname || '').toLowerCase();
+    return host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '[::1]';
+  }
+
+  function getRuntimeDefaults() {
+    const defaults = clone(DEFAULT_SETTINGS);
+    if (canUseSameOriginMusicApis()) return defaults;
+    defaults.usePluginSearch = false;
+    defaults.usePluginUrl = false;
+    defaults.searchBackend = {
+      ...defaults.searchBackend,
+      enabled: true,
+      kind: 'template',
+      baseUrl: DIRECT_BACKEND_BASE,
+      searchTemplate: '/search?keywords={q}&type=1&limit=30&offset=0',
+      searchPath: 'result.songs',
+    };
+    defaults.urlBackend = {
+      ...defaults.urlBackend,
+      enabled: true,
+      kind: 'template',
+      baseUrl: DIRECT_BACKEND_BASE,
+      urlTemplate: '/api.php?types=url&source={source}&id={id}',
+      urlPath: 'url',
+    };
+    return defaults;
+  }
+
+  function mergeSettings(next) {
+    const defaults = getRuntimeDefaults();
+    return {
+      ...defaults,
+      ...(next || {}),
+      searchBackend: {
+        ...defaults.searchBackend,
+        ...((next && next.searchBackend) || {}),
+      },
+      urlBackend: {
+        ...defaults.urlBackend,
+        ...((next && next.urlBackend) || {}),
+      },
+    };
   }
 
   function normalizeBaseUrl(value) {
@@ -103,43 +149,22 @@ const MusicAPI = (() => {
   function readSettings() {
     try {
       const raw = localStorage.getItem(SETTINGS_KEY);
-      if (!raw) return clone(DEFAULT_SETTINGS);
+      if (!raw) return getRuntimeDefaults();
       const parsed = JSON.parse(raw);
-      return {
-        ...clone(DEFAULT_SETTINGS),
-        ...parsed,
-        searchBackend: {
-          ...clone(DEFAULT_SETTINGS.searchBackend),
-          ...(parsed.searchBackend || {}),
-        },
-        urlBackend: {
-          ...clone(DEFAULT_SETTINGS.urlBackend),
-          ...(parsed.urlBackend || {}),
-        },
-      };
+      return mergeSettings(parsed);
     } catch (e) {
-      return clone(DEFAULT_SETTINGS);
+      return getRuntimeDefaults();
     }
   }
 
   function saveSettings(next) {
-    const merged = {
-      ...clone(DEFAULT_SETTINGS),
-      ...(next || {}),
-      searchBackend: {
-        ...clone(DEFAULT_SETTINGS.searchBackend),
-        ...((next && next.searchBackend) || {}),
-      },
-      urlBackend: {
-        ...clone(DEFAULT_SETTINGS.urlBackend),
-        ...((next && next.urlBackend) || {}),
-      },
-    };
+    const merged = mergeSettings(next);
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(merged));
     return merged;
   }
 
   async function waitForPlugins() {
+    if (!canUseSameOriginMusicApis()) return;
     if (!window.LXPlugins || typeof window.LXPlugins.ready !== 'function') return;
     try {
       await window.LXPlugins.ready();
@@ -179,7 +204,8 @@ const MusicAPI = (() => {
         source: level,
         quality: 'standard',
       }));
-      const data = backend.kind === 'template' ? await fetchJSON(url) : await proxyFetch(url);
+      const shouldFetchDirect = backend.kind === 'template' || !canUseSameOriginMusicApis();
+      const data = shouldFetchDirect ? await fetchJSON(url) : await proxyFetch(url);
       const list = extractSongList(readPath(data, backend.searchPath || DEFAULT_SETTINGS.searchBackend.searchPath));
       return list.map(item => normalizeSong(item, {
         source: level,
@@ -209,7 +235,8 @@ const MusicAPI = (() => {
         source: song.source || 'wy',
         quality,
       }));
-      const data = kind === 'template' ? await fetchJSON(url) : await proxyFetch(url);
+      const shouldFetchDirect = kind === 'template' || !canUseSameOriginMusicApis();
+      const data = shouldFetchDirect ? await fetchJSON(url) : await proxyFetch(url);
       const path = backend.urlPath || DEFAULT_SETTINGS.urlBackend.urlPath;
       const value = readPath(data, path);
       if (value) {
@@ -262,20 +289,22 @@ const MusicAPI = (() => {
     const backendSongs = await searchWithBackend(query, source, settings);
     if (backendSongs.length > 0) return backendSongs;
 
-    try {
-      const data = await proxyFetch(
-        `${NETEASE}/api/search/get?s=${encodeURIComponent(query)}&type=1&limit=30&offset=0`
-      );
-      const songs = data?.result?.songs || [];
-      if (songs.length > 0) {
-        return songs.map(s => normalizeSong(s, {
-          source: 'wy',
-          apiId: 'netease',
-          backendKind: 'netease',
-        }));
+    if (canUseSameOriginMusicApis()) {
+      try {
+        const data = await proxyFetch(
+          `${NETEASE}/api/search/get?s=${encodeURIComponent(query)}&type=1&limit=30&offset=0`
+        );
+        const songs = data?.result?.songs || [];
+        if (songs.length > 0) {
+          return songs.map(s => normalizeSong(s, {
+            source: 'wy',
+            apiId: 'netease',
+            backendKind: 'netease',
+          }));
+        }
+      } catch (e) {
+        console.warn('[MusicAPI] netease search failed:', e.message);
       }
-    } catch (e) {
-      console.warn('[MusicAPI] netease search failed:', e.message);
     }
 
     // Final rescue path: even when plugin search is not explicitly enabled,
@@ -317,20 +346,22 @@ const MusicAPI = (() => {
       return backendUrl;
     }
 
-    try {
-      const data = await proxyFetch(
-        `${NETEASE}/api/song/enhance/player/url?ids=[${song.id}]&br=128000`
-      );
-      const item = data?.data?.[0];
-      if (item && item.url && item.code === 200) {
-        _urlCache.set(cacheKey, item.url);
-        return item.url;
+    if (canUseSameOriginMusicApis()) {
+      try {
+        const data = await proxyFetch(
+          `${NETEASE}/api/song/enhance/player/url?ids=[${song.id}]&br=128000`
+        );
+        const item = data?.data?.[0];
+        if (item && item.url && item.code === 200) {
+          _urlCache.set(cacheKey, item.url);
+          return item.url;
+        }
+        if (item && item.code !== 200) {
+          console.warn(`[MusicAPI] netease returned code=${item.code}`);
+        }
+      } catch (e) {
+        console.warn('[MusicAPI] netease url resolve failed:', e.message);
       }
-      if (item && item.code !== 200) {
-        console.warn(`[MusicAPI] netease returned code=${item.code}`);
-      }
-    } catch (e) {
-      console.warn('[MusicAPI] netease url resolve failed:', e.message);
     }
 
     return null;
@@ -339,7 +370,7 @@ const MusicAPI = (() => {
   function setBackendConfig(next) {
     if (!next) {
       localStorage.removeItem(SETTINGS_KEY);
-      return clone(DEFAULT_SETTINGS);
+      return getRuntimeDefaults();
     }
     return saveSettings(next);
   }
@@ -347,9 +378,10 @@ const MusicAPI = (() => {
   return {
     search,
     getSongUrl,
+    canUseSameOriginMusicApis,
     getBackendConfig: readSettings,
     setBackendConfig,
-    defaultBackendConfig: clone(DEFAULT_SETTINGS),
+    defaultBackendConfig: getRuntimeDefaults(),
   };
 })();
 
@@ -949,8 +981,10 @@ class MusicPlayer {
       }
       song.url = url;
       console.log('[MusicPlayer] resolved audio url');
-      // Load through CORS proxy so Web Audio can inspect it
-      this.audio.src = '/api/proxy?url=' + encodeURIComponent(url);
+      // Prefer the local proxy in dev; on deployed static hosts it may not exist.
+      this.audio.src = MusicAPI.canUseSameOriginMusicApis()
+        ? '/api/proxy?url=' + encodeURIComponent(url)
+        : url;
       this.audio.play().catch(() => {});
     } catch (e) {
       console.warn('播放失败:', e);

@@ -76,9 +76,34 @@ const MusicAPI = (() => {
     return defaults;
   }
 
+  function enforceDeployedFallbackSettings(settings) {
+    if (canUseSameOriginMusicApis()) return settings;
+    return {
+      ...settings,
+      usePluginSearch: false,
+      usePluginUrl: false,
+      searchBackend: {
+        ...(settings.searchBackend || {}),
+        enabled: true,
+        kind: 'template',
+        baseUrl: DIRECT_BACKEND_BASE,
+        searchTemplate: '/api.php?types=search&source={source}&name={q}&count=30',
+        searchPath: '',
+      },
+      urlBackend: {
+        ...(settings.urlBackend || {}),
+        enabled: true,
+        kind: 'template',
+        baseUrl: DIRECT_BACKEND_BASE,
+        urlTemplate: '/api.php?types=url&source={source}&id={id}',
+        urlPath: 'url',
+      },
+    };
+  }
+
   function mergeSettings(next) {
     const defaults = getRuntimeDefaults();
-    return {
+    const merged = {
       ...defaults,
       ...(next || {}),
       searchBackend: {
@@ -90,6 +115,7 @@ const MusicAPI = (() => {
         ...((next && next.urlBackend) || {}),
       },
     };
+    return enforceDeployedFallbackSettings(merged);
   }
 
   function normalizeBaseUrl(value) {

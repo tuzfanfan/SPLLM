@@ -269,3 +269,12 @@ Required fields for each entry:
 - Details: Live probing showed the deployed URL-resolver endpoint was reachable, but the search endpoint was not `/search?...`; it was `https://music-api.gdstudio.xyz/api.php?types=search&source=...&name=...&count=...`, and its response body was a top-level array rather than `result.songs`. `music-player.js` was updated to use that endpoint on deployed hosts, parse the top-level array correctly, and translate frontend source keys such as `wy` and `kw` into backend-supported names like `netease` and `kuwo` before searching or resolving playback URLs.
 - Compatibility: Verified against live endpoint responses during the fix. Local `server.cjs` behavior remains unchanged because the mapping only affects the deployed-host fallback path.
 - Follow-up: If users still see playback failures after songs can be found again, inspect whether the final remote MP3 hosts allow direct browser playback from `xfan.kdns.fr`.
+
+## 2026-07-01 22:21:00 +08:00
+
+- Agent: Codex
+- Files: `music-player.js`, `log.md`
+- Summary: Made deployed-host music fallback ignore stale saved backend settings.
+- Details: The public page can persist `comic-canvas:music-backends` in browser storage. That meant an older saved config could keep overriding the repaired deployed defaults even after a hard refresh, sending roaming and search back to the old broken endpoint template. `music-player.js` now force-normalizes deployed-host settings after merge so non-local hosts always use the current direct search and direct URL templates, with plugin-dependent paths disabled.
+- Compatibility: Local `localhost` development keeps respecting the original server-backed configuration path. Only deployed hosts are forced onto the normalized fallback settings.
+- Follow-up: If roaming still fails after this, the next diagnostic target is direct audio playback from the final remote MP3 host rather than search/backend selection.

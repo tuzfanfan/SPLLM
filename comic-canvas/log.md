@@ -278,3 +278,12 @@ Required fields for each entry:
 - Details: The public page can persist `comic-canvas:music-backends` in browser storage. That meant an older saved config could keep overriding the repaired deployed defaults even after a hard refresh, sending roaming and search back to the old broken endpoint template. `music-player.js` now force-normalizes deployed-host settings after merge so non-local hosts always use the current direct search and direct URL templates, with plugin-dependent paths disabled.
 - Compatibility: Local `localhost` development keeps respecting the original server-backed configuration path. Only deployed hosts are forced onto the normalized fallback settings.
 - Follow-up: If roaming still fails after this, the next diagnostic target is direct audio playback from the final remote MP3 host rather than search/backend selection.
+
+## 2026-07-01 22:33:00 +08:00
+
+- Agent: Codex
+- Files: `music-player.js`, `log.md`
+- Summary: Fixed deployed music search result parsing for top-level array responses.
+- Details: Live in-browser verification on `https://xfan.kdns.fr/comic-canvas/index.html` showed manual search for `ambient` still rendered `No matching songs found` even though the live backend endpoint was returning a non-empty JSON array. The root cause was `extractSongList()` only checking nested shapes like `result.songs` and `data.list`, while the deployed `api.php?types=search` response body is a top-level array. `extractSongList()` now returns `payload` directly when it is already a non-empty array, restoring both manual search and roaming discovery on the deployed host.
+- Compatibility: Safe for local and deployed hosts because nested payload formats still follow the existing fallback chain.
+- Follow-up: If songs appear but still fail to start playback, inspect the final resolved audio URL fetch and browser media error events next.

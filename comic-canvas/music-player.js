@@ -150,6 +150,7 @@ const MusicAPI = (() => {
   }
 
   function extractSongList(payload) {
+    if (Array.isArray(payload) && payload.length > 0) return payload;
     const candidates = [
       payload?.list,
       payload?.data,

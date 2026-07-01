@@ -260,3 +260,12 @@ Required fields for each entry:
 - Details: `music-player.js` now detects whether it is running on the local dev host (`localhost` / `127.0.0.1`) or on a deployed static host such as `xfan.kdns.fr`. On local hosts it preserves the original `server.cjs` flow, including plugin loading and proxy-based playback. On deployed hosts it automatically switches search and URL resolution to direct requests against `https://music-api.gdstudio.xyz`, disables plugin-dependent lookups that require `/api/plugins`, and plays resolved audio URLs directly instead of forcing them back through `/api/proxy`. `lx-shim.js` was also softened so missing plugin APIs no longer spam errors or block readiness when the page is running outside the local server environment.
 - Compatibility: Designed to keep local `node server.cjs` behavior unchanged while restoring a usable fallback path for the public homepage. Syntax validation should be run after deployment because the public host could not be probed directly from this session.
 - Follow-up: If some songs still fail only on the public host, the next check should be whether the resolved remote audio URLs send the CORS/range headers needed by the browser for playback and waveform analysis.
+
+## 2026-07-01 22:05:00 +08:00
+
+- Agent: Codex
+- Files: `music-player.js`, `log.md`
+- Summary: Corrected the deployed music search backend path and source-name mapping for the public homepage.
+- Details: Live probing showed the deployed URL-resolver endpoint was reachable, but the search endpoint was not `/search?...`; it was `https://music-api.gdstudio.xyz/api.php?types=search&source=...&name=...&count=...`, and its response body was a top-level array rather than `result.songs`. `music-player.js` was updated to use that endpoint on deployed hosts, parse the top-level array correctly, and translate frontend source keys such as `wy` and `kw` into backend-supported names like `netease` and `kuwo` before searching or resolving playback URLs.
+- Compatibility: Verified against live endpoint responses during the fix. Local `server.cjs` behavior remains unchanged because the mapping only affects the deployed-host fallback path.
+- Follow-up: If users still see playback failures after songs can be found again, inspect whether the final remote MP3 hosts allow direct browser playback from `xfan.kdns.fr`.

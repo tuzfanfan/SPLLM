@@ -37,6 +37,21 @@ const MusicAPI = (() => {
     return host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '[::1]';
   }
 
+  function mapBackendSource(source, mode = 'search') {
+    const key = String(source || 'wy').trim().toLowerCase();
+    const table = {
+      wy: 'netease',
+      qsvip: 'netease',
+      kw: 'kuwo',
+      tx: mode === 'search' ? 'netease' : 'netease',
+      kg: mode === 'search' ? 'kuwo' : 'kuwo',
+      mg: mode === 'search' ? 'netease' : 'netease',
+      netease: 'netease',
+      kuwo: 'kuwo',
+    };
+    return table[key] || 'netease';
+  }
+
   function getRuntimeDefaults() {
     const defaults = clone(DEFAULT_SETTINGS);
     if (canUseSameOriginMusicApis()) return defaults;
@@ -47,8 +62,8 @@ const MusicAPI = (() => {
       enabled: true,
       kind: 'template',
       baseUrl: DIRECT_BACKEND_BASE,
-      searchTemplate: '/search?keywords={q}&type=1&limit=30&offset=0',
-      searchPath: 'result.songs',
+      searchTemplate: '/api.php?types=search&source={source}&name={q}&count=30',
+      searchPath: '',
     };
     defaults.urlBackend = {
       ...defaults.urlBackend,
@@ -195,24 +210,26 @@ const MusicAPI = (() => {
     const baseUrl = normalizeBaseUrl(backend.baseUrl);
     const q = encodeURIComponent(query);
     const level = source || 'wy';
+    const backendSource = mapBackendSource(level, 'search');
 
     try {
       const template = backend.searchTemplate || DEFAULT_SETTINGS.searchBackend.searchTemplate;
       const url = joinUrl(baseUrl, fillTemplate(template, {
         base: baseUrl,
         q,
-        source: level,
+        source: backendSource,
         quality: 'standard',
       }));
       const shouldFetchDirect = backend.kind === 'template' || !canUseSameOriginMusicApis();
       const data = shouldFetchDirect ? await fetchJSON(url) : await proxyFetch(url);
-      const list = extractSongList(readPath(data, backend.searchPath || DEFAULT_SETTINGS.searchBackend.searchPath));
+      const searchPath = backend.searchPath != null ? backend.searchPath : DEFAULT_SETTINGS.searchBackend.searchPath;
+      const list = extractSongList(readPath(data, searchPath));
       return list.map(item => normalizeSong(item, {
-        source: level,
+        source: mapBackendSource(item.source || backendSource, 'url'),
         apiId: 'backend',
         backendKind: backend.kind || 'netease',
         backendBaseUrl: baseUrl,
-        backendSearchPath: backend.searchPath || '',
+        backendSearchPath: searchPath || '',
         backendUrlPath: backend.urlPath || '',
       }));
     } catch (e) {
@@ -229,10 +246,11 @@ const MusicAPI = (() => {
 
     try {
       const template = backend.urlTemplate || DEFAULT_SETTINGS.urlBackend.urlTemplate;
+      const backendSource = mapBackendSource(song.source || 'wy', 'url');
       const url = joinUrl(baseUrl, fillTemplate(template, {
         base: baseUrl,
         id: encodeURIComponent(String(song.id)),
-        source: song.source || 'wy',
+        source: backendSource,
         quality,
       }));
       const shouldFetchDirect = kind === 'template' || !canUseSameOriginMusicApis();

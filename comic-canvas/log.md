@@ -237,3 +237,18 @@ Required fields for each entry:
 - Details: Extracted plugin search into a reusable fallback path, added roaming source rotation (`wy/tx/kw/kg/mg/qsvip`), and taught roaming to automatically switch the active source button when another source successfully returns playable songs. The failure toast was also updated to reflect backend unavailability instead of incorrectly implying roaming itself was paused.
 - Compatibility: `node --check music-player.js` passes. In a browser-level mock test where the current source returned no songs and `tx` returned one song, roaming switched to `tx`, updated the active source button, and appended the fallback song into the playlist.
 - Follow-up: If the external proxy remains unavailable on this machine, the next pass should focus on the backend search source itself rather than the roaming control flow.
+
+## 2026-07-01 05:31:39 +08:00
+
+- Agent: Claudian
+- Files: `index.html`, `CLAUDE.md`, `log.md`, `styles/*`, `modules/*`, `lib/drawflow/*`
+- Summary: Completed three-phase architectural refactor: CSS separation → JS module split → Drawflow externalization.
+- Details: 
+  - **Phase 1 (CSS)**: Extracted ~2,000 lines of inline CSS from `index.html` into 4 modular files under `styles/`: `tokens.css` (theme variables + base reset), `navbar.css` (navbar/toolbar/menus/modals), `components.css` (layout/panels/nodes/connections/UI), `responsive.css` (media queries + pure-mode). `index.html` lost 1,970 CSS lines.
+  - **Phase 2 (JS modules)**: Split the ~5,300-line IIFE into 9 ES modules under `modules/`: `config.js` (TYPE_META/SCHEMA), `store.js` (state), `theme.js` (dark/light), `ink-ripple.js` (audio-reactive animation), `sphere-drag.js` (3D sphere), `util.js` (helpers/history/serialization), `canvas.js` (core app logic — Drawflow init, node rendering, inspector, connections, AI, menus, boot), `navbar.js` (wave canvas), `index.js` (entry point). `index.html` lost ~3,360 JS lines.
+  - **Phase 3 (Drawflow)**: Extracted the 46KB inline Drawflow 0.0.60 UMD bundle into `lib/drawflow/drawflow.min.js`. Created `lib/drawflow/index.js` as an ESM shim. Replaced inline `<script>` with `<script src="lib/drawflow/drawflow.min.js">`. Replaced the main IIFE with `<script type="module" src="modules/index.js">`.
+  - **Result**: `index.html` reduced from 7,826 lines to ~550 lines (HTML structure only). Total project structure is now modular, maintainable, and follows the single-responsibility principle.
+  - **Updated**: `CLAUDE.md` with new file map, architecture overview, load order, and module-level paths.
+- Compatibility: All functionality preserved. Drawflow is loaded as a classic script before the ES module, so `window.Drawflow` is available to `canvas.js`. The navbar behavior script remains an inline classic script in `index.html` (unchanged). `lx-shim.js` and `music-player.js` remain classic scripts loaded after the module.
+- Follow-up: `modules/canvas.js` (~2,980 lines) is still large and could be further split into sub-modules (node-rendering, inspector, connections, AI, menus) in a future pass. The unused `modules/navbar.js` can be removed or integrated.
+

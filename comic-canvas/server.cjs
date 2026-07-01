@@ -175,6 +175,9 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, {
       'Content-Type': mime,
       'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
     });
     res.end(data);
   } catch {

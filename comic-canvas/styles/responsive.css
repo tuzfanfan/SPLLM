@@ -1,0 +1,45 @@
+/* ============================================================
+   comic-canvas · CSS 分离产物
+   模块：responsive（媒体查询 + 纯净模式）
+
+   此文件从 index.html 的 <style> 标签中提取。
+   不要手动编辑此文件 — 编辑 index.html 中的对应区块。
+============================================================ */
+
+/* ============ 移动端响应式 ============ */
+@media (max-width: 768px){
+  .palette{display:none}
+  .inspector{display:none}
+  .main{grid-template-columns:1fr}
+  .topbar{padding:0 10px}
+  .brand small{display:none}
+  .tbtn{padding:0 8px; font-size:11px}
+  .tbtn .tbtn-text{display:none}
+  .zoom-group{display:none}
+  .bottom-bar{display:block}
+  .minimap{width:120px; height:90px; bottom:44px; right:10px}
+  .nav-bar{display:none}
+  body{padding-bottom:calc(60px + env(safe-area-inset-bottom))}
+  /* Resizable Navbar 移动端适配 */
+  .resizable-navbar .nav-links,
+  .resizable-navbar .nav-actions .nav-btn:not(.hamburger) {
+    display:none;
+  }
+  .resizable-navbar .hamburger{
+    display:flex;
+  }
+}
+
+@media (max-width: 480px){
+  .topbar .tbar-sep{display:none}
+  .topbar #btn-new, .topbar #btn-import, .topbar #btn-export{display:none}
+  .minimap{display:none}
+}
+
+/* 纯净模式 */
+body.pure-mode .topbar{transform:translateY(-100%)}
+body.pure-mode .palette{transform:translateX(-100%)}
+body.pure-mode .inspector{transform:translateX(100%)}
+body.pure-mode .bottom-bar{transform:translateY(100%)}
+body{transition:.25s}
+.topbar, .palette, .inspector, .bottom-bar{transition:.25s}

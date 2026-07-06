@@ -25,6 +25,7 @@
 /.claude/
 /.claudian/
 /.codex/
+/agent-center/
 /.obsidian/
 /.tmp/
 /.uploads/
@@ -71,3 +72,14 @@ node_modules/
 *.xls
 *.xlsx
 *.zip
+
+# comic-canvas: local source, stale builds, and tool state (not deployment artifacts)
+comic-canvas/TaijiCanvas/excalidraw/
+comic-canvas/site/
+comic-canvas/.catpaw/
+comic-canvas/.od-skills/
+comic-canvas/.agents/
+comic-canvas/.codex/
+comic-canvas/.uploads/
+comic-canvas/TaijiCanvas/.agents/
+comic-canvas/TaijiCanvas/.codex/

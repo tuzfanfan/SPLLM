@@ -73,13 +73,14 @@ node_modules/
 *.xlsx
 *.zip
 
-# comic-canvas: local source, stale builds, and tool state (not deployment artifacts)
-comic-canvas/TaijiCanvas/excalidraw/
-comic-canvas/site/
-comic-canvas/.catpaw/
-comic-canvas/.od-skills/
+# comic-canvas: build artifacts are tracked (deployment target)
+# Ignore leftover local tool/agent state and stale directories (not deployment artifacts)
 comic-canvas/.agents/
+comic-canvas/.catpaw/
 comic-canvas/.codex/
+comic-canvas/.git/
+comic-canvas/.od-skills/
 comic-canvas/.uploads/
-comic-canvas/TaijiCanvas/.agents/
-comic-canvas/TaijiCanvas/.codex/
+comic-canvas/site/
+comic-canvas/TaijiCanvas/
+comic-canvas/taiji-particles/

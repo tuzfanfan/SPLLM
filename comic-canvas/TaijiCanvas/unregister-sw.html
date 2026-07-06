@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>清除 Service Worker 缓存</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; max-width: 640px; margin: 60px auto; padding: 0 24px; color: #222; line-height: 1.7; }
+  h1 { font-size: 22px; margin-bottom: 8px; }
+  .status { padding: 16px 20px; border-radius: 10px; margin: 16px 0; font-family: Consolas, monospace; font-size: 13px; }
+  .status.working { background: #fff8e1; border: 1px solid #ffe082; }
+  .status.done { background: #e8f5e9; border: 1px solid #81c784; }
+  .status.error { background: #ffebee; border: 1px solid #e57373; }
+  .log { white-space: pre-wrap; word-break: break-all; margin-top: 8px; max-height: 240px; overflow-y: auto; }
+  .actions { margin-top: 24px; }
+  .btn { display: inline-block; padding: 10px 20px; background: #20cf7a; color: #08110d; text-decoration: none; border-radius: 8px; font-weight: 600; margin-right: 12px; }
+  .btn.secondary { background: #e0e0e0; color: #333; }
+  .note { color: #666; font-size: 13px; margin-top: 16px; }
+</style>
+</head>
+<body>
+  <h1>清除 Service Worker 缓存</h1>
+  <p>此页面会注销 <code>xfan.kdns.fr</code> 域下所有 Service Worker，并清空相关缓存。完成后即可加载太极画布的最新版本。</p>
+  <div id="status" class="status working">正在执行…<div id="log" class="log"></div></div>
+  <div class="actions" id="actions" style="display:none">
+    <a class="btn" href="./site/index.html">前往太极画布</a>
+    <a class="btn secondary" href="https://xfan.kdns.fr/comic-canvas/">前往入口</a>
+  </div>
+  <p class="note">注：此操作不会清除你的本地绘图数据（localStorage / IndexedDB 保留）。</p>
+
+<script>
+(async () => {
+  const logEl = document.getElementById('log');
+  const statusEl = document.getElementById('status');
+  const actionsEl = document.getElementById('actions');
+  const log = (msg) => {
+    logEl.textContent += msg + '\n';
+    logEl.scrollTop = logEl.scrollHeight;
+  };
+
+  let errorCount = 0;
+
+  // 1. 注销所有 Service Worker
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      log(`找到 ${regs.length} 个 Service Worker 注册`);
+      for (const reg of regs) {
+        const scope = reg.scope;
+        const active = reg.active ? reg.active.scriptURL : '(no active)';
+        try {
+          await reg.unregister();
+          log(`✓ 已注销: scope=${scope} script=${active}`);
+        } catch (e) {
+          errorCount++;
+          log(`✗ 注销失败: scope=${scope} 错误=${e.message}`);
+        }
+      }
+    } else {
+      log('当前浏览器不支持 Service Worker，跳过');
+    }
+  } catch (e) {
+    errorCount++;
+    log(`✗ 获取 SW 注册失败: ${e.message}`);
+  }
+
+  // 2. 清除所有 Cache Storage
+  try {
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      log(`\n找到 ${keys.length} 个缓存:`);
+      for (const key of keys) {
+        try {
+          await caches.delete(key);
+          log(`✓ 已删除缓存: ${key}`);
+        } catch (e) {
+          errorCount++;
+          log(`✗ 删除缓存失败: ${key} 错误=${e.message}`);
+        }
+      }
+    }
+  } catch (e) {
+    errorCount++;
+    log(`✗ 获取缓存列表失败: ${e.message}`);
+  }
+
+  // 3. 结果
+  if (errorCount === 0) {
+    statusEl.className = 'status done';
+    statusEl.firstChild.textContent = `✅ 完成。所有 Service Worker 和缓存已清除。`;
+  } else {
+    statusEl.className = 'status error';
+    statusEl.firstChild.textContent = `⚠️ 完成但有 ${errorCount} 个错误，请查看日志。`;
+  }
+  statusEl.appendChild(logEl);
+  actionsEl.style.display = 'block';
+})();
+</script>
+</body>
+</html>
